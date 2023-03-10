@@ -1,16 +1,21 @@
+import { useRouter } from 'expo-router'
+import { NavArrowLeft } from 'iconoir-react-native'
 import React from 'react'
-import { StyleSheet } from 'react-native'
+import { Pressable, StyleSheet } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { H3, XStack } from 'tamagui'
+import { H2, XStack, Text } from 'tamagui'
 
 export default function Header({
   title,
   right,
+  back,
 }: {
   title: string
   right?: React.ReactNode
+  back?: boolean
 }) {
   const insets = useSafeAreaInsets()
+  const router = useRouter()
 
   return (
     <XStack
@@ -18,9 +23,20 @@ export default function Header({
       style={{
         ...styles.container,
         paddingTop: insets.top,
+        paddingHorizontal: back ? 8 : 16,
       }}
     >
-      <H3 style={{ color: 'black' }}>{title}</H3>
+      {back ? (
+        <Pressable onPress={() => router.back()}>
+          <XStack alignItems="center">
+            <NavArrowLeft width={32} height={32} />
+            <Text fontSize={20}>{title}</Text>
+          </XStack>
+        </Pressable>
+      ) : (
+        <H2 style={{ color: 'black', fontFamily: 'Gilroy-Bold' }}>{title}</H2>
+      )}
+
       {right}
     </XStack>
   )

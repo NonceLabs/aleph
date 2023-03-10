@@ -10,14 +10,15 @@ export default function TabLayout() {
 
   return (
     <Tabs
+      initialRouteName="feeds"
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
       }}
     >
       <Tabs.Screen
-        name="feed"
+        name="feeds"
         options={{
-          title: 'Feed',
+          title: 'Feeds',
           tabBarIcon: ({ color }) => (
             <HomeAltSlim
               width={32}
@@ -39,6 +40,7 @@ export default function TabLayout() {
               color={Colors[colorScheme ?? 'light'].text}
             />
           ),
+          header: () => null,
         }}
       />
     </Tabs>

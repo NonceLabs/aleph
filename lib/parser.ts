@@ -1,4 +1,4 @@
-import { isValid as isValidUrl } from './utils/linker'
+import { isValid as isValidUrl } from './utils/linker.js'
 import retrieve from './utils/retrieve.js'
 import { validate, xml2obj, isRSS, isAtom } from './utils/xmlparser.js'
 import parseJsonFeed from './utils/parseJsonFeed.js'
@@ -34,10 +34,9 @@ export const extractFromXml = (xml: string | undefined, options = {}) => {
   if (!validate(xml)) {
     throw new Error('The XML document is not well-formed')
   }
-
   const opts = getopt(options)
-
   const data = xml2obj(xml, opts.xmlParserOptions)
+
   return isRSS(data)
     ? parseRssFeed(data, opts)
     : isAtom(data)

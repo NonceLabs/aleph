@@ -88,3 +88,9 @@ export interface FetchOptions {
   integrity?: any
   proxy?: ProxyConfig
 }
+
+export interface Source {
+  title: string
+  description: string
+  url: string
+}

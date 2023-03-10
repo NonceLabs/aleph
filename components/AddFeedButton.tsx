@@ -1,20 +1,22 @@
 import { X } from '@tamagui/lucide-icons'
 import { Plus } from 'iconoir-react-native'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Pressable } from 'react-native'
-import { Unspaced, Dialog, Button, YStack, Input } from 'tamagui'
-import { extract } from '../lib/parser'
+import {
+  Unspaced,
+  Dialog,
+  Button,
+  YStack,
+  Input,
+  useWindowDimensions,
+} from 'tamagui'
+import { useRouter } from 'expo-router'
 
 export default function AddFeedButton() {
-  const [url, setUrl] = useState('https://rsshub.app/wsj/en-us/opinion')
+  const [url, setUrl] = useState('https://cn.nytimes.com/rss/')
 
-  useEffect(() => {
-    extract('https://rsshub.app/wsj/en-us/opinion')
-      .then((res) => {
-        console.log('feed', res)
-      })
-      .catch(console.log)
-  }, [])
+  const router = useRouter()
+  const { width } = useWindowDimensions()
 
   return (
     <Dialog modal>
@@ -30,6 +32,7 @@ export default function AddFeedButton() {
           o={0.7}
           enterStyle={{ o: 0 }}
           exitStyle={{ o: 0 }}
+          backgroundColor="black"
         />
         <Dialog.Content
           bordered
@@ -45,7 +48,8 @@ export default function AddFeedButton() {
           ]}
           enterStyle={{ x: 0, y: -20, opacity: 0, scale: 0.9 }}
           exitStyle={{ x: 0, y: 10, opacity: 0, scale: 0.95 }}
-          space
+          space="$1"
+          w={width - 40}
         >
           <YStack space={5}>
             <Dialog.Title size="$5" lineHeight="$1">
@@ -61,8 +65,17 @@ export default function AddFeedButton() {
               value={url}
               onChangeText={setUrl}
             />
-            <Dialog.Close displayWhenAdapted asChild style={{ marginTop: 10 }}>
-              <Button theme="alt1" aria-label="Close">
+            <Dialog.Close asChild>
+              <Button
+                themeInverse
+                style={{ marginTop: 16 }}
+                onPress={() => {
+                  router.push({
+                    pathname: '(feed)/profile',
+                    params: { url: encodeURIComponent(url) },
+                  })
+                }}
+              >
                 Confirm
               </Button>
             </Dialog.Close>
