@@ -1101,6 +1101,13 @@
   resolved "https://registry.npmjs.org/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
+"@egjs/hammerjs@^2.0.17":
+  version "2.0.17"
+  resolved "https://registry.npmjs.org/@egjs/hammerjs/-/hammerjs-2.0.17.tgz#5dc02af75a6a06e4c2db0202cae38c9263895124"
+  integrity sha512-XQsZgjm2EcVUiZQf11UBJQfmZeEmOW8DpI1gsFeln6w0ae0ii4dMQEQ0kjl6DspdWX1aGY1/loyXnP0JS06e/A==
+  dependencies:
+    "@types/hammerjs" "^2.0.36"
+
 "@esbuild/android-arm64@0.17.11":
   version "0.17.11"
   resolved "https://registry.npmjs.org/@esbuild/android-arm64/-/android-arm64-0.17.11.tgz#52c3e6cabc19c5e4c1c0c01cb58f0442338e1c14"
@@ -2213,6 +2220,15 @@
     react-is "^16.13.0"
     use-latest-callback "^0.1.5"
 
+"@react-navigation/drawer@^6.6.2":
+  version "6.6.2"
+  resolved "https://registry.npmjs.org/@react-navigation/drawer/-/drawer-6.6.2.tgz#8206d00a4b89f1f30640147e0c230267bb83d9ed"
+  integrity sha512-6qt4guBdz7bkdo/8BLSCcFNdQdSPYyNn05D9cD+VCY3mGThSiD8bRiP9ju+64im7LsSU+bNWXaP8RxA/FtTVQg==
+  dependencies:
+    "@react-navigation/elements" "^1.3.17"
+    color "^4.2.3"
+    warn-once "^0.1.0"
+
 "@react-navigation/elements@^1.3.17":
   version "1.3.17"
   resolved "https://registry.npmjs.org/@react-navigation/elements/-/elements-1.3.17.tgz#9cb95765940f2841916fc71686598c22a3e4067e"
@@ -3165,6 +3181,11 @@
   integrity sha512-Sig0SNORX9fdW+bQuTEovKj3uHcUL6LQKbCrrqb1X7J6/ReAbhCXRAhc+SMejhLELFj2QcyuxmUooZ4bt5ReSw==
   dependencies:
     "@types/node" "*"
+
+"@types/hammerjs@^2.0.36":
+  version "2.0.41"
+  resolved "https://registry.npmjs.org/@types/hammerjs/-/hammerjs-2.0.41.tgz#f6ecf57d1b12d2befcce00e928a6a097c22980aa"
+  integrity sha512-ewXv/ceBaJprikMcxCmWU1FKyMAQ2X7a9Gtmzw8fcg2kIePI1crERDM818W+XYrxqdBBOdlf2rm137bU+BltCA==
 
 "@types/hoist-non-react-statics@^3.3.1":
   version "3.3.1"
@@ -4977,6 +4998,13 @@ expo-asset@~8.9.1:
     path-browserify "^1.0.0"
     url-parse "^1.5.9"
 
+expo-background-fetch@~11.1.1:
+  version "11.1.1"
+  resolved "https://registry.npmjs.org/expo-background-fetch/-/expo-background-fetch-11.1.1.tgz#7cf88d7cd3d9dca9be4262f3489d79e370e9f970"
+  integrity sha512-5X63ogpCqEqdqXYk4Sl4J8Lt/ZWcQCboS1pq3uprqD1KUi4ICl1P3gwPo+il3rYPV6xYb74Wv1KyyEEYj2vklg==
+  dependencies:
+    expo-task-manager "~11.1.0"
+
 expo-blur@~12.2.2:
   version "12.2.2"
   resolved "https://registry.npmjs.org/expo-blur/-/expo-blur-12.2.2.tgz#b7f94499255afbd3468302d02f3c4e39a0e562d5"
@@ -5119,6 +5147,13 @@ expo-system-ui@~2.2.1:
   dependencies:
     "@react-native/normalize-color" "^2.0.0"
     debug "^4.3.2"
+
+expo-task-manager@~11.1.0, expo-task-manager@~11.1.1:
+  version "11.1.1"
+  resolved "https://registry.npmjs.org/expo-task-manager/-/expo-task-manager-11.1.1.tgz#1a9adcf5439afafcd1a5beb5cfa427708a016c64"
+  integrity sha512-Ot4wq0fVd8+I1W7MsJz0rNdX0ma/zdnBvAppxDX1Oo0o0exo4qs1FmgrTnh3OBnn18aB4cX3wBJoXIatIgNMZQ==
+  dependencies:
+    unimodules-app-loader "~4.1.0"
 
 expo-updates-interface@~0.9.0:
   version "0.9.1"
@@ -8442,6 +8477,17 @@ react-native-fit-image@^1.5.2:
   dependencies:
     prop-types "^15.5.10"
 
+react-native-gesture-handler@~2.9.0:
+  version "2.9.0"
+  resolved "https://registry.npmjs.org/react-native-gesture-handler/-/react-native-gesture-handler-2.9.0.tgz#2f63812e523c646f25b9ad660fc6f75948e51241"
+  integrity sha512-a0BcH3Qb1tgVqUutc6d3VuWQkI1AM3+fJx8dkxzZs9t06qA27QgURYFoklpabuWpsUTzuKRpxleykp25E8m7tg==
+  dependencies:
+    "@egjs/hammerjs" "^2.0.17"
+    hoist-non-react-statics "^3.3.0"
+    invariant "^2.2.4"
+    lodash "^4.17.21"
+    prop-types "^15.7.2"
+
 react-native-gradle-plugin@^0.71.15:
   version "0.71.16"
   resolved "https://registry.npmjs.org/react-native-gradle-plugin/-/react-native-gradle-plugin-0.71.16.tgz#822bb0c680e03b5df5aa65f2e5ffc2bc2930854a"
@@ -9897,6 +9943,11 @@ unicode-property-aliases-ecmascript@^2.0.0:
   version "2.1.0"
   resolved "https://registry.npmjs.org/unicode-property-aliases-ecmascript/-/unicode-property-aliases-ecmascript-2.1.0.tgz#43d41e3be698bd493ef911077c9b131f827e8ccd"
   integrity sha512-6t3foTQI9qne+OZoVQB/8x8rk2k1eVy1gRXhV3oFQ5T6R1dqQ1xtin3XqSlx3+ATBkliTaR/hHyJBm+LVPNM8w==
+
+unimodules-app-loader@~4.1.0:
+  version "4.1.1"
+  resolved "https://registry.npmjs.org/unimodules-app-loader/-/unimodules-app-loader-4.1.1.tgz#c263ee1a52eac1a583f7b8d7b7cefd562d6d0c51"
+  integrity sha512-K0vuriaD1Zft2dKwYSER/eoiTEPINL6cASed42/QuWeV9jqfQ7Y6OAHM4zIyhXVdro/IS2L6pPnnqZFIH2xoKg==
 
 union-value@^1.0.0:
   version "1.0.1"

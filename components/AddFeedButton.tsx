@@ -1,4 +1,4 @@
-import { X } from '@tamagui/lucide-icons'
+import { X, PlusCircle } from '@tamagui/lucide-icons'
 import { Plus } from 'iconoir-react-native'
 import { useState } from 'react'
 import { Pressable } from 'react-native'
@@ -22,7 +22,7 @@ export default function AddFeedButton() {
     <Dialog modal>
       <Dialog.Trigger asChild>
         <Pressable hitSlop={15}>
-          <Plus width={32} height={32} />
+          <PlusCircle size={24} />
         </Pressable>
       </Dialog.Trigger>
       <Dialog.Portal>

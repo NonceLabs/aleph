@@ -11,6 +11,9 @@ import { useColorScheme } from 'react-native'
 import { TamaguiProvider } from 'tamagui'
 import config from './tamagui.config'
 import { LogBox } from 'react-native'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import { Provider } from 'react-redux'
+import { store } from 'store'
 
 LogBox.ignoreAllLogs()
 
@@ -51,20 +54,31 @@ function RootLayoutNav() {
 
   return (
     <>
-      <TamaguiProvider config={config}>
-        <ThemeProvider
-          value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
-        >
-          <Stack initialRouteName="(tabs)">
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen
-              name="(feed)"
-              options={{ headerShown: false, header: () => null }}
-            />
-            <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
-          </Stack>
-        </ThemeProvider>
-      </TamaguiProvider>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <Provider store={store}>
+          <TamaguiProvider config={config}>
+            <ThemeProvider
+              value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
+            >
+              <Stack initialRouteName="(tabs)">
+                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                <Stack.Screen
+                  name="(feed)"
+                  options={{ headerShown: false, header: () => null }}
+                />
+                <Stack.Screen
+                  name="article"
+                  options={{ headerShown: false, header: () => null }}
+                />
+                <Stack.Screen
+                  name="modal"
+                  options={{ presentation: 'modal' }}
+                />
+              </Stack>
+            </ThemeProvider>
+          </TamaguiProvider>
+        </Provider>
+      </GestureHandlerRootView>
     </>
   )
 }

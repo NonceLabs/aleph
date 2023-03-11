@@ -23,7 +23,7 @@ export default function Header({
       style={{
         ...styles.container,
         paddingTop: insets.top,
-        paddingHorizontal: back ? 8 : 16,
+        paddingHorizontal: back ? 2 : 16,
       }}
     >
       {back ? (

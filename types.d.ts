@@ -7,6 +7,7 @@ export interface FeedEntry {
   title?: string
   description?: string
   published?: Date
+  sourceUrl?: string
 }
 
 export interface FeedData {
@@ -93,4 +94,6 @@ export interface Source {
   title: string
   description: string
   url: string
+  link?: string
+  logo?: string
 }
