@@ -24,7 +24,7 @@ export default function SourceItem({
     <Pressable
       onPress={() => {
         router.push({
-          pathname: '(feed)/profile',
+          pathname: 'feed',
           params: {
             ...item,
             link: item.link ? encodeURIComponent(item.link) : '',
@@ -34,7 +34,14 @@ export default function SourceItem({
         })
       }}
     >
-      <XStack space={4} alignItems="center" paddingVertical={8}>
+      <XStack
+        space={4}
+        alignItems="center"
+        paddingVertical={12}
+        backgroundColor="white"
+        px={12}
+        borderRadius={4}
+      >
         <Image
           source={{ uri: item.logo }}
           style={{

@@ -12,8 +12,9 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useAppSelector } from 'store/hooks'
 import { Heading, Paragraph, ScrollView, Text, XStack, YStack } from 'tamagui'
 import * as WebBrowser from 'expo-web-browser'
+import Header from 'components/Header'
 
-export default function Article() {
+export default function Reader() {
   const flow = useAppSelector((state) => state.feed.flow)
   const sources = useAppSelector((state) => state.feed.sources)
   const { id } = useSearchParams()
@@ -25,15 +26,34 @@ export default function Article() {
   const source = sources.find((t) => t.link === feed?.link)
 
   return (
-    <YStack flex={1} pt={20}>
-      <XStack
+    <YStack flex={1}>
+      <Header
+        title="Back"
+        back
+        right={
+          source && (
+            <XStack space={8} pr={8}>
+              <Text fontWeight="bold" fontSize={20}>
+                {source.title}
+              </Text>
+              {source?.logo && (
+                <Image
+                  source={source?.logo}
+                  style={{ width: 24, height: 24, borderRadius: 4 }}
+                />
+              )}
+            </XStack>
+          )
+        }
+      />
+      {/* <XStack
         px={16}
         pb={10}
         alignItems="center"
         justifyContent="space-between"
       >
         <Pressable onPress={() => router.back()}>
-          {/* <DeleteCircle width={28} height={28} color="gray" /> */}
+          
         </Pressable>
 
         {source && (
@@ -49,7 +69,7 @@ export default function Article() {
             )}
           </XStack>
         )}
-      </XStack>
+      </XStack> */}
 
       <ScrollView
         p={16}

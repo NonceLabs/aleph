@@ -1,16 +1,10 @@
-import { FlashList } from '@shopify/flash-list'
 import { Link } from 'expo-router'
-import { FlatList } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { useAppSelector } from 'store/hooks'
-import { Heading, ScrollView, Text, YStack } from 'tamagui'
-import SourceItem from './SourceItem'
+import { Text, YStack } from 'tamagui'
 
 export default function DrawerPanel() {
   const insets = useSafeAreaInsets()
-  const sources = useAppSelector((state) => state.feed.sources)
-  console.log('sources', sources)
-
+  const fontSize = 32
   return (
     <YStack
       flex={1}
@@ -18,44 +12,36 @@ export default function DrawerPanel() {
       pb={insets.bottom}
       space
       px={8}
-      justifyContent="space-between"
+      justifyContent="center"
     >
-      {/* <ScrollView>
-        {sources.map((source) => {
-          return <SourceItem key={source.url} item={source} />
-        })}
-      </ScrollView> */}
-      <FlatList
-        data={sources}
-        style={{
-          flex: 1,
-          maxHeight: 300,
-          minHeight: 100,
-        }}
-        ItemSeparatorComponent={() => (
-          <YStack height={1} backgroundColor="$borderColor" />
-        )}
-        renderItem={({ item }) => {
-          return <SourceItem item={item} />
-        }}
-      />
       <YStack width="100%" space={8}>
         <Link href="/">
           <Text
             textAlign="right"
             fontWeight="bold"
-            fontSize={24}
+            fontSize={fontSize}
             fontFamily="Gilroy-Bold"
             width={200}
           >
             Home
           </Text>
         </Link>
+        <Link href="/feeds">
+          <Text
+            textAlign="right"
+            fontWeight="bold"
+            fontSize={fontSize}
+            fontFamily="Gilroy-Bold"
+            width={200}
+          >
+            Feeds
+          </Text>
+        </Link>
         <Link href="/settings">
           <Text
             textAlign="right"
             fontWeight="bold"
-            fontSize={24}
+            fontSize={fontSize}
             fontFamily="Gilroy-Bold"
           >
             Settings

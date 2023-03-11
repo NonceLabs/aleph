@@ -1,5 +1,5 @@
 import { X, PlusCircle } from '@tamagui/lucide-icons'
-import { Plus } from 'iconoir-react-native'
+import { AddCircle, Plus } from 'iconoir-react-native'
 import { useState } from 'react'
 import { Pressable } from 'react-native'
 import {
@@ -21,8 +21,8 @@ export default function AddFeedButton() {
   return (
     <Dialog modal>
       <Dialog.Trigger asChild>
-        <Pressable hitSlop={15}>
-          <PlusCircle size={24} />
+        <Pressable hitSlop={15} style={{ marginRight: 10 }}>
+          <AddCircle width={24} height={24} />
         </Pressable>
       </Dialog.Trigger>
       <Dialog.Portal>
@@ -71,7 +71,7 @@ export default function AddFeedButton() {
                 style={{ marginTop: 16 }}
                 onPress={() => {
                   router.push({
-                    pathname: '(feed)/profile',
+                    pathname: 'feed',
                     params: { url: encodeURIComponent(url) },
                   })
                 }}

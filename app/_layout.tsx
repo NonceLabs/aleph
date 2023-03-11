@@ -16,6 +16,7 @@ import { Provider } from 'react-redux'
 import { store } from 'store'
 import { Drawer } from './Drawer'
 import DrawerPanel from 'components/DrawerPanel'
+import AddFeedButton from 'components/AddFeedButton'
 
 LogBox.ignoreAllLogs()
 
@@ -72,27 +73,36 @@ function RootLayoutNav() {
                 }}
               >
                 <Drawer.Screen
-                  name="index" // This is the name of the page and must match the url from root
+                  name="index"
                   options={{
                     drawerLabel: 'Flow',
                     header: () => null,
                   }}
                 />
-                <Stack.Screen
-                  name="(feed)"
-                  options={{ headerShown: false, header: () => null }}
-                />
-                <Stack.Screen
-                  name="modal"
-                  options={{ presentation: 'modal' }}
-                />
                 <Drawer.Screen
-                  name="settings" // This is the name of the page and must match the url from root
+                  name="settings"
                   options={{
                     drawerLabel: 'Settings',
                     title: 'Settings',
                   }}
                 />
+                <Drawer.Screen
+                  name="feeds"
+                  options={{
+                    drawerLabel: 'Feeds',
+                    title: 'Feeds',
+                    headerRight: AddFeedButton,
+                  }}
+                />
+                <Stack.Screen
+                  name="feed"
+                  options={{ headerShown: false, header: () => null }}
+                />
+                <Stack.Screen
+                  name="reader"
+                  options={{ headerShown: false, header: () => null }}
+                />
+                <Stack></Stack>
               </Drawer>
             </ThemeProvider>
           </TamaguiProvider>
