@@ -34,26 +34,24 @@ export default function SourceItem({
         })
       }}
     >
-      <XStack space alignItems="center" paddingVertical={6}>
-        <XStack borderWidth={1} borderColor="$borderColor" borderRadius={4}>
-          <Image
-            source={{ uri: item.logo }}
-            style={{
-              width: 24,
-              height: 24,
-              borderRadius: 4,
-            }}
-          />
-        </XStack>
-        <XStack
-          flex={1}
-          space
-          alignItems="center"
-          justifyContent="space-between"
-        >
-          <YStack>
-            <Text fontSize={18}>{item.title}</Text>
-          </YStack>
+      <XStack space={4} alignItems="center" paddingVertical={8}>
+        <Image
+          source={{ uri: item.logo }}
+          style={{
+            width: 24,
+            height: 24,
+            borderRadius: 4,
+          }}
+        />
+        <XStack flex={1} alignItems="center" justifyContent="space-between">
+          <Text
+            fontSize={16}
+            maxWidth={120}
+            numberOfLines={1}
+            ellipsizeMode="tail"
+          >
+            {item.title}
+          </Text>
           <Text fontSize={14} color="$gray9Light">
             {unreadCount}
           </Text>

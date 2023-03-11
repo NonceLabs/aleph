@@ -9,11 +9,13 @@ import { SplashScreen, Stack } from 'expo-router'
 import { useEffect } from 'react'
 import { useColorScheme } from 'react-native'
 import { TamaguiProvider } from 'tamagui'
-import config from './tamagui.config'
+import config from '../lib/tamagui.config'
 import { LogBox } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { Provider } from 'react-redux'
 import { store } from 'store'
+import { Drawer } from './Drawer'
+import DrawerPanel from 'components/DrawerPanel'
 
 LogBox.ignoreAllLogs()
 
@@ -24,7 +26,7 @@ export {
 
 export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: '(tabs)',
+  initialRouteName: 'flow',
 }
 
 export default function RootLayout() {
@@ -60,21 +62,38 @@ function RootLayoutNav() {
             <ThemeProvider
               value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
             >
-              <Stack initialRouteName="(tabs)">
-                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-                <Stack.Screen
-                  name="(feed)"
-                  options={{ headerShown: false, header: () => null }}
+              <Drawer
+                initialRouteName="flow"
+                drawerContent={DrawerPanel}
+                screenOptions={{
+                  drawerStyle: {
+                    width: 250,
+                  },
+                }}
+              >
+                <Drawer.Screen
+                  name="index" // This is the name of the page and must match the url from root
+                  options={{
+                    drawerLabel: 'Flow',
+                    header: () => null,
+                  }}
                 />
                 <Stack.Screen
-                  name="article"
+                  name="(feed)"
                   options={{ headerShown: false, header: () => null }}
                 />
                 <Stack.Screen
                   name="modal"
                   options={{ presentation: 'modal' }}
                 />
-              </Stack>
+                <Drawer.Screen
+                  name="settings" // This is the name of the page and must match the url from root
+                  options={{
+                    drawerLabel: 'Settings',
+                    title: 'Settings',
+                  }}
+                />
+              </Drawer>
             </ThemeProvider>
           </TamaguiProvider>
         </Provider>

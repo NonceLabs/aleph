@@ -14,8 +14,7 @@ import { Crown, RssFeed, TextAlt } from 'iconoir-react-native'
 export default function SettingsPage() {
   return (
     <YStack flex={1}>
-      <Header title="Settings" />
-      <ScrollView p={20} pt={0} flex={1}>
+      <ScrollView p={20} flex={1}>
         <YGroup als="center" bordered size="$5" separator={<Separator />}>
           <YGroup.Item>
             <ListItem

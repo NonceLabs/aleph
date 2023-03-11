@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
 import { Image } from 'expo-image'
-import { useRouter, useSearchParams } from 'expo-router'
+import { useNavigation, useRouter, useSearchParams } from 'expo-router'
 import {
   BookmarkEmpty,
   Compass,
@@ -19,15 +19,21 @@ export default function Article() {
   const { id } = useSearchParams()
   const insets = useSafeAreaInsets()
   const router = useRouter()
+  const navigation = useNavigation()
   const feed = flow.find((t) => t.entries?.find((m) => m.id === id))
   const item = feed?.entries?.find((t) => t.id === id)
   const source = sources.find((t) => t.link === feed?.link)
 
   return (
-    <YStack flex={1} pt={insets.top}>
-      <XStack px={16} alignItems="center" justifyContent="space-between">
+    <YStack flex={1} pt={20}>
+      <XStack
+        px={16}
+        pb={10}
+        alignItems="center"
+        justifyContent="space-between"
+      >
         <Pressable onPress={() => router.back()}>
-          <DeleteCircle width={28} height={28} color="gray" />
+          {/* <DeleteCircle width={28} height={28} color="gray" /> */}
         </Pressable>
 
         {source && (
@@ -45,7 +51,12 @@ export default function Article() {
         )}
       </XStack>
 
-      <ScrollView p={16} flex={1} space={8}>
+      <ScrollView
+        p={16}
+        contentContainerStyle={{ paddingBottom: insets.bottom }}
+        flex={1}
+        space={8}
+      >
         <Heading lineHeight={28}>{item?.title}</Heading>
         <Text fontSize={12} color="gray">
           {dayjs(item?.published).format('MMM DD, YYYY')}

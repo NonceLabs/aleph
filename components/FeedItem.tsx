@@ -20,7 +20,7 @@ export default function FeedItem({
     <Pressable
       onPress={() => {
         router.push({
-          pathname: 'article',
+          pathname: '(feed)/article',
           params: {
             id: encodeURIComponent(item.id),
           },
