@@ -1,3 +1,4 @@
+import { Image } from 'expo-image'
 import { Link } from 'expo-router'
 import {
   BookmarkEmpty,
@@ -11,6 +12,34 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Text, XStack, YStack } from 'tamagui'
 
+const routes = [
+  {
+    href: '/',
+    title: 'Home',
+    Icon: Home,
+  },
+  {
+    href: '/feeds',
+    title: 'Feeds',
+    Icon: RssFeedTag,
+  },
+  {
+    href: '/explore',
+    title: 'Explore',
+    Icon: Planet,
+  },
+  {
+    href: '/bookmarks',
+    title: 'Bookmarks',
+    Icon: BookmarkEmpty,
+  },
+  {
+    href: '/settings',
+    title: 'Settings',
+    Icon: Settings,
+  },
+]
+
 export default function DrawerPanel() {
   const insets = useSafeAreaInsets()
   const fontSize = 32
@@ -18,79 +47,41 @@ export default function DrawerPanel() {
     <YStack
       flex={1}
       pt={insets.top}
-      pb={insets.bottom}
       space
       px={8}
-      justifyContent="center"
+      jc="space-between"
+      pb={insets.bottom + 80}
     >
-      <YStack width="100%" space={8} alignItems="flex-end">
-        <Link href="/">
-          <XStack space={8} alignItems="center" justifyContent="flex-end">
-            <Text
-              textAlign="right"
-              fontWeight="bold"
-              fontSize={fontSize}
-              fontFamily="Gilroy-Bold"
-              width={200}
-            >
-              Home
-            </Text>
-            <Home width={30} height={30} color="black" />
-          </XStack>
-        </Link>
-        <Link href="/feeds">
-          <XStack space={8} alignItems="center" justifyContent="flex-end">
-            <Text
-              textAlign="right"
-              fontWeight="bold"
-              fontSize={fontSize}
-              fontFamily="Gilroy-Bold"
-              width={200}
-            >
-              Feeds
-            </Text>
-            <RssFeedTag width={30} height={30} color="black" />
-          </XStack>
-        </Link>
-        <XStack space={8} alignItems="center" justifyContent="flex-end">
-          <Text
-            textAlign="right"
-            fontWeight="bold"
-            fontSize={fontSize}
-            fontFamily="Gilroy-Bold"
-            width={200}
-          >
-            Explore
+      <XStack jc="flex-end">
+        <YStack p={10} ai="flex-end" space={4}>
+          <Image
+            source={require('../assets/images/icon.png')}
+            style={{ width: 80, height: 80 }}
+          />
+          <Text fontFamily={'Gilroy'} color="$gray7Light">
+            Aleph Reader
           </Text>
-          <Planet width={30} height={30} color="black" />
-        </XStack>
-        <Link href="/bookmarks">
-          <XStack space={8} alignItems="center" justifyContent="flex-end">
-            <Text
-              textAlign="right"
-              fontWeight="bold"
-              fontSize={fontSize}
-              fontFamily="Gilroy-Bold"
-              width={200}
-            >
-              Bookmarks
-            </Text>
-            <BookmarkEmpty width={30} height={30} color="black" />
-          </XStack>
-        </Link>
-        <Link href="/settings">
-          <XStack space={8} alignItems="center" justifyContent="flex-end">
-            <Text
-              textAlign="right"
-              fontWeight="bold"
-              fontSize={fontSize}
-              fontFamily="Gilroy-Bold"
-            >
-              Settings
-            </Text>
-            <Settings width={30} height={30} color="black" />
-          </XStack>
-        </Link>
+        </YStack>
+      </XStack>
+      <YStack width="100%" space={8} ai="flex-end" pr={8}>
+        {routes.map(({ href, title, Icon }) => {
+          return (
+            <Link key={title} href={href}>
+              <XStack space={8} ai="center" jc="flex-end">
+                <Text
+                  textAlign="right"
+                  fontWeight="bold"
+                  fontSize={fontSize}
+                  fontFamily="Gilroy-Bold"
+                  width={200}
+                >
+                  {title}
+                </Text>
+                <Icon width={30} height={30} color="black" />
+              </XStack>
+            </Link>
+          )
+        })}
       </YStack>
     </YStack>
   )

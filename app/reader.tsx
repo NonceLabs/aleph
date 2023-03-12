@@ -26,6 +26,7 @@ import * as WebBrowser from 'expo-web-browser'
 import RenderHtml from 'react-native-render-html'
 import ReaderSettings from 'components/ReaderSettings'
 import { useMemo } from 'react'
+import ReaderHeader from 'components/ReaderHeader'
 
 export default function Reader() {
   const flow = useAppSelector((state) => state.feed.flow)
@@ -42,7 +43,7 @@ export default function Reader() {
   const dispatch = useAppDispatch()
   const feed = flow.find((t) => t.entries?.find((m) => m.id === id))
   const item = feed?.entries?.find((t) => t.id === id)
-  const source = sources.find((t) => t.link === feed?.link)
+  const source = sources.find((t) => t.url === feed?.url)
   const bookmarked = useAppSelector((state) => state.feed.bookmarked)
   const isBookmarked = bookmarked.some((t) => t.id === item?.id)
 
@@ -74,65 +75,26 @@ export default function Reader() {
   }
 
   return (
-    <YStack flex={1} pt={insets.top}>
-      <XStack
-        space
-        px={16}
-        py={4}
-        alignItems="center"
-        justifyContent="space-between"
-      >
-        {source && (
-          <Pressable
-            onPress={() =>
-              router.push({
-                pathname: 'feed',
-                params: {
-                  ...source,
-                  id: '',
-                  link: source.link ? encodeURIComponent(source.link) : '',
-                  url: encodeURIComponent(source.url),
-                  logo: source.logo ? encodeURIComponent(source.logo) : '',
-                },
-              })
-            }
-          >
-            <XStack space={8} alignItems="center">
-              {source?.logo && (
-                <Image
-                  source={source?.logo}
-                  style={{ width: 24, height: 24, borderRadius: 4 }}
-                />
-              )}
-              <Text fontWeight="bold" fontSize={20} color="$blue10Light">
-                {source.title}
-              </Text>
-            </XStack>
-          </Pressable>
-        )}
-        <XStack space={8}>
-          {(item?.link || item?.id.startsWith('http')) && (
-            <Pressable
-              onPress={() => WebBrowser.openBrowserAsync(item.link || item?.id)}
-            >
-              <Compass width={24} height={24} color="gray" />
-            </Pressable>
-          )}
-        </XStack>
-      </XStack>
-
+    <YStack flex={1}>
+      <ReaderHeader source={source} item={item} />
       <ScrollView
         p={16}
         contentContainerStyle={{ paddingBottom: insets.bottom }}
         flex={1}
         space={8}
+        // stickyHeaderIndices={[0]}
+        // StickyHeaderComponent={() => (
+        //   <ReaderHeader source={source} item={item} />
+        // )}
       >
-        <Text fontWeight="bold" fontSize={26} lineHeight={28}>
-          {item?.title}
-        </Text>
-        <Text fontSize={12} color="gray">
-          {dayjs(item?.published).format('MMM DD, YYYY')}
-        </Text>
+        <YStack>
+          <Text fontWeight="bold" fontSize={26} lineHeight={28}>
+            {item?.title}
+          </Text>
+          <Text fontSize={12} color="gray">
+            {dayjs(item?.published).format('MMM DD, YYYY')}
+          </Text>
+        </YStack>
         <RenderHtml
           source={{ html: item?.description || '' }}
           enableExperimentalMarginCollapsing

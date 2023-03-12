@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+import _ from 'lodash'
 import { FeedEntry, Source, FeedData } from '../types'
 
 interface FeedSlice {
@@ -68,7 +69,13 @@ export const feedSlice = createSlice({
           const oldIndex = state.flow.findIndex((t) => t.url === item.url)
           if (oldIndex !== -1) {
             const old = state.flow[oldIndex]
-            state.flow.splice(oldIndex, 1, item)
+            state.flow.splice(oldIndex, 1, {
+              ...item,
+              entries: _.uniqBy(
+                [...(old.entries || []), ...(item.entries || [])],
+                'id'
+              ),
+            })
           } else {
             state.flow.push(item)
           }

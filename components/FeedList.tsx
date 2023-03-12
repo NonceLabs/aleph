@@ -32,7 +32,7 @@ export default function FeedList({ feeds }: { feeds: FeedEntry[] }) {
             >
               <Menu width={28} height={28} />
             </Pressable>
-            <Input flex={1} borderRadius="50%" height={40} />
+            <Input flex={1} borderRadius={20} height={40} />
           </XStack>
         )
       }}

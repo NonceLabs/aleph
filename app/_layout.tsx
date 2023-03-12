@@ -109,6 +109,10 @@ function RootLayoutNav() {
                   name="reader"
                   options={{ headerShown: false, header: () => null }}
                 />
+                <Drawer.Screen
+                  name="explore"
+                  options={{ headerShown: false, header: () => null }}
+                />
               </Drawer>
             </ThemeProvider>
           </TamaguiProvider>
