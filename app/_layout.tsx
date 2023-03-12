@@ -113,6 +113,10 @@ function RootLayoutNav() {
                   name="explore"
                   options={{ headerShown: false, header: () => null }}
                 />
+                <Drawer.Screen
+                  name="tags"
+                  options={{ headerShown: false, header: () => null }}
+                />
               </Drawer>
             </ThemeProvider>
           </TamaguiProvider>

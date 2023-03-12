@@ -154,7 +154,7 @@ export default function ReaderSettings() {
                         t === fontFamily ? '$blue7Light' : '$gray7Light'
                       }
                     >
-                      <Text fontSize={fontSize} fontFamily={t}>
+                      <Text fontSize={20} fontFamily={t}>
                         {t}
                       </Text>
                     </XStack>

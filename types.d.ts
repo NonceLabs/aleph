@@ -99,3 +99,9 @@ export interface Source {
   logo?: string
   id?: string
 }
+
+export interface Tag {
+  title: string
+  icon: any
+  count: number
+}

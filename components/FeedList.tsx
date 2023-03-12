@@ -1,29 +1,68 @@
 import { useAppSelector } from 'store/hooks'
-import { FeedEntry } from 'types'
+import { FeedEntry, Tag } from 'types'
 import { FlashList } from '@shopify/flash-list'
-import { Button, Input, ScrollView, Text, XStack } from 'tamagui'
+import { Input, XStack } from 'tamagui'
 import EntryItem from './EntryItem'
-import { Pressable } from 'react-native'
+import { Animated, Pressable, useAnimatedValue } from 'react-native'
 import _ from 'lodash'
-import { Menu } from 'iconoir-react-native'
-import { BlurView } from 'expo-blur'
-import useTheme from 'hooks/useTheme'
+import { BookmarkEmpty, Menu, SeaAndSun } from 'iconoir-react-native'
 import { useState } from 'react'
-import { useNavigation } from 'expo-router'
+import { useNavigation, useRouter } from 'expo-router'
 import { PAGE_SIZE } from 'lib/constants'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import TagsHeader from './TagsHeader'
 
-export default function FeedList({ feeds }: { feeds: FeedEntry[] }) {
+export default function FeedList({
+  feeds,
+  type = 'flow',
+}: {
+  feeds: FeedEntry[]
+  type?: 'flow' | 'bookmarks'
+}) {
   const [page, setPage] = useState(1)
+  const [selectedTag, setSelectedTag] = useState<Tag>()
   const sources = useAppSelector((state) => state.feed.sources)
-  const theme = useTheme()
+  const insets = useSafeAreaInsets()
+  const scrollY = useAnimatedValue(0)
 
   const navigation = useNavigation()
+
+  const customTags = [
+    {
+      title: type === 'flow' ? 'Today' : 'Bookmarked',
+      icon: type === 'flow' ? SeaAndSun : BookmarkEmpty,
+      count: 0,
+    },
+  ]
+  const topTags = [
+    {
+      title: 'SVB',
+      count: 12,
+      icon: null,
+    },
+    {
+      title: 'Binance',
+      count: 7,
+      icon: null,
+    },
+    {
+      title: 'Disney',
+      count: 7,
+      icon: null,
+    },
+  ]
 
   return (
     <FlashList
       ListHeaderComponent={() => {
         return (
-          <XStack space={8} flex={1} px={16} alignItems="center">
+          <XStack
+            space={8}
+            flex={1}
+            px={16}
+            alignItems="center"
+            pt={insets.top}
+          >
             <Pressable
               onPress={() => {
                 // @ts-ignore
@@ -36,24 +75,22 @@ export default function FeedList({ feeds }: { feeds: FeedEntry[] }) {
           </XStack>
         )
       }}
+      scrollEventThrottle={16}
       stickyHeaderIndices={[0]}
+      onScroll={Animated.event(
+        [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+        { useNativeDriver: false }
+      )}
       data={['header', ...feeds.slice(0, page * PAGE_SIZE)]}
       renderItem={({ item }) => {
         if (typeof item === 'string') {
           return (
-            <BlurView intensity={80} tint={theme}>
-              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                <XStack space={12} flex={1} px={16} alignItems="center" py={16}>
-                  {sources.map((t) => {
-                    return (
-                      <Button key={t.title} height={30} borderRadius="50%">
-                        <Text fontSize={16}>{t.title}</Text>
-                      </Button>
-                    )
-                  })}
-                </XStack>
-              </ScrollView>
-            </BlurView>
+            <TagsHeader
+              tags={[...customTags, ...topTags]}
+              selectedTag={selectedTag}
+              scrollY={scrollY}
+              setSelectedTag={setSelectedTag}
+            />
           )
         }
         return (

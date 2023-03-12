@@ -35,7 +35,7 @@ export default function FlowPage() {
     dayjs(b.published).diff(dayjs(a.published))
   )
   return (
-    <YStack flex={1} backgroundColor="#f7f6f5" paddingTop={insets.top}>
+    <YStack flex={1} backgroundColor="#f7f6f5">
       <FeedList feeds={feeds} />
     </YStack>
   )
