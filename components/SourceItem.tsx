@@ -2,7 +2,7 @@ import { Image } from 'expo-image'
 import { useRouter } from 'expo-router'
 import { Pressable } from 'react-native'
 import { useAppSelector } from 'store/hooks'
-import { Text, XStack, YStack } from 'tamagui'
+import { Text, XStack } from 'tamagui'
 import { Source } from 'types'
 
 export default function SourceItem({
@@ -12,14 +12,13 @@ export default function SourceItem({
   item: Source
   onPress?: () => void
 }) {
-  const flow = useAppSelector((state) =>
-    state.feed.flow.find((t) => t.link === item.link)
+  const feedData = useAppSelector((state) =>
+    state.feed.flow.find((t) => t.url === item.url)
   )
-  const read = useAppSelector((state) => state.feed.read || [])
   const router = useRouter()
 
-  const unreadCount =
-    flow?.entries?.filter((t) => !read.includes(t.id)).length || 0
+  const unreadCount = feedData?.entries?.filter((t) => !t.read).length || 0
+
   return (
     <Pressable
       onPress={() => {
