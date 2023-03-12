@@ -96,4 +96,5 @@ export interface Source {
   url: string
   link?: string
   logo?: string
+  id?: string
 }

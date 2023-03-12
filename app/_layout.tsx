@@ -35,6 +35,7 @@ export default function RootLayout() {
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
     Inter: require('../assets/fonts/Inter.ttf'),
     'Gilroy-Bold': require('../assets/fonts/Gilroy-Bold.ttf'),
+    Vollkorn: require('../assets/fonts/Vollkorn.ttf'),
     ...FontAwesome.font,
   })
 
@@ -94,15 +95,14 @@ function RootLayoutNav() {
                     headerRight: AddFeedButton,
                   }}
                 />
-                <Stack.Screen
+                <Drawer.Screen
                   name="feed"
                   options={{ headerShown: false, header: () => null }}
                 />
-                <Stack.Screen
+                <Drawer.Screen
                   name="reader"
                   options={{ headerShown: false, header: () => null }}
                 />
-                <Stack></Stack>
               </Drawer>
             </ThemeProvider>
           </TamaguiProvider>

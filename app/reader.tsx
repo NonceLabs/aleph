@@ -5,14 +5,25 @@ import {
   BookmarkEmpty,
   Compass,
   DeleteCircle,
+  NavArrowLeft,
+  Play,
   ShareIos,
+  TextSize,
 } from 'iconoir-react-native'
 import { Pressable } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { useAppSelector } from 'store/hooks'
-import { Heading, Paragraph, ScrollView, Text, XStack, YStack } from 'tamagui'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
+import {
+  Heading,
+  Paragraph,
+  ScrollView,
+  Text,
+  useWindowDimensions,
+  XStack,
+  YStack,
+} from 'tamagui'
 import * as WebBrowser from 'expo-web-browser'
-import Header from 'components/Header'
+import RenderHtml from 'react-native-render-html'
 
 export default function Reader() {
   const flow = useAppSelector((state) => state.feed.flow)
@@ -20,56 +31,70 @@ export default function Reader() {
   const { id } = useSearchParams()
   const insets = useSafeAreaInsets()
   const router = useRouter()
+  const { width } = useWindowDimensions()
   const navigation = useNavigation()
+  const dispatch = useAppDispatch()
   const feed = flow.find((t) => t.entries?.find((m) => m.id === id))
   const item = feed?.entries?.find((t) => t.id === id)
   const source = sources.find((t) => t.link === feed?.link)
+  const bookmarked = useAppSelector((state) => state.feed.bookmarked)
+  const isBookmarked = bookmarked.some((t) => t.id === item?.id)
+  const onBookmark = () => {
+    dispatch({
+      type: 'feed/bookmark',
+      payload: item,
+    })
+  }
 
   return (
-    <YStack flex={1}>
-      <Header
-        title="Back"
-        back
-        right={
-          source && (
-            <XStack space={8} pr={8}>
-              <Text fontWeight="bold" fontSize={20}>
-                {source.title}
-              </Text>
+    <YStack flex={1} pt={insets.top}>
+      <XStack
+        space
+        px={16}
+        py={4}
+        alignItems="center"
+        justifyContent="space-between"
+      >
+        {source && (
+          <Pressable
+            onPress={() =>
+              router.push({
+                pathname: 'feed',
+                params: {
+                  ...source,
+                  id: '',
+                  link: source.link ? encodeURIComponent(source.link) : '',
+                  url: encodeURIComponent(source.url),
+                  logo: source.logo ? encodeURIComponent(source.logo) : '',
+                },
+              })
+            }
+          >
+            <XStack space={8} alignItems="center">
               {source?.logo && (
                 <Image
                   source={source?.logo}
                   style={{ width: 24, height: 24, borderRadius: 4 }}
                 />
               )}
+              <Text fontWeight="bold" fontSize={20} color="$blue10Light">
+                {source.title}
+              </Text>
             </XStack>
-          )
-        }
-      />
-      {/* <XStack
-        px={16}
-        pb={10}
-        alignItems="center"
-        justifyContent="space-between"
-      >
-        <Pressable onPress={() => router.back()}>
-          
-        </Pressable>
-
-        {source && (
-          <XStack space={8}>
-            <Text fontWeight="bold" fontSize={20}>
-              {source.title}
-            </Text>
-            {source?.logo && (
-              <Image
-                source={source?.logo}
-                style={{ width: 24, height: 24, borderRadius: 4 }}
-              />
-            )}
-          </XStack>
+          </Pressable>
         )}
-      </XStack> */}
+        <XStack space={8}>
+          <TextSize width={24} height={24} color="gray" />
+          {(item?.link || item?.id.startsWith('http')) && (
+            <Pressable
+              onPress={() => WebBrowser.openBrowserAsync(item.link || item?.id)}
+            >
+              <Compass width={24} height={24} color="gray" />
+            </Pressable>
+          )}
+          <ShareIos width={24} height={24} color="gray" />
+        </XStack>
+      </XStack>
 
       <ScrollView
         p={16}
@@ -77,30 +102,60 @@ export default function Reader() {
         flex={1}
         space={8}
       >
-        <Heading lineHeight={28}>{item?.title}</Heading>
+        <Text fontWeight="bold" fontSize={26} lineHeight={28}>
+          {item?.title}
+        </Text>
         <Text fontSize={12} color="gray">
           {dayjs(item?.published).format('MMM DD, YYYY')}
         </Text>
-        <Paragraph>{item?.description}</Paragraph>
+        <RenderHtml
+          source={{ html: item?.description || '' }}
+          enableExperimentalMarginCollapsing
+          contentWidth={width}
+          systemFonts={['Vollkorn', 'Gilroy-Bold']}
+          tagsStyles={{
+            body: {
+              fontSize: 20,
+              fontFamily: 'Vollkorn',
+            },
+            p: {
+              fontFamily: 'Vollkorn',
+            },
+            figcaption: {
+              fontStyle: 'italic',
+              fontSize: 14,
+            },
+            cite: {
+              fontStyle: 'italic',
+              fontSize: 14,
+              textAlign: 'center',
+            },
+          }}
+        />
       </ScrollView>
 
       <XStack
         space
         pb={insets.bottom}
         px={20}
-        justifyContent="space-around"
+        justifyContent="space-between"
         backgroundColor="$background"
         pt={8}
       >
-        {(item?.link || item?.id.startsWith('http')) && (
-          <Pressable
-            onPress={() => WebBrowser.openBrowserAsync(item.link || item?.id)}
-          >
-            <Compass width={28} height={28} />
+        <Pressable onPress={() => router.back()}>
+          <NavArrowLeft width={28} height={28} />
+        </Pressable>
+        <XStack space={16}>
+          <Play width={28} height={28} color="gray" />
+          <Pressable onPress={onBookmark}>
+            <BookmarkEmpty
+              width={28}
+              height={28}
+              color={isBookmarked ? 'blue' : 'gray'}
+              strokeWidth={isBookmarked ? 2 : 1}
+            />
           </Pressable>
-        )}
-        <BookmarkEmpty width={28} height={28} />
-        <ShareIos width={28} height={28} />
+        </XStack>
       </XStack>
     </YStack>
   )

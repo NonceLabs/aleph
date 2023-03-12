@@ -1,6 +1,14 @@
 import { Link } from 'expo-router'
+import {
+  BookmarkEmpty,
+  Home,
+  Planet,
+  Repository,
+  RssFeed,
+  Settings,
+} from 'iconoir-react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { Text, YStack } from 'tamagui'
+import { Text, XStack, YStack } from 'tamagui'
 
 export default function DrawerPanel() {
   const insets = useSafeAreaInsets()
@@ -14,19 +22,36 @@ export default function DrawerPanel() {
       px={8}
       justifyContent="center"
     >
-      <YStack width="100%" space={8}>
+      <YStack width="100%" space={8} alignItems="flex-end">
         <Link href="/">
-          <Text
-            textAlign="right"
-            fontWeight="bold"
-            fontSize={fontSize}
-            fontFamily="Gilroy-Bold"
-            width={200}
-          >
-            Home
-          </Text>
+          <XStack space={8} alignItems="center" justifyContent="flex-end">
+            <Text
+              textAlign="right"
+              fontWeight="bold"
+              fontSize={fontSize}
+              fontFamily="Gilroy-Bold"
+              width={200}
+            >
+              Home
+            </Text>
+            <Home width={30} height={30} color="black" />
+          </XStack>
         </Link>
         <Link href="/feeds">
+          <XStack space={8} alignItems="center" justifyContent="flex-end">
+            <Text
+              textAlign="right"
+              fontWeight="bold"
+              fontSize={fontSize}
+              fontFamily="Gilroy-Bold"
+              width={200}
+            >
+              Feeds
+            </Text>
+            <RssFeed width={30} height={30} color="black" />
+          </XStack>
+        </Link>
+        <XStack space={8} alignItems="center" justifyContent="flex-end">
           <Text
             textAlign="right"
             fontWeight="bold"
@@ -34,18 +59,34 @@ export default function DrawerPanel() {
             fontFamily="Gilroy-Bold"
             width={200}
           >
-            Feeds
+            Explore
           </Text>
-        </Link>
-        <Link href="/settings">
+          <Planet width={30} height={30} color="black" />
+        </XStack>
+        <XStack space={8} alignItems="center" justifyContent="flex-end">
           <Text
             textAlign="right"
             fontWeight="bold"
             fontSize={fontSize}
             fontFamily="Gilroy-Bold"
+            width={200}
           >
-            Settings
+            Bookmarks
           </Text>
+          <BookmarkEmpty width={30} height={30} color="black" />
+        </XStack>
+        <Link href="/settings">
+          <XStack space={8} alignItems="center" justifyContent="flex-end">
+            <Text
+              textAlign="right"
+              fontWeight="bold"
+              fontSize={fontSize}
+              fontFamily="Gilroy-Bold"
+            >
+              Settings
+            </Text>
+            <Settings width={30} height={30} color="black" />
+          </XStack>
         </Link>
       </YStack>
     </YStack>

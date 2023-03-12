@@ -7,37 +7,46 @@ import { H2, XStack, Text } from 'tamagui'
 
 export default function Header({
   title,
+  center,
   right,
   back,
 }: {
   title: string
+  center?: React.ReactNode
   right?: React.ReactNode
   back?: boolean
 }) {
   const insets = useSafeAreaInsets()
   const router = useRouter()
 
+  const left = back ? (
+    <Pressable onPress={() => router.back()}>
+      <XStack alignItems="center">
+        <NavArrowLeft width={32} height={32} />
+        <Text fontSize={20}>{title}</Text>
+      </XStack>
+    </Pressable>
+  ) : (
+    <H2 style={{ color: 'black', fontFamily: 'Gilroy-Bold' }}>{title}</H2>
+  )
+  const justifyContent = back || center ? 'space-between' : 'flex-start'
   return (
     <XStack
       space
+      alignItems="center"
+      justifyContent={justifyContent}
       style={{
         ...styles.container,
         paddingTop: insets.top,
         paddingHorizontal: back ? 2 : 16,
+        paddingRight: back ? 8 : 16,
       }}
     >
-      {back ? (
-        <Pressable onPress={() => router.back()}>
-          <XStack alignItems="center">
-            <NavArrowLeft width={32} height={32} />
-            <Text fontSize={20}>{title}</Text>
-          </XStack>
-        </Pressable>
-      ) : (
-        <H2 style={{ color: 'black', fontFamily: 'Gilroy-Bold' }}>{title}</H2>
-      )}
-
+      {left}
+      {center}
       {right}
+
+      <XStack o={0}>{center ? left : null}</XStack>
     </XStack>
   )
 }

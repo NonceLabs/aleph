@@ -4,7 +4,7 @@ import { FeedEntry, Source, FeedData } from '../types'
 interface FeedSlice {
   sources: Source[]
   watchlist: FeedEntry[]
-  collected: FeedEntry[]
+  bookmarked: FeedEntry[]
   flow: FeedData[]
   read: string[]
 }
@@ -33,9 +33,16 @@ const initialState: FeedSlice = {
       link: 'https://cn.nytimes.com',
       logo: 'https://cn.nytimes.com/favicon.ico',
     },
+    {
+      title: '一天世界',
+      url: 'https://blog.yitianshijie.net/feed/',
+      description: '一天世界，昆亂不擋。Lawrence Li 主理。IPN 出品。',
+      link: 'https://blog.yitianshijie.net',
+      logo: 'https://blog.yitianshijie.net/favicon.ico',
+    },
   ],
   watchlist: [],
-  collected: [],
+  bookmarked: [],
   flow: [],
   read: [],
 }
@@ -65,6 +72,17 @@ export const feedSlice = createSlice({
             state.flow.push(item)
           }
         })
+      }
+    },
+    bookmark: (state, action) => {
+      if (!state.bookmarked) {
+        state.bookmarked = [action.payload]
+      } else if (state.bookmarked.some((t) => t.id === action.payload.id)) {
+        state.bookmarked = state.bookmarked.filter(
+          (t) => t.id !== action.payload.id
+        )
+      } else {
+        state.bookmarked.push(action.payload)
       }
     },
   },

@@ -9,6 +9,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Image } from 'expo-image'
 import { useAppSelector } from 'store/hooks'
 import FeedItem from 'components/FeedItem'
+import Favicon from 'components/Favicon'
 
 export default function FeedProfile() {
   const [data, setData] = useState<FeedData>()
@@ -29,7 +30,18 @@ export default function FeedProfile() {
 
   return (
     <YStack flex={1}>
-      <Header title="Back" back />
+      <Header
+        title="Back"
+        back
+        center={
+          <XStack space={4} alignItems="center">
+            <Favicon favicon={logo as string} size={24} />
+            <Text fontSize={20} fontWeight="bold" color="$blue10Light">
+              {title || data?.title}
+            </Text>
+          </XStack>
+        }
+      />
       <YStack flex={1}>
         <XStack
           space
@@ -37,45 +49,10 @@ export default function FeedProfile() {
           paddingBottom={16}
           paddingHorizontal={20}
         >
-          {logo && (
-            <Image
-              source={logo}
-              style={{ width: 92, height: 92, borderRadius: 8 }}
-            />
-          )}
-          <YStack space={4}>
-            <Text fontSize={16}>{title || data?.title}</Text>
-            <Text
-              fontSize={12}
-              color="$gray10Light"
-              numberOfLines={1}
-              ellipse
-              ellipsizeMode="tail"
-              w={240}
-            >
+          <YStack space={4} alignItems="center" width="100%">
+            <Text fontSize={12} color="$gray10Light" textAlign="center">
               {description || data?.description}
             </Text>
-            {(link || data?.link) && (
-              <Anchor
-                href={(link as string) || data?.link}
-                fontSize={12}
-                lineHeight={14}
-              >
-                {link || data?.link}
-              </Anchor>
-            )}
-
-            <XStack>
-              <Button
-                themeInverse={!isFollowed}
-                theme={isFollowed ? 'gray' : undefined}
-                size="$2"
-                paddingHorizontal={16}
-                marginTop={4}
-              >
-                {isFollowed ? 'Unfollow' : 'Follow'}
-              </Button>
-            </XStack>
           </YStack>
         </XStack>
         <FlatList

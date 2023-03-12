@@ -49,7 +49,7 @@ export default function FeedItem({
           </XStack>
         )}
         <Text fontSize={18} fontWeight="600" lineHeight={20}>
-          {item.title}
+          {item.title || 'Untitled'}
         </Text>
         <XStack space></XStack>
       </YStack>
