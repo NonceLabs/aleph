@@ -16,7 +16,6 @@ export async function fetchFeedFlow() {
 
           return {
             ...result,
-            link: source.link,
             url: source.url,
             entries: (result.entries || []).map((entry: FeedEntry) => ({
               ...entry,

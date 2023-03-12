@@ -34,8 +34,10 @@ export default function RootLayout() {
   const [loaded, error] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
     Inter: require('../assets/fonts/Inter.ttf'),
+    Gilroy: require('../assets/fonts/Gilroy-Medium.ttf'),
     'Gilroy-Bold': require('../assets/fonts/Gilroy-Bold.ttf'),
     Vollkorn: require('../assets/fonts/Vollkorn.ttf'),
+    Arvo: require('../assets/fonts/Arvo-Regular.ttf'),
     ...FontAwesome.font,
   })
 

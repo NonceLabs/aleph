@@ -65,8 +65,9 @@ export const feedSlice = createSlice({
 
       if (Array.isArray(action.payload)) {
         action.payload.forEach((item: FeedData) => {
-          const oldIndex = state.flow.findIndex((t) => t.link === item.link)
+          const oldIndex = state.flow.findIndex((t) => t.url === item.url)
           if (oldIndex !== -1) {
+            const old = state.flow[oldIndex]
             state.flow.splice(oldIndex, 1, item)
           } else {
             state.flow.push(item)

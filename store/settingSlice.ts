@@ -23,6 +23,9 @@ export const settingSlice = createSlice({
     updateFontSize: (state, action) => {
       state.reader.fontSize = action.payload
     },
+    updateFontFamily: (state, action) => {
+      state.reader.fontFamily = action.payload
+    },
     updateReaderTheme: (state, action) => {
       state.reader.theme = action.payload
     },

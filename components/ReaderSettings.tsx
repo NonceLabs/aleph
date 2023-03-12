@@ -17,12 +17,16 @@ import {
   Slider,
   styled,
   Circle,
+  ScrollView,
 } from 'tamagui'
 
 export default function ReaderSettings() {
   const [position, setPosition] = useState(0)
   const [open, setOpen] = useState(false)
   const fontSize = useAppSelector((state) => state.setting?.reader?.fontSize)
+  const fontFamily = useAppSelector(
+    (state) => state.setting?.reader?.fontFamily
+  )
   const theme = useAppSelector(
     (state) => state.setting?.reader?.theme || 'light'
   )
@@ -123,6 +127,41 @@ export default function ReaderSettings() {
             <Text fontWeight="bold" fontSize={18}>
               Font
             </Text>
+            <ScrollView
+              horizontal
+              space={16}
+              showsHorizontalScrollIndicator={false}
+            >
+              {['Vollkorn', 'Inter', 'Gilroy', 'SpaceMono', 'Arvo'].map((t) => {
+                return (
+                  <Pressable
+                    key={t}
+                    onPress={() => {
+                      dispatch({
+                        type: 'setting/updateFontFamily',
+                        payload: t,
+                      })
+                    }}
+                  >
+                    <XStack
+                      borderWidth={3}
+                      h={46}
+                      px={8}
+                      br={4}
+                      ai="center"
+                      jc="center"
+                      borderColor={
+                        t === fontFamily ? '$blue7Light' : '$gray7Light'
+                      }
+                    >
+                      <Text fontSize={fontSize} fontFamily={t}>
+                        {t}
+                      </Text>
+                    </XStack>
+                  </Pressable>
+                )
+              })}
+            </ScrollView>
           </YStack>
         </Sheet.Frame>
       </Sheet>

@@ -31,6 +31,9 @@ export default function Reader() {
   const flow = useAppSelector((state) => state.feed.flow)
   const sources = useAppSelector((state) => state.feed.sources)
   const fontSize = useAppSelector((state) => state.setting?.reader?.fontSize)
+  const fontFamily = useAppSelector(
+    (state) => state.setting?.reader?.fontFamily
+  )
   const { id } = useSearchParams()
   const insets = useSafeAreaInsets()
   const router = useRouter()
@@ -47,10 +50,10 @@ export default function Reader() {
     return {
       body: {
         fontSize,
-        fontFamily: 'Vollkorn',
+        fontFamily,
       },
       p: {
-        fontFamily: 'Vollkorn',
+        fontFamily,
       },
       figcaption: {
         fontStyle: 'italic',
@@ -62,7 +65,7 @@ export default function Reader() {
         textAlign: 'center',
       },
     }
-  }, [fontSize])
+  }, [fontSize, fontFamily])
   const onBookmark = () => {
     dispatch({
       type: 'feed/bookmark',
@@ -134,7 +137,7 @@ export default function Reader() {
           source={{ html: item?.description || '' }}
           enableExperimentalMarginCollapsing
           contentWidth={width}
-          systemFonts={['Vollkorn', 'Gilroy-Bold']}
+          systemFonts={[fontFamily, 'Vollkorn', 'Gilroy-Bold']}
           tagsStyles={tagsStyle as any}
         />
       </ScrollView>
@@ -151,7 +154,7 @@ export default function Reader() {
           <NavArrowLeft width={28} height={28} />
         </Pressable>
         <XStack space={16}>
-          <Play width={24} height={24} color="gray" />
+          {/* <Play width={24} height={24} color="gray" /> */}
           <ReaderSettings />
           <Pressable onPress={onBookmark}>
             <BookmarkEmpty

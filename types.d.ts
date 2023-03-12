@@ -12,6 +12,7 @@ export interface FeedEntry {
 
 export interface FeedData {
   link?: string
+  url?: string
   title?: string
   description?: string
   generator?: string
