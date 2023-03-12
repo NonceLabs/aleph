@@ -44,7 +44,7 @@ export default function ReaderSettings() {
         <Sheet.Handle />
         <Sheet.Frame f={1} p="$4" space="$7">
           <YStack space>
-            <Text fontWeight="bold" fontSize={18}>
+            <Text fontWeight="bold" fontSize={18} color="$color11">
               Text Size
             </Text>
             <Slider
@@ -70,7 +70,7 @@ export default function ReaderSettings() {
           </YStack>
 
           <YStack space={4}>
-            <Text fontWeight="bold" fontSize={18}>
+            <Text fontWeight="bold" fontSize={18} color="$color11">
               Theme
             </Text>
             <XStack space>
@@ -116,7 +116,7 @@ export default function ReaderSettings() {
           </YStack>
 
           <YStack space>
-            <Text fontWeight="bold" fontSize={18}>
+            <Text fontWeight="bold" fontSize={18} color="$color11">
               Font
             </Text>
             <ScrollView
@@ -136,7 +136,7 @@ export default function ReaderSettings() {
                     }}
                   >
                     <XStack
-                      borderWidth={3}
+                      borderWidth={2}
                       h={46}
                       px={8}
                       br={4}
@@ -146,7 +146,7 @@ export default function ReaderSettings() {
                         t === fontFamily ? '$blue7Light' : '$gray7Light'
                       }
                     >
-                      <Text fontSize={20} fontFamily={t}>
+                      <Text fontSize={20} fontFamily={t} color="$color12">
                         {t}
                       </Text>
                     </XStack>

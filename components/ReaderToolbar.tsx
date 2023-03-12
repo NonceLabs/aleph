@@ -36,7 +36,7 @@ export default function ReaderToolbar({ item }: { item?: FeedEntry }) {
   }
   return (
     <BlurView
-      intensity={80}
+      intensity={40}
       tint={theme}
       style={{ position: 'absolute', bottom: 0, width: '100%' }}
     >
@@ -45,7 +45,6 @@ export default function ReaderToolbar({ item }: { item?: FeedEntry }) {
         pb={insets.bottom}
         px={20}
         justifyContent="space-between"
-        bc="rgba(255,255,255,0.9)"
         pt={8}
       >
         <Pressable hitSlop={16} onPress={() => router.back()}>

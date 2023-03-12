@@ -7,6 +7,7 @@ import RenderHtml from 'react-native-render-html'
 import { useMemo } from 'react'
 import ReaderHeader from 'components/ReaderHeader'
 import ReaderToolbar from 'components/ReaderToolbar'
+import useTheme from 'hooks/useTheme'
 
 export default function Reader() {
   const flow = useAppSelector((state) => state.feed.flow)
@@ -21,12 +22,14 @@ export default function Reader() {
   const feed = flow.find((t) => t.entries?.find((m) => m.id === id))
   const item = feed?.entries?.find((t) => t.id === id)
   const source = sources.find((t) => t.url === feed?.url)
+  const theme = useTheme()
 
   const tagsStyle = useMemo(() => {
     return {
       body: {
         fontSize,
         fontFamily,
+        color: theme === 'light' ? 'black' : '#999',
       },
       p: {
         fontFamily,
@@ -41,20 +44,29 @@ export default function Reader() {
         textAlign: 'center',
       },
     }
-  }, [fontSize, fontFamily])
+  }, [fontSize, fontFamily, theme])
 
   return (
     <YStack flex={1}>
-      <ReaderHeader source={source} item={item} />
       <ZStack flex={1}>
         <ScrollView
           p={16}
           contentContainerStyle={{ paddingBottom: insets.bottom + 60 }}
           flex={1}
           space={8}
+          // StickyHeaderComponent={() => (
+          //   <ReaderHeader source={source} item={item} />
+          // )}
+          stickyHeaderIndices={[0]}
         >
+          <ReaderHeader source={source} item={item} />
           <YStack>
-            <Text fontWeight="bold" fontSize={26} lineHeight={28}>
+            <Text
+              fontWeight="bold"
+              fontSize={26}
+              lineHeight={28}
+              color="$color12"
+            >
               {item?.title}
             </Text>
             <Text fontSize={12} color="gray">

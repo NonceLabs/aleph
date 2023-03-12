@@ -7,6 +7,7 @@ import { Pressable, StyleSheet } from 'react-native'
 import { useRouter } from 'expo-router'
 import { extractImages } from 'lib/helper'
 import { useAppDispatch } from 'store/hooks'
+import Favicon from './Favicon'
 
 dayjs.extend(relativeTime)
 
@@ -58,13 +59,8 @@ export default function FeedItem({
         >
           {source && (
             <XStack space={4} alignItems="center">
-              {source.logo && (
-                <Image
-                  source={source.logo}
-                  style={{ width: 20, height: 20, borderRadius: 4 }}
-                />
-              )}
-              <Text>{source.title}</Text>
+              <Favicon favicon={source.logo} size={20} />
+              <Text color="$color12">{source.title}</Text>
               <Text fontSize={12} color="$gray10" marginLeft={10}>
                 {dayjs(item.published).fromNow()}
               </Text>
@@ -74,6 +70,7 @@ export default function FeedItem({
             fontSize={18}
             fontWeight={item?.read ? '300' : '600'}
             lineHeight={20}
+            color="$color9"
           >
             {item.title || 'Untitled'}
           </Text>

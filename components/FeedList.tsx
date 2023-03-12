@@ -24,18 +24,18 @@ export default function FeedList({
   const [selectedTag, setSelectedTag] = useState<Tag>()
   const [keyword, setKeyword] = useState('')
   const sources = useAppSelector((state) => state.feed.sources)
-  const insets = useSafeAreaInsets()
   const scrollY = useAnimatedValue(0)
 
-  const navigation = useNavigation()
-
-  const customTags = [
-    {
-      title: type === 'flow' ? 'Today' : 'Bookmarked',
-      icon: type === 'flow' ? SeaAndSun : BookmarkEmpty,
-      count: 0,
-    },
-  ]
+  const customTags =
+    type === 'flow'
+      ? [
+          {
+            title: 'Today',
+            icon: SeaAndSun,
+            count: 0,
+          },
+        ]
+      : []
   const topTags = [
     {
       title: 'SVB',

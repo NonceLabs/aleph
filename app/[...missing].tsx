@@ -1,23 +1,15 @@
-import { Link, Stack, usePathname } from 'expo-router'
+import { usePathname } from 'expo-router'
 import { StyleSheet } from 'react-native'
-
-import { Text, View } from '../components/Themed'
+import { Heading, YStack } from 'tamagui'
 
 export default function NotFoundScreen() {
   const pathname = usePathname()
   console.log('pathname', pathname)
 
   return (
-    <>
-      <Stack.Screen options={{ title: 'Oops!' }} />
-      <View style={styles.container}>
-        <Text style={styles.title}>This screen doesn't exist.</Text>
-
-        <Link href="/" style={styles.link}>
-          <Text style={styles.linkText}>Go to home screen!</Text>
-        </Link>
-      </View>
-    </>
+    <YStack flex={1}>
+      <Heading>404</Heading>
+    </YStack>
   )
 }
 

@@ -1,11 +1,10 @@
 import { Image } from 'expo-image'
 import { Link } from 'expo-router'
+import useTheme from 'hooks/useTheme'
 import {
   BookmarkEmpty,
   Home,
   Planet,
-  Repository,
-  RssFeed,
   RssFeedTag,
   Settings,
 } from 'iconoir-react-native'
@@ -42,6 +41,7 @@ const routes = [
 
 export default function DrawerPanel() {
   const insets = useSafeAreaInsets()
+  const theme = useTheme()
   const fontSize = 32
   return (
     <YStack
@@ -51,6 +51,7 @@ export default function DrawerPanel() {
       px={8}
       jc="space-between"
       pb={insets.bottom + 80}
+      bc={theme === 'light' ? '#f6eee3' : '$background'}
     >
       <XStack jc="flex-end">
         <YStack p={10} ai="flex-end" space={4}>
@@ -58,8 +59,11 @@ export default function DrawerPanel() {
             source={require('../assets/images/icon.png')}
             style={{ width: 80, height: 80 }}
           />
-          <Text fontFamily={'Gilroy'} color="$gray7Light">
+          <Text fontFamily={'Gilroy'} color="#f0353c">
             Aleph Reader
+          </Text>
+          <Text color="$gray10Light" fontSize={14}>
+            Last update
           </Text>
         </YStack>
       </XStack>
@@ -74,10 +78,11 @@ export default function DrawerPanel() {
                   fontSize={fontSize}
                   fontFamily="Gilroy-Bold"
                   width={200}
+                  color="#f0353c"
                 >
                   {title}
                 </Text>
-                <Icon width={30} height={30} color="black" />
+                <Icon width={30} height={30} color="#f0353c" />
               </XStack>
             </Link>
           )

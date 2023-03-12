@@ -4,6 +4,7 @@ import { Pressable } from 'react-native'
 import { useAppSelector } from 'store/hooks'
 import { Text, XStack } from 'tamagui'
 import { Source } from 'types'
+import Favicon from './Favicon'
 
 export default function SourceItem({
   item,
@@ -34,27 +35,21 @@ export default function SourceItem({
       }}
     >
       <XStack
-        space={4}
+        space={8}
         alignItems="center"
         paddingVertical={12}
-        backgroundColor="white"
+        backgroundColor="$background"
         px={12}
         borderRadius={4}
       >
-        <Image
-          source={{ uri: item.logo }}
-          style={{
-            width: 24,
-            height: 24,
-            borderRadius: 4,
-          }}
-        />
+        <Favicon favicon={item.logo} />
         <XStack flex={1} alignItems="center" justifyContent="space-between">
           <Text
             fontSize={16}
             maxWidth={120}
             numberOfLines={1}
             ellipsizeMode="tail"
+            color="$color11"
           >
             {item.title}
           </Text>

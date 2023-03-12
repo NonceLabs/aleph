@@ -17,6 +17,7 @@ import { store } from 'store'
 import { Drawer } from './Drawer'
 import DrawerPanel from 'components/DrawerPanel'
 import AddFeedButton from 'components/AddFeedButton'
+import useTheme from 'hooks/useTheme'
 
 LogBox.ignoreAllLogs()
 
@@ -56,16 +57,14 @@ export default function RootLayout() {
 }
 
 function RootLayoutNav() {
-  const colorScheme = useColorScheme()
+  const theme = useTheme()
 
   return (
     <>
       <GestureHandlerRootView style={{ flex: 1 }}>
         <Provider store={store}>
-          <TamaguiProvider config={config}>
-            <ThemeProvider
-              value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
-            >
+          <TamaguiProvider config={config} defaultTheme={theme}>
+            <ThemeProvider value={theme === 'dark' ? DarkTheme : DefaultTheme}>
               <Drawer
                 initialRouteName="flow"
                 drawerContent={DrawerPanel}

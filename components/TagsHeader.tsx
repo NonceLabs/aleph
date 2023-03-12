@@ -7,6 +7,8 @@ import { Button, ScrollView, Text, XStack } from 'tamagui'
 import { ArrowRightCircle } from 'iconoir-react-native'
 import { useRouter } from 'expo-router'
 
+const AnimatedBlurView = Animated.createAnimatedComponent(BlurView)
+
 export default function TagsHeader({
   tags,
   selectedTag,
@@ -23,10 +25,22 @@ export default function TagsHeader({
   const router = useRouter()
   const headerHeight = 38
   return (
-    <BlurView intensity={80} tint={theme}>
+    <AnimatedBlurView
+      intensity={scrollY.interpolate({
+        inputRange: [
+          0,
+          headerHeight,
+          headerHeight + insets.top,
+          headerHeight + insets.top + 1,
+        ],
+        outputRange: [0, 0, 80, 80],
+        extrapolate: 'clamp',
+      })}
+      tint={theme}
+    >
       <Animated.View
         style={{
-          marginTop: scrollY.interpolate({
+          paddingTop: scrollY.interpolate({
             inputRange: [
               0,
               headerHeight,
@@ -43,6 +57,11 @@ export default function TagsHeader({
             {tags.map((t) => {
               const active = selectedTag?.title === t.title
               const Icon = t.icon
+              const contentColor = active
+                ? 'white'
+                : theme === 'dark'
+                ? 'white'
+                : 'black'
               return (
                 <Button
                   key={t.title}
@@ -51,11 +70,7 @@ export default function TagsHeader({
                   space={4}
                   icon={
                     Icon ? (
-                      <Icon
-                        width={24}
-                        height={24}
-                        color={active ? 'yellow' : 'blue'}
-                      />
+                      <Icon width={24} height={24} color={contentColor} />
                     ) : null
                   }
                   onPress={() => {
@@ -66,11 +81,12 @@ export default function TagsHeader({
                     }
                   }}
                   themeInverse={active}
+                  bc={active ? '#f0353c' : '$blue3'}
                 >
                   <Text
                     fontSize={16}
                     fontFamily="Gilroy-Bold"
-                    color={active ? 'white' : 'black'}
+                    color={contentColor}
                   >
                     {t.title}
                   </Text>
@@ -88,6 +104,6 @@ export default function TagsHeader({
           </XStack>
         </ScrollView>
       </Animated.View>
-    </BlurView>
+    </AnimatedBlurView>
   )
 }

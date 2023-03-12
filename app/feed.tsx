@@ -15,18 +15,20 @@ export default function FeedProfile() {
   const [data, setData] = useState<FeedData>()
   const { url, title, description, logo, link } = useSearchParams()
   const insets = useSafeAreaInsets()
-  const sources = useAppSelector((state) => state.feed.sources)
+  const flows = useAppSelector((state) => state.feed.flow)
+  const source = flows.find((f) => f.url === url)
+
   useEffect(() => {
-    if (url) {
+    if (source) {
+      setData(source)
+    } else if (url) {
       extract(url as string)
         .then((res) => {
           setData(res)
         })
         .catch(console.log)
     }
-  }, [url])
-
-  const isFollowed = sources.some((source) => source.url === url)
+  }, [url, source])
 
   return (
     <YStack flex={1}>

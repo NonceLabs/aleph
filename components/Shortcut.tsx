@@ -40,7 +40,7 @@ export default function Shortcut() {
         <Sheet.Handle />
         <Sheet.Frame f={1} p="$4" space="$3">
           <XStack space ai="center" jc="space-between">
-            <Text fontWeight="bold" fontSize={18}>
+            <Text fontWeight="bold" fontSize={18} color="$color11">
               Hide read
             </Text>
             <Switch
@@ -58,12 +58,12 @@ export default function Shortcut() {
           </XStack>
 
           <XStack space ai="center" jc="space-between">
-            <Text fontWeight="bold" fontSize={18}>
+            <Text fontWeight="bold" fontSize={18} color="$color11">
               Mark All as Read
             </Text>
-            <Button size="$3" themeInverse>
+            <Button size="$3" bc="#f0353c">
               <DoubleCheck width={16} height={16} color="white" />
-              Mark
+              <Text color="white">Mark</Text>
             </Button>
           </XStack>
         </Sheet.Frame>

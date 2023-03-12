@@ -37,9 +37,9 @@ export default function FlowPage() {
   )
   // if (hideRead) {
   //   feeds = feeds.filter((t) => !t.read)
-  // }
+  // }#f6eee3
   return (
-    <YStack flex={1} backgroundColor="#f7f6f5">
+    <YStack flex={1} backgroundColor="$background">
       <FeedList feeds={feeds} />
       {/* <Shortcut /> */}
     </YStack>
