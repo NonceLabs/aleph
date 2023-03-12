@@ -69,7 +69,7 @@ export default function ReaderSettings() {
             </Slider>
           </YStack>
 
-          <YStack space={4}>
+          {/* <YStack space={4}>
             <Text fontWeight="bold" fontSize={18} color="$color11">
               Theme
             </Text>
@@ -113,7 +113,7 @@ export default function ReaderSettings() {
                 </Circle>
               </Pressable>
             </XStack>
-          </YStack>
+          </YStack> */}
 
           <YStack space>
             <Text fontWeight="bold" fontSize={18} color="$color11">

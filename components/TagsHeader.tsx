@@ -14,11 +14,13 @@ export default function TagsHeader({
   selectedTag,
   scrollY,
   setSelectedTag,
+  type,
 }: {
   tags: Tag[]
   selectedTag: Tag | undefined
   setSelectedTag: (tag: Tag | undefined) => void
   scrollY: Animated.Value
+  type: 'flow' | 'bookmarks'
 }) {
   const theme = useTheme()
   const insets = useSafeAreaInsets()
@@ -53,7 +55,7 @@ export default function TagsHeader({
         }}
       >
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          <XStack space={12} flex={1} px={8} alignItems="center" py={8}>
+          <XStack space={12} flex={1} px={8} alignItems="center" pt={10} pb={6}>
             {tags.map((t) => {
               const active = selectedTag?.title === t.title
               const Icon = t.icon
@@ -98,9 +100,11 @@ export default function TagsHeader({
                 </Button>
               )
             })}
-            <Pressable onPress={() => router.push('tags')}>
-              <ArrowRightCircle width={32} height={32} />
-            </Pressable>
+            {type === 'flow' && tags.length > 3 && (
+              <Pressable onPress={() => router.push('tags')}>
+                <ArrowRightCircle width={32} height={32} />
+              </Pressable>
+            )}
           </XStack>
         </ScrollView>
       </Animated.View>

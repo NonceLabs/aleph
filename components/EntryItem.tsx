@@ -60,7 +60,7 @@ export default function FeedItem({
           {source && (
             <XStack space={4} alignItems="center">
               <Favicon favicon={source.logo} size={20} />
-              <Text color="$color12">{source.title}</Text>
+              <Text color="$color11">{source.title}</Text>
               <Text fontSize={12} color="$gray10" marginLeft={10}>
                 {dayjs(item.published).fromNow()}
               </Text>
@@ -70,7 +70,7 @@ export default function FeedItem({
             fontSize={18}
             fontWeight={item?.read ? '300' : '600'}
             lineHeight={20}
-            color="$color9"
+            color="$color12"
           >
             {item.title || 'Untitled'}
           </Text>

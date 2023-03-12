@@ -61,7 +61,7 @@ export async function registerBackgroundFetchAsync() {
   console.log('registerBackgroundFetchAsync')
 
   return BackgroundFetch.registerTaskAsync(BACKGROUND_FETCH_TASK, {
-    minimumInterval: 60 * 5, // 15 minutes
+    minimumInterval: 60 * 5, // 5 minutes
     stopOnTerminate: false, // android only,
     startOnBoot: true, // android only
   })

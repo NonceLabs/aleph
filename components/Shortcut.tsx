@@ -1,18 +1,8 @@
-import { Check, DoubleCheck, TextAlt, ViewGrid } from 'iconoir-react-native'
+import { DoubleCheck, ViewGrid } from 'iconoir-react-native'
 import { useState } from 'react'
 import { Pressable } from 'react-native'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
-import {
-  XStack,
-  Text,
-  Sheet,
-  YStack,
-  Slider,
-  Circle,
-  ScrollView,
-  Switch,
-  Button,
-} from 'tamagui'
+import { XStack, Text, Sheet, Switch, Button } from 'tamagui'
 
 export default function Shortcut() {
   const [position, setPosition] = useState(0)
@@ -23,7 +13,7 @@ export default function Shortcut() {
   return (
     <>
       <Pressable onPress={() => setOpen(true)}>
-        <ViewGrid width={28} height={28} color="gray" />
+        <ViewGrid width={28} height={28} color="#f0353c" />
       </Pressable>
       <Sheet
         forceRemoveScrollEnabled={open}
@@ -45,6 +35,7 @@ export default function Shortcut() {
             </Text>
             <Switch
               size="$4"
+              bc="$color8"
               checked={hideRead}
               onCheckedChange={(checked) => {
                 dispatch({

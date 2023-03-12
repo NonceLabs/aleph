@@ -20,39 +20,28 @@ export default function FeedList({
   feeds: FeedEntry[]
   type?: 'flow' | 'bookmarks'
 }) {
+  const customTag =
+    type === 'flow'
+      ? {
+          title: 'Today',
+          icon: SeaAndSun,
+          count: 0,
+        }
+      : {
+          title: 'Bookmarked',
+          icon: BookmarkEmpty,
+          count: 0,
+        }
+
   const [page, setPage] = useState(1)
-  const [selectedTag, setSelectedTag] = useState<Tag>()
+  const [selectedTag, setSelectedTag] = useState<Tag | undefined>(
+    type === 'bookmarks' ? customTag : undefined
+  )
   const [keyword, setKeyword] = useState('')
   const sources = useAppSelector((state) => state.feed.sources)
   const scrollY = useAnimatedValue(0)
 
-  const customTags =
-    type === 'flow'
-      ? [
-          {
-            title: 'Today',
-            icon: SeaAndSun,
-            count: 0,
-          },
-        ]
-      : []
-  const topTags = [
-    {
-      title: 'SVB',
-      count: 12,
-      icon: null,
-    },
-    {
-      title: 'Binance',
-      count: 7,
-      icon: null,
-    },
-    {
-      title: 'Disney',
-      count: 7,
-      icon: null,
-    },
-  ]
+  const topTags: Tag[] = []
 
   let filtered = [...feeds]
 
@@ -100,10 +89,11 @@ export default function FeedList({
         if (typeof item === 'string') {
           return (
             <TagsHeader
-              tags={[...customTags, ...topTags]}
+              tags={[customTag, ...topTags]}
               selectedTag={selectedTag}
               scrollY={scrollY}
               setSelectedTag={setSelectedTag}
+              type={type}
             />
           )
         }
