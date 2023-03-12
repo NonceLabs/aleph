@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
 import { Image } from 'expo-image'
-import { YStack, H6, Text, XStack } from 'tamagui'
+import { YStack, Text, XStack } from 'tamagui'
 import { FeedEntry, Source } from 'types'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import { Pressable, StyleSheet } from 'react-native'

@@ -20,6 +20,7 @@ module.exports = function (api) {
           include: 'TAMAGUI_TARGET',
         },
       ],
+      '@babel/plugin-proposal-export-namespace-from',
       'react-native-reanimated/plugin',
       [
         'module-resolver',

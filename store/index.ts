@@ -2,6 +2,7 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import { persistStore, persistReducer } from 'redux-persist'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import feedSlice from './feedSlice'
+import settingSlice from './settingSlice'
 
 const persistConfig = {
   key: 'Aleph',
@@ -10,6 +11,7 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   feed: feedSlice,
+  setting: settingSlice,
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

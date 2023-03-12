@@ -1,32 +1,26 @@
 import { useAppSelector } from 'store/hooks'
 import { FeedEntry } from 'types'
 import { FlashList } from '@shopify/flash-list'
-import { Button, Input, ScrollView, Text, XStack, YStack } from 'tamagui'
-import FeedItem from './FeedItem'
+import { Button, Input, ScrollView, Text, XStack } from 'tamagui'
+import EntryItem from './EntryItem'
 import { Pressable } from 'react-native'
 import _ from 'lodash'
-import dayjs from 'dayjs'
 import { Menu } from 'iconoir-react-native'
 import { BlurView } from 'expo-blur'
 import useTheme from 'hooks/useTheme'
-import { useRef } from 'react'
-import { useScrollToTop } from '@react-navigation/native'
+import { useState } from 'react'
 import { useNavigation } from 'expo-router'
+import { PAGE_SIZE } from 'lib/constants'
 
-export default function FeedList() {
-  const feedflowRef = useRef<FlashList<any>>(null)
-  const flow = useAppSelector((state) =>
-    state.feed.flow.map((t) => t.entries || [])
-  )
+export default function FeedList({ feeds }: { feeds: FeedEntry[] }) {
+  const [page, setPage] = useState(1)
   const sources = useAppSelector((state) => state.feed.sources)
   const theme = useTheme()
 
-  useScrollToTop(feedflowRef as any)
   const navigation = useNavigation()
 
   return (
     <FlashList
-      ref={feedflowRef}
       ListHeaderComponent={() => {
         return (
           <XStack space={8} flex={1} px={16} alignItems="center">
@@ -43,12 +37,7 @@ export default function FeedList() {
         )
       }}
       stickyHeaderIndices={[0]}
-      data={[
-        'header',
-        ..._.flatten(flow).sort((a: FeedEntry, b: FeedEntry) =>
-          dayjs(b.published).diff(dayjs(a.published))
-        ),
-      ]}
+      data={['header', ...feeds.slice(0, page * PAGE_SIZE)]}
       renderItem={({ item }) => {
         if (typeof item === 'string') {
           return (
@@ -68,13 +57,18 @@ export default function FeedList() {
           )
         }
         return (
-          <FeedItem
+          <EntryItem
             item={item}
             source={sources.find((t) => t.url === item.sourceUrl)}
           />
         )
       }}
       estimatedItemSize={100}
+      onMomentumScrollEnd={({ nativeEvent }) => {
+        if (nativeEvent.contentOffset.y > 0) {
+          setPage(page + 1)
+        }
+      }}
     />
   )
 }

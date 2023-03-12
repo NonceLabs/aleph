@@ -100,6 +100,10 @@ function RootLayoutNav() {
                   options={{ headerShown: false, header: () => null }}
                 />
                 <Drawer.Screen
+                  name="bookmarks"
+                  options={{ headerShown: false, header: () => null }}
+                />
+                <Drawer.Screen
                   name="reader"
                   options={{ headerShown: false, header: () => null }}
                 />

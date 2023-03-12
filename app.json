@@ -12,11 +12,15 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
-        "UIBackgroundModes": ["fetch"]
+        "UIBackgroundModes": [
+          "fetch"
+        ]
       }
     },
     "android": {
@@ -28,6 +32,17 @@
     "web": {
       "bundler": "metro",
       "favicon": "./assets/images/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "39c42834-f3f1-497e-87ab-415a17550054"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/39c42834-f3f1-497e-87ab-415a17550054"
     }
   }
 }

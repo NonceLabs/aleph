@@ -24,10 +24,13 @@ import {
 } from 'tamagui'
 import * as WebBrowser from 'expo-web-browser'
 import RenderHtml from 'react-native-render-html'
+import ReaderSettings from 'components/ReaderSettings'
+import { useMemo } from 'react'
 
 export default function Reader() {
   const flow = useAppSelector((state) => state.feed.flow)
   const sources = useAppSelector((state) => state.feed.sources)
+  const fontSize = useAppSelector((state) => state.setting?.reader?.fontSize)
   const { id } = useSearchParams()
   const insets = useSafeAreaInsets()
   const router = useRouter()
@@ -39,6 +42,27 @@ export default function Reader() {
   const source = sources.find((t) => t.link === feed?.link)
   const bookmarked = useAppSelector((state) => state.feed.bookmarked)
   const isBookmarked = bookmarked.some((t) => t.id === item?.id)
+
+  const tagsStyle = useMemo(() => {
+    return {
+      body: {
+        fontSize,
+        fontFamily: 'Vollkorn',
+      },
+      p: {
+        fontFamily: 'Vollkorn',
+      },
+      figcaption: {
+        fontStyle: 'italic',
+        fontSize: 14,
+      },
+      cite: {
+        fontStyle: 'italic',
+        fontSize: 14,
+        textAlign: 'center',
+      },
+    }
+  }, [fontSize])
   const onBookmark = () => {
     dispatch({
       type: 'feed/bookmark',
@@ -84,7 +108,6 @@ export default function Reader() {
           </Pressable>
         )}
         <XStack space={8}>
-          <TextSize width={24} height={24} color="gray" />
           {(item?.link || item?.id.startsWith('http')) && (
             <Pressable
               onPress={() => WebBrowser.openBrowserAsync(item.link || item?.id)}
@@ -92,7 +115,6 @@ export default function Reader() {
               <Compass width={24} height={24} color="gray" />
             </Pressable>
           )}
-          <ShareIos width={24} height={24} color="gray" />
         </XStack>
       </XStack>
 
@@ -113,24 +135,7 @@ export default function Reader() {
           enableExperimentalMarginCollapsing
           contentWidth={width}
           systemFonts={['Vollkorn', 'Gilroy-Bold']}
-          tagsStyles={{
-            body: {
-              fontSize: 20,
-              fontFamily: 'Vollkorn',
-            },
-            p: {
-              fontFamily: 'Vollkorn',
-            },
-            figcaption: {
-              fontStyle: 'italic',
-              fontSize: 14,
-            },
-            cite: {
-              fontStyle: 'italic',
-              fontSize: 14,
-              textAlign: 'center',
-            },
-          }}
+          tagsStyles={tagsStyle as any}
         />
       </ScrollView>
 
@@ -146,15 +151,17 @@ export default function Reader() {
           <NavArrowLeft width={28} height={28} />
         </Pressable>
         <XStack space={16}>
-          <Play width={28} height={28} color="gray" />
+          <Play width={24} height={24} color="gray" />
+          <ReaderSettings />
           <Pressable onPress={onBookmark}>
             <BookmarkEmpty
-              width={28}
-              height={28}
+              width={24}
+              height={24}
               color={isBookmarked ? 'blue' : 'gray'}
-              strokeWidth={isBookmarked ? 2 : 1}
+              strokeWidth={isBookmarked ? 2 : 1.5}
             />
           </Pressable>
+          <ShareIos width={24} height={24} color="gray" />
         </XStack>
       </XStack>
     </YStack>

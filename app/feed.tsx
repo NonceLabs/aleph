@@ -8,7 +8,7 @@ import { FeedData } from 'types'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Image } from 'expo-image'
 import { useAppSelector } from 'store/hooks'
-import FeedItem from 'components/FeedItem'
+import EntryItem from 'components/EntryItem'
 import Favicon from 'components/Favicon'
 
 export default function FeedProfile() {
@@ -36,7 +36,13 @@ export default function FeedProfile() {
         center={
           <XStack space={4} alignItems="center">
             <Favicon favicon={logo as string} size={24} />
-            <Text fontSize={20} fontWeight="bold" color="$blue10Light">
+            <Text
+              fontSize={20}
+              fontWeight="bold"
+              color="$blue10Light"
+              maxWidth={140}
+              numberOfLines={1}
+            >
               {title || data?.title}
             </Text>
           </XStack>
@@ -59,7 +65,7 @@ export default function FeedProfile() {
           data={data?.entries || []}
           contentContainerStyle={{ paddingBottom: insets.bottom }}
           renderItem={({ item }) => {
-            return <FeedItem item={item} />
+            return <EntryItem item={item} />
           }}
           ItemSeparatorComponent={() => (
             <YStack bg="gray" h={StyleSheet.hairlineWidth} />
