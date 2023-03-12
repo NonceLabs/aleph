@@ -3,19 +3,11 @@ import { useState } from 'react'
 import { Pressable } from 'react-native'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import {
-  Adapt,
-  Button,
-  Input,
-  Label,
-  Popover,
-  PopoverProps,
   XStack,
-  YGroup,
   Text,
   Sheet,
   YStack,
   Slider,
-  styled,
   Circle,
   ScrollView,
 } from 'tamagui'

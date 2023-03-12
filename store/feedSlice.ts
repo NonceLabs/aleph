@@ -7,7 +7,6 @@ interface FeedSlice {
   watchlist: FeedEntry[]
   bookmarked: FeedEntry[]
   flow: FeedData[]
-  read: string[]
 }
 
 const initialState: FeedSlice = {
@@ -45,7 +44,6 @@ const initialState: FeedSlice = {
   watchlist: [],
   bookmarked: [],
   flow: [],
-  read: [],
 }
 
 export const feedSlice = createSlice({
@@ -91,6 +89,16 @@ export const feedSlice = createSlice({
         )
       } else {
         state.bookmarked.push(action.payload)
+      }
+    },
+    read: (state, action) => {
+      const { url, id } = action.payload
+      const feed = state.flow.find((t) => t.url === url)
+      if (feed) {
+        const entry = feed.entries?.find((t) => t.id === id)
+        if (entry) {
+          entry.read = true
+        }
       }
     },
   },

@@ -6,6 +6,9 @@ interface SettingSlice {
     fontFamily: string
     theme: 'light' | 'dark'
   }
+  flow: {
+    hideRead: boolean
+  }
 }
 
 const initialState: SettingSlice = {
@@ -13,6 +16,9 @@ const initialState: SettingSlice = {
     fontSize: 20,
     fontFamily: 'Vollkorn',
     theme: 'light',
+  },
+  flow: {
+    hideRead: false,
   },
 }
 
@@ -28,6 +34,12 @@ export const settingSlice = createSlice({
     },
     updateReaderTheme: (state, action) => {
       state.reader.theme = action.payload
+    },
+    updateHideRead: (state, action) => {
+      if (!state.flow) {
+        state.flow = { hideRead: false }
+      }
+      state.flow.hideRead = action.payload
     },
   },
 })

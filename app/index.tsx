@@ -1,5 +1,5 @@
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { YStack } from 'tamagui'
+import { XStack, YStack } from 'tamagui'
 import { useEffect } from 'react'
 import FeedList from 'components/FeedList'
 import { fetchFeedFlow, registerBackgroundFetchAsync } from 'lib/task'
@@ -7,13 +7,14 @@ import { useAppDispatch, useAppSelector } from 'store/hooks'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { FeedEntry } from 'types'
+import { Jellyfish } from 'iconoir-react-native'
+import Shortcut from 'components/Shortcut'
 
 export default function FlowPage() {
   const entries = useAppSelector((state) =>
     state.feed.flow.map((t) => t.entries || [])
   )
-  const insets = useSafeAreaInsets()
-  // const navigation = useRootNavigation()
+  const hideRead = useAppSelector((state) => state.setting.flow.hideRead)
   const dispatch = useAppDispatch()
   useEffect(() => {
     fetchFeedFlow()
@@ -34,9 +35,13 @@ export default function FlowPage() {
   const feeds = _.flatten(entries).sort((a: FeedEntry, b: FeedEntry) =>
     dayjs(b.published).diff(dayjs(a.published))
   )
+  // if (hideRead) {
+  //   feeds = feeds.filter((t) => !t.read)
+  // }
   return (
     <YStack flex={1} backgroundColor="#f7f6f5">
       <FeedList feeds={feeds} />
+      {/* <Shortcut /> */}
     </YStack>
   )
 }

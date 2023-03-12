@@ -48,7 +48,7 @@ export default function ReaderToolbar({ item }: { item?: FeedEntry }) {
         bc="rgba(255,255,255,0.9)"
         pt={8}
       >
-        <Pressable onPress={() => router.back()}>
+        <Pressable hitSlop={16} onPress={() => router.back()}>
           <NavArrowLeft width={28} height={28} />
         </Pressable>
         <XStack space={24}>
@@ -61,9 +61,6 @@ export default function ReaderToolbar({ item }: { item?: FeedEntry }) {
               color={isBookmarked ? 'blue' : 'gray'}
               strokeWidth={isBookmarked ? 2 : 1.5}
             />
-          </Pressable>
-          <Pressable onPress={onShare}>
-            <ShareIos width={24} height={24} color="gray" />
           </Pressable>
         </XStack>
       </XStack>

@@ -8,6 +8,7 @@ export interface FeedEntry {
   description?: string
   published?: Date
   sourceUrl?: string
+  read?: boolean
 }
 
 export interface FeedData {
