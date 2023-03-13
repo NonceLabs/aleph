@@ -1,5 +1,6 @@
 import * as BackgroundFetch from 'expo-background-fetch'
 import * as TaskManager from 'expo-task-manager'
+import _ from 'lodash'
 import { store } from 'store'
 import { FeedEntry } from 'types'
 import { extract } from './parser'
@@ -29,9 +30,27 @@ export async function fetchFeedFlow() {
         }
       })
     )
+    result.forEach((feed) => {
+      console.log('feed', _.omit(feed, 'entries'))
+    })
+
     store.dispatch({
       type: 'feed/updateFlow',
       payload: result.filter((t) => t),
+    })
+    store.dispatch({
+      type: 'feed/updateSources',
+      payload: sources.map((t) => {
+        const feed = result.find((f) => f.url === t.url)
+        if (feed) {
+          return {
+            ...t,
+            favicon: feed.favicon,
+            description: feed.description,
+          }
+        }
+        return t
+      }),
     })
   } catch (error) {
     //
@@ -48,6 +67,7 @@ export async function tagFeedEntries() {
         })
         .map((entry) => entry.id)
         .filter((t) => (t || '').startsWith('http'))
+        .slice(0, 5)
 
       return {
         sourceUrl: feed.url,

@@ -11,22 +11,9 @@ export default function FlowPage() {
   const entries = useAppSelector((state) =>
     state.feed.flow.map((t) => t.entries || [])
   )
-  const dispatch = useAppDispatch()
   useEffect(() => {
     fetchFeedFlow()
-    tagFeedEntries()
-
-    // navigation?.addListener("tabLongPress", () => {})
-    // dispatch({
-    //   type: 'feed/addSource',
-    //   payload: {
-    //     title: '一天世界',
-    //     url: 'https://blog.yitianshijie.net/feed/',
-    //     description: '一天世界，昆亂不擋。Lawrence Li 主理。IPN 出品。',
-    //     link: 'https://blog.yitianshijie.net',
-    //     logo: 'https://blog.yitianshijie.net/favicon.ico',
-    //   },
-    // })
+    // tagFeedEntries()
   }, [])
 
   const feeds = _.flatten(entries).sort((a: FeedEntry, b: FeedEntry) =>

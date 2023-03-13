@@ -36,6 +36,7 @@ export const extractFromXml = (xml: string | undefined, options = {}) => {
   }
   const opts = getopt(options)
   const data = xml2obj(xml, opts.xmlParserOptions)
+  console.log(isRSS(data) ? 'RSS' : isAtom(data) ? 'Atom' : 'Unknown')
 
   return isRSS(data)
     ? parseRssFeed(data, opts)
@@ -45,12 +46,17 @@ export const extractFromXml = (xml: string | undefined, options = {}) => {
 }
 
 export const extract = async (url: string, options = {}, fetchOptions = {}) => {
+  if (!isValidUrl(url)) {
+    throw new Error('Input param must be a valid URL')
+  }
   const data = await retrieve(url, fetchOptions)
   if (!data.text && !data.json) {
     throw new Error(`Failed to load content from "${url}"`)
   }
 
   const { type, json, text } = data
+
+  console.log('url', url)
 
   return type === 'json'
     ? extractFromJson(json, options)

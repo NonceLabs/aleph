@@ -1,3 +1,4 @@
+import 'react-native-url-polyfill/auto'
 import FontAwesome from '@expo/vector-icons/FontAwesome'
 import {
   DarkTheme,
@@ -66,7 +67,7 @@ function RootLayoutNav() {
           <TamaguiProvider config={config} defaultTheme={theme}>
             <ThemeProvider value={theme === 'dark' ? DarkTheme : DefaultTheme}>
               <Drawer
-                initialRouteName="flow"
+                initialRouteName="feeds"
                 drawerContent={DrawerPanel}
                 screenOptions={{
                   drawerStyle: {

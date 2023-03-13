@@ -123,7 +123,6 @@ export default function FeedList({
     }
     return result
   }, [feeds, keyword, hideRead, selectedTag])
-  console.log('filtered', filtered.length)
 
   useEffect(() => {
     listRef.current?.scrollToIndex({

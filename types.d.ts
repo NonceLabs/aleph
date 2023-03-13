@@ -16,6 +16,7 @@ export interface FeedData {
   description?: string
   generator?: string
   language?: string
+  favicon?: string
   published?: Date
   entries?: Array<FeedEntry>
 }
@@ -95,7 +96,7 @@ export interface Source {
   description: string
   url: string
   link?: string
-  logo?: string
+  favicon?: string
   id?: string
 }
 

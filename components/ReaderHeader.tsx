@@ -8,6 +8,7 @@ import { FeedEntry, Source } from 'types'
 import * as WebBrowser from 'expo-web-browser'
 import { BlurView } from 'expo-blur'
 import useTheme from 'hooks/useTheme'
+import Favicon from './Favicon'
 
 export default function ReaderHeader({
   source,
@@ -45,18 +46,15 @@ export default function ReaderHeader({
                   id: '',
                   link: source.link ? encodeURIComponent(source.link) : '',
                   url: encodeURIComponent(source.url),
-                  logo: source.logo ? encodeURIComponent(source.logo) : '',
+                  favicon: source.favicon
+                    ? encodeURIComponent(source.favicon)
+                    : '',
                 },
               })
             }
           >
             <XStack space={8} alignItems="center">
-              {source?.logo && (
-                <Image
-                  source={source?.logo}
-                  style={{ width: 24, height: 24, borderRadius: 4 }}
-                />
-              )}
+              <Favicon favicon={source.favicon} />
               <Text fontWeight="bold" fontSize={20} color="$blue10Light">
                 {source.title}
               </Text>

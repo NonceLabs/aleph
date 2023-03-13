@@ -27,9 +27,7 @@ export default function SourceItem({
           pathname: 'feed',
           params: {
             ...item,
-            link: item.link ? encodeURIComponent(item.link) : '',
             url: encodeURIComponent(item.url),
-            logo: item.logo ? encodeURIComponent(item.logo) : '',
           },
         })
       }}
@@ -42,7 +40,7 @@ export default function SourceItem({
         px={12}
         borderRadius={4}
       >
-        <Favicon favicon={item.logo} />
+        <Favicon favicon={item.favicon} />
         <XStack flex={1} alignItems="center" justifyContent="space-between">
           <Text
             fontSize={16}

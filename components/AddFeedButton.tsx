@@ -13,7 +13,9 @@ import {
 import { useRouter } from 'expo-router'
 
 export default function AddFeedButton() {
-  const [url, setUrl] = useState('https://cn.nytimes.com/rss/')
+  const [url, setUrl] = useState(
+    'https://rss.nytimes.com/services/xml/rss/nyt/World.xml'
+  )
 
   const router = useRouter()
   const { width } = useWindowDimensions()

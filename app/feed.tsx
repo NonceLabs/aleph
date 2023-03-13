@@ -3,7 +3,7 @@ import { useSearchParams } from 'expo-router'
 import { extract } from 'lib/parser'
 import { useEffect, useState } from 'react'
 import { FlatList, StyleSheet } from 'react-native'
-import { Anchor, YStack, H6, Text, Button, XStack } from 'tamagui'
+import { YStack, Text, Button, XStack } from 'tamagui'
 import { FeedData } from 'types'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
@@ -13,7 +13,7 @@ import _ from 'lodash'
 
 export default function FeedProfile() {
   const [data, setData] = useState<FeedData>()
-  const { url, title, description, logo, link } = useSearchParams()
+  const { url, title, description } = useSearchParams()
   const insets = useSafeAreaInsets()
   const flows = useAppSelector((state) => state.feed.flow)
   const source = flows.find((f) => f.url === url)
@@ -24,9 +24,12 @@ export default function FeedProfile() {
     } else if (url) {
       extract(url as string)
         .then((res) => {
+          console.log('subscribe', _.omit(res, 'entries'))
           setData(res)
         })
-        .catch(console.log)
+        .catch((error) => {
+          console.log('extract error', error)
+        })
     }
   }, [url, source])
 
@@ -44,6 +47,9 @@ export default function FeedProfile() {
     }
   }
 
+  const desc = description || data?.description
+  const favicon = source?.favicon || data?.favicon
+
   return (
     <YStack flex={1}>
       <Header
@@ -51,7 +57,7 @@ export default function FeedProfile() {
         back
         center={
           <XStack space={4} alignItems="center">
-            <Favicon favicon={logo as string} size={24} />
+            <Favicon favicon={favicon} size={24} />
             <Text
               fontSize={20}
               fontWeight="bold"
@@ -75,18 +81,20 @@ export default function FeedProfile() {
         }
       />
       <YStack flex={1}>
-        <XStack
-          space
-          alignItems="center"
-          paddingBottom={16}
-          paddingHorizontal={20}
-        >
-          <YStack space={4} alignItems="center" width="100%">
-            <Text fontSize={12} color="$gray10Light" textAlign="center">
-              {description || data?.description}
-            </Text>
-          </YStack>
-        </XStack>
+        {desc && (
+          <XStack
+            space
+            alignItems="center"
+            paddingBottom={16}
+            paddingHorizontal={20}
+          >
+            <YStack space={4} alignItems="center" width="100%">
+              <Text fontSize={12} color="$gray10Light" textAlign="center">
+                {desc}
+              </Text>
+            </YStack>
+          </XStack>
+        )}
         <FlatList
           data={data?.entries || []}
           contentContainerStyle={{ paddingBottom: insets.bottom }}

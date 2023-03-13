@@ -17,28 +17,21 @@ const initialState: FeedSlice = {
       description:
         'The Verge covers the intersection of technology, science, art, and culture.',
       link: 'https://www.theverge.com/',
-      logo: 'https://cdn.vox-cdn.com/verge/favicon.ico',
+      favicon: 'https://cdn.vox-cdn.com/verge/favicon.ico',
     },
     {
       title: 'TechCrunch',
       url: 'https://techcrunch.com/feed/',
       description: 'Startup and Technology News',
       link: 'https://techcrunch.com/',
-      logo: 'https://techcrunch.com/favicon.ico',
-    },
-    {
-      title: '纽约时报中文网',
-      url: 'https://cn.nytimes.com/rss/',
-      description: '纽约时报中文网 国际纵览',
-      link: 'https://cn.nytimes.com',
-      logo: 'https://cn.nytimes.com/favicon.ico',
+      favicon: 'https://techcrunch.com/favicon.ico',
     },
     {
       title: '一天世界',
       url: 'https://blog.yitianshijie.net/feed/',
       description: '一天世界，昆亂不擋。Lawrence Li 主理。IPN 出品。',
       link: 'https://blog.yitianshijie.net',
-      logo: 'https://blog.yitianshijie.net/favicon.ico',
+      favicon: 'https://blog.yitianshijie.net/favicon.ico',
     },
   ],
   watchlist: [],
@@ -60,6 +53,9 @@ export const feedSlice = createSlice({
     unsubscribe: (state, action) => {
       state.sources = state.sources.filter((t) => t.url !== action.payload.url)
       state.flow = state.flow.filter((t) => t.url !== action.payload.url)
+    },
+    updateSources: (state, action) => {
+      state.sources = action.payload
     },
     markAllAsRead: (state, action) => {
       state.flow = state.flow.map((t) => {
