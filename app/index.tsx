@@ -6,6 +6,7 @@ import { useAppSelector } from 'store/hooks'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { FeedEntry } from 'types'
+import { usePathname } from 'expo-router'
 
 export default function FlowPage() {
   const compactEntries = useAppSelector((state) =>
@@ -15,6 +16,8 @@ export default function FlowPage() {
   useEffect(() => {
     fetchFeedFlow()
   }, [sources.length])
+  const pathname = usePathname()
+  console.log('pathname', pathname)
 
   useEffect(() => {
     tagFeedEntries()

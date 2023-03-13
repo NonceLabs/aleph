@@ -1,9 +1,8 @@
 import dayjs from 'dayjs'
-import { Image } from 'expo-image'
 import { YStack, Text, XStack, useWindowDimensions } from 'tamagui'
 import { FeedEntry, FeedListType, Source } from 'types'
 import relativeTime from 'dayjs/plugin/relativeTime'
-import { Pressable, StyleSheet } from 'react-native'
+import { Pressable, StyleSheet, Image } from 'react-native'
 import { useRouter } from 'expo-router'
 import { extractImages } from 'lib/helper'
 import { useAppDispatch } from 'store/hooks'
@@ -35,6 +34,7 @@ export default function FeedItem({
   } else {
     fontWeight = '400'
   }
+
   return (
     <Pressable
       onPress={() => {
@@ -92,7 +92,7 @@ export default function FeedItem({
           <Image
             source={{ uri: images[0] }}
             style={{ height: 80, width: 80, borderRadius: 4 }}
-            contentFit="cover"
+            resizeMode="cover"
           />
         )}
       </XStack>

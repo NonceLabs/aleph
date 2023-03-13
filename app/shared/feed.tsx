@@ -3,7 +3,7 @@ import { Stack, useSearchParams } from 'expo-router'
 import { extract } from 'lib/parser'
 import { useEffect, useState } from 'react'
 import { Pressable } from 'react-native'
-import { YStack, Text, XStack } from 'tamagui'
+import { YStack, Text, XStack, Spinner } from 'tamagui'
 import { FeedData } from 'types'
 import { useAppSelector } from 'store/hooks'
 import Favicon from 'components/Favicon'
@@ -16,6 +16,7 @@ import EntryList from 'components/EntryList'
 export default function FeedProfile() {
   const [data, setData] = useState<FeedData>()
   const [error, setError] = useState()
+  const [loading, setLoading] = useState(false)
   const { url, title, description } = useSearchParams()
   const flows = useAppSelector((state) => state.feed.flow)
   const source = flows.find((f) => f.url === url)
@@ -26,14 +27,17 @@ export default function FeedProfile() {
     if (source) {
       setData(source)
     } else if (url) {
+      setLoading(true)
       extract(url as string)
         .then((res) => {
           if (res) {
             setData({ ...res, url })
           }
+          setLoading(false)
         })
         .catch((error) => {
           setError(error)
+          setLoading(false)
         })
     }
   }, [url, source])
@@ -87,11 +91,18 @@ export default function FeedProfile() {
             />
           </YStack>
         )}
-        <EntryList
-          entries={data?.entries || []}
-          type="tags"
-          withHeader={false}
-        />
+        {loading ? (
+          <YStack ai="center" jc="center" pt={100}>
+            <Spinner size="large" />
+            <Text color="$color10">Loading</Text>
+          </YStack>
+        ) : (
+          <EntryList
+            entries={data?.entries || []}
+            type="tags"
+            withHeader={false}
+          />
+        )}
       </YStack>
     </YStack>
   )

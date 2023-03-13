@@ -66,7 +66,7 @@ function RootLayoutNav() {
           <TamaguiProvider config={config} defaultTheme={theme}>
             <ThemeProvider value={theme === 'dark' ? DarkTheme : DefaultTheme}>
               <Drawer
-                initialRouteName="feeds"
+                initialRouteName="index"
                 drawerContent={DrawerPanel}
                 screenOptions={{
                   headerShown: false,

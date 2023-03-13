@@ -12,6 +12,7 @@ export function extractImages(content?: string) {
 
   while ((m = rex.exec(content))) {
     urls.push(m[1])
+    break
   }
   return urls
 }

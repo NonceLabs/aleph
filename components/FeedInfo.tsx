@@ -1,4 +1,4 @@
-import { useRouter } from 'expo-router'
+import { useNavigation, useRouter } from 'expo-router'
 import { Check, InfoEmpty, TextAlt } from 'iconoir-react-native'
 import { HOST } from 'lib/constants'
 import { post } from 'lib/request'
@@ -15,6 +15,7 @@ export default function FeedInfo({ source }: { source?: Source | FeedData }) {
   const dispatch = useAppDispatch()
 
   const router = useRouter()
+  const navigation = useNavigation()
   const sources = useAppSelector((state) => state.feed.sources)
   if (!source) {
     return null
@@ -45,7 +46,9 @@ export default function FeedInfo({ source }: { source?: Source | FeedData }) {
         // router.push('')
       }
       setOpen(false)
-      router.back()
+      // router.replace('/')
+      // @ts-ignore
+      navigation.jumpTo('index')
     } catch (error) {}
   }
   return (
@@ -76,7 +79,14 @@ export default function FeedInfo({ source }: { source?: Source | FeedData }) {
               </Anchor>
             )}
             {source.description && (
-              <Text color="$color10">{source.description}</Text>
+              <Text
+                color="$color10"
+                textAlign="center"
+                numberOfLines={4}
+                ellipsizeMode="tail"
+              >
+                {source.description}
+              </Text>
             )}
             <Button
               bc={isSubscribed ? '$color5' : '#f0353c'}

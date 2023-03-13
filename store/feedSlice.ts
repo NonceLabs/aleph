@@ -10,23 +10,7 @@ interface FeedSlice {
 }
 
 const initialState: FeedSlice = {
-  sources: [
-    {
-      title: 'The Verge',
-      url: 'https://www.theverge.com/rss/full.xml',
-      description:
-        'The Verge covers the intersection of technology, science, art, and culture.',
-      link: 'https://www.theverge.com/',
-      favicon: 'https://cdn.vox-cdn.com/verge/favicon.ico',
-    },
-    {
-      title: 'Michael Tsai',
-      url: 'https://mjtsai.com/blog/feed/',
-      description: '',
-      link: 'https://mjtsai.com/blog',
-      favicon: 'https://mjtsai.com/favicon.ico',
-    },
-  ],
+  sources: [],
   watchlist: [],
   bookmarked: [],
   flow: [],
