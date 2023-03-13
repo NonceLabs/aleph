@@ -14,7 +14,6 @@ export default function FlowPage() {
   const entries = useAppSelector((state) =>
     state.feed.flow.map((t) => t.entries || [])
   )
-  const hideRead = useAppSelector((state) => state.setting.flow.hideRead)
   const dispatch = useAppDispatch()
   useEffect(() => {
     fetchFeedFlow()
@@ -35,9 +34,6 @@ export default function FlowPage() {
   const feeds = _.flatten(entries).sort((a: FeedEntry, b: FeedEntry) =>
     dayjs(b.published).diff(dayjs(a.published))
   )
-  // if (hideRead) {
-  //   feeds = feeds.filter((t) => !t.read)
-  // }#f6eee3
   return (
     <YStack flex={1} backgroundColor="$background">
       <FeedList feeds={feeds} />

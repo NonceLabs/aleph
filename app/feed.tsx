@@ -6,8 +6,7 @@ import { FlatList, StyleSheet } from 'react-native'
 import { Anchor, YStack, H6, Text, Button, XStack } from 'tamagui'
 import { FeedData } from 'types'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { Image } from 'expo-image'
-import { useAppSelector } from 'store/hooks'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
 import EntryItem from 'components/EntryItem'
 import Favicon from 'components/Favicon'
 
@@ -30,6 +29,18 @@ export default function FeedProfile() {
     }
   }, [url, source])
 
+  const isSubscribed = !!source
+  const dispatch = useAppDispatch()
+
+  const handleSubscribe = () => {
+    if (isSubscribed) {
+      dispatch({
+        type: 'feed/unsubscribe',
+        payload: source,
+      })
+    }
+  }
+
   return (
     <YStack flex={1}>
       <Header
@@ -48,6 +59,16 @@ export default function FeedProfile() {
               {title || data?.title}
             </Text>
           </XStack>
+        }
+        right={
+          <Button
+            bc="$color11"
+            size="$2"
+            color="$color1"
+            onPress={handleSubscribe}
+          >
+            {isSubscribed ? 'Unsubscribe' : 'Subscribe'}
+          </Button>
         }
       />
       <YStack flex={1}>

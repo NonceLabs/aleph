@@ -13,7 +13,7 @@ export default function Shortcut() {
   return (
     <>
       <Pressable onPress={() => setOpen(true)}>
-        <ViewGrid width={28} height={28} color="#f0353c" />
+        <ViewGrid width={32} height={32} color="#f0353c" strokeWidth={2} />
       </Pressable>
       <Sheet
         forceRemoveScrollEnabled={open}
@@ -35,7 +35,7 @@ export default function Shortcut() {
             </Text>
             <Switch
               size="$4"
-              bc="$color8"
+              bc={hideRead ? '$blue8' : '$color8'}
               checked={hideRead}
               onCheckedChange={(checked) => {
                 dispatch({
@@ -52,7 +52,15 @@ export default function Shortcut() {
             <Text fontWeight="bold" fontSize={18} color="$color11">
               Mark All as Read
             </Text>
-            <Button size="$3" bc="#f0353c">
+            <Button
+              size="$3"
+              bc="#f0353c"
+              onPress={() => {
+                dispatch({
+                  type: 'feed/markAllAsRead',
+                })
+              }}
+            >
               <DoubleCheck width={16} height={16} color="white" />
               <Text color="white">Mark</Text>
             </Button>

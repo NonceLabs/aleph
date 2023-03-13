@@ -38,15 +38,15 @@ export default function Header({
       style={{
         ...styles.container,
         paddingTop: insets.top,
-        paddingHorizontal: back ? 2 : 16,
-        paddingRight: back ? 8 : 16,
+        paddingLeft: back ? 2 : 16,
+        paddingRight: back && right ? 8 : 16,
       }}
     >
       {left}
       {center}
       {right}
 
-      <XStack o={0}>{center ? left : null}</XStack>
+      {center && !right && <XStack o={0}>{left}</XStack>}
     </XStack>
   )
 }

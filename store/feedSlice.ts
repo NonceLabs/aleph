@@ -50,12 +50,24 @@ export const feedSlice = createSlice({
   name: 'feed',
   initialState,
   reducers: {
-    addSource: (state, action) => {
+    subscribe: (state, action) => {
       if (Array.isArray(action.payload)) {
         state.sources = [...state.sources, ...action.payload]
       } else {
         state.sources.push(action.payload)
       }
+    },
+    unsubscribe: (state, action) => {
+      state.sources = state.sources.filter((t) => t.url !== action.payload.url)
+      state.flow = state.flow.filter((t) => t.url !== action.payload.url)
+    },
+    markAllAsRead: (state, action) => {
+      state.flow = state.flow.map((t) => {
+        return {
+          ...t,
+          entries: t.entries?.map((t) => ({ ...t, read: true })),
+        }
+      })
     },
     updateFlow: (state, action) => {
       if (!Array.isArray(state.flow)) {
@@ -104,6 +116,6 @@ export const feedSlice = createSlice({
   },
 })
 
-export const { addSource } = feedSlice.actions
+export const {} = feedSlice.actions
 
 export default feedSlice.reducer

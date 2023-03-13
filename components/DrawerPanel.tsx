@@ -62,9 +62,6 @@ export default function DrawerPanel() {
           <Text fontFamily={'Gilroy'} color="#f0353c">
             Aleph Reader
           </Text>
-          <Text color="$gray10Light" fontSize={14}>
-            Last update
-          </Text>
         </YStack>
       </XStack>
       <YStack width="100%" space={8} ai="flex-end" pr={8}>

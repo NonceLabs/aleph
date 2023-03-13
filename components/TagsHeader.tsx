@@ -6,6 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Button, ScrollView, Text, XStack } from 'tamagui'
 import { ArrowRightCircle } from 'iconoir-react-native'
 import { useRouter } from 'expo-router'
+import { useState } from 'react'
 
 const AnimatedBlurView = Animated.createAnimatedComponent(BlurView)
 
@@ -26,6 +27,8 @@ export default function TagsHeader({
   const insets = useSafeAreaInsets()
   const router = useRouter()
   const headerHeight = 38
+  const [localTag, setLocalTag] = useState(selectedTag)
+
   return (
     <AnimatedBlurView
       intensity={scrollY.interpolate({
@@ -57,7 +60,7 @@ export default function TagsHeader({
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           <XStack space={12} flex={1} px={8} alignItems="center" pt={10} pb={6}>
             {tags.map((t) => {
-              const active = selectedTag?.title === t.title
+              const active = localTag?.title === t.title
               const Icon = t.icon
               const contentColor = active
                 ? 'white'
@@ -76,10 +79,12 @@ export default function TagsHeader({
                     ) : null
                   }
                   onPress={() => {
-                    if (t.title === selectedTag?.title) {
+                    if (t.title === localTag?.title && type === 'flow') {
                       setSelectedTag(undefined)
+                      setLocalTag(undefined)
                     } else {
                       setSelectedTag(t)
+                      setLocalTag(t)
                     }
                   }}
                   themeInverse={active}

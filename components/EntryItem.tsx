@@ -14,16 +14,27 @@ dayjs.extend(relativeTime)
 export default function FeedItem({
   item,
   source,
+  type,
 }: {
   item: FeedEntry
   source?: Source
+  type?: 'flow' | 'bookmarks'
 }) {
   const router = useRouter()
   const images = extractImages(item.description)
   const { width } = useWindowDimensions()
   const dispatch = useAppDispatch()
   const withImage = images.length > 0
-
+  let opacity = 1
+  let fontWeight = '600'
+  if (type === 'flow') {
+    if (item.read) {
+      opacity = 0.6
+      fontWeight = '300'
+    }
+  } else {
+    fontWeight = '400'
+  }
   return (
     <Pressable
       onPress={() => {
@@ -42,14 +53,7 @@ export default function FeedItem({
         })
       }}
     >
-      <XStack
-        space={8}
-        ai="center"
-        jc="center"
-        w={width}
-        py={8}
-        o={item?.read ? 0.6 : 1}
-      >
+      <XStack space={8} ai="center" jc="center" w={width} py={8} o={opacity}>
         <YStack
           paddingVertical={10}
           space={4}
@@ -68,7 +72,7 @@ export default function FeedItem({
           )}
           <Text
             fontSize={18}
-            fontWeight={item?.read ? '300' : '600'}
+            fontWeight={fontWeight}
             lineHeight={20}
             color="$color12"
           >
