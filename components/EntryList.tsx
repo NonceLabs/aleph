@@ -14,7 +14,7 @@ import {
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { PAGE_SIZE } from 'lib/constants'
 import TagsHeader from './TagsHeader'
-import FeedListHeader from './FeedListHeader'
+import EntryListHeader from './EntryListHeader'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const CUSTOM_TAGS = {
@@ -40,12 +40,12 @@ const CUSTOM_TAGS = {
   tags: [],
 }
 
-export default function FeedList({
-  feeds,
+export default function EntryList({
+  entries,
   type = 'flow',
   withHeader = true,
 }: {
-  feeds: FeedEntry[]
+  entries: FeedEntry[]
   type?: FeedListType
   withHeader?: boolean
 }) {
@@ -63,7 +63,7 @@ export default function FeedList({
   const insets = useSafeAreaInsets()
 
   const topTags: Tag[] = useMemo(() => {
-    const tags = feeds.reduce((acc, cur) => {
+    const tags = entries.reduce((acc, cur) => {
       if (cur.tags) {
         cur.tags.forEach((t) => {
           if (typeof t === 'string') {
@@ -87,17 +87,17 @@ export default function FeedList({
       })
       .sort((a, b) => b.count - a.count)
       .slice(0, 5)
-  }, [feeds])
+  }, [entries])
 
   const filtered = useMemo(() => {
-    let result = feeds
+    let result = entries
     if (keyword) {
-      result = feeds.filter((t) =>
+      result = entries.filter((t) =>
         t.title?.toLowerCase().includes(keyword.trim().toLowerCase())
       )
     } else if (selectedTag) {
       if (selectedTag.title === 'Today') {
-        result = feeds.filter((t) => {
+        result = entries.filter((t) => {
           if (t.published) {
             return (
               new Date(t.published).toDateString() === new Date().toDateString()
@@ -106,9 +106,9 @@ export default function FeedList({
           return false
         })
       } else if (selectedTag.title === 'Unread') {
-        result = feeds.filter((t) => !t.read)
+        result = entries.filter((t) => !t.read)
       } else {
-        result = feeds.filter((t) => {
+        result = entries.filter((t) => {
           if (t.tags) {
             return t.tags.includes(selectedTag.title)
           }
@@ -116,13 +116,13 @@ export default function FeedList({
         })
       }
     } else if (hideRead && type === 'flow') {
-      result = feeds.filter((t) => !t.read)
+      result = entries.filter((t) => !t.read)
     }
     if (type === 'flow') {
       return ['Header', ...result]
     }
     return result
-  }, [feeds, keyword, hideRead, selectedTag])
+  }, [entries, keyword, hideRead, selectedTag])
 
   useEffect(() => {
     listRef.current?.scrollToIndex({
@@ -136,7 +136,7 @@ export default function FeedList({
       ref={listRef}
       ListHeaderComponent={
         withHeader ? (
-          <FeedListHeader keyword={keyword} setKeyword={setKeyword} />
+          <EntryListHeader keyword={keyword} setKeyword={setKeyword} />
         ) : null
       }
       scrollEventThrottle={16}
@@ -194,7 +194,7 @@ export default function FeedList({
             />
             <Text color="$color11" fontSize={18}>
               {type === 'flow'
-                ? "You don't have feeds to read"
+                ? "You don't have entries to read"
                 : "You don't have bookmarks"}
             </Text>
           </YStack>

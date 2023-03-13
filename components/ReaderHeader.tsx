@@ -42,13 +42,7 @@ export default function ReaderHeader({
               router.push({
                 pathname: 'feed',
                 params: {
-                  ...source,
-                  id: '',
-                  link: source.link ? encodeURIComponent(source.link) : '',
                   url: encodeURIComponent(source.url),
-                  favicon: source.favicon
-                    ? encodeURIComponent(source.favicon)
-                    : '',
                 },
               })
             }

@@ -2,50 +2,44 @@ import Header from 'components/Header'
 import { useSearchParams } from 'expo-router'
 import { extract } from 'lib/parser'
 import { useEffect, useState } from 'react'
-import { FlatList, StyleSheet } from 'react-native'
-import { YStack, Text, Button, XStack } from 'tamagui'
+import { FlatList, Pressable, StyleSheet } from 'react-native'
+import { YStack, Text, XStack } from 'tamagui'
 import { FeedData } from 'types'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { useAppDispatch, useAppSelector } from 'store/hooks'
+import { useAppSelector } from 'store/hooks'
 import EntryItem from 'components/EntryItem'
 import Favicon from 'components/Favicon'
 import _ from 'lodash'
+import FeedInfo from 'components/FeedInfo'
+import { EmojiLookUp } from 'iconoir-react-native'
+import AddFeedButton from 'components/AddFeedButton'
+import EntryList from 'components/EntryList'
 
 export default function FeedProfile() {
   const [data, setData] = useState<FeedData>()
+  const [error, setError] = useState()
   const { url, title, description } = useSearchParams()
   const insets = useSafeAreaInsets()
   const flows = useAppSelector((state) => state.feed.flow)
   const source = flows.find((f) => f.url === url)
 
   useEffect(() => {
+    setData(undefined)
+    setError(undefined)
     if (source) {
       setData(source)
     } else if (url) {
       extract(url as string)
         .then((res) => {
-          console.log('subscribe', _.omit(res, 'entries'))
-          setData(res)
+          if (res) {
+            setData({ ...res, url })
+          }
         })
         .catch((error) => {
-          console.log('extract error', error)
+          setError(error)
         })
     }
   }, [url, source])
-
-  const isSubscribed = !!source
-  const dispatch = useAppDispatch()
-
-  const handleSubscribe = () => {
-    if (isSubscribed) {
-      dispatch({
-        type: 'feed/unsubscribe',
-        payload: source,
-      })
-    } else {
-      console.log('subscribe', _.omit(data, 'entries'))
-    }
-  }
 
   const desc = description || data?.description
   const favicon = source?.favicon || data?.favicon
@@ -53,7 +47,7 @@ export default function FeedProfile() {
   return (
     <YStack flex={1}>
       <Header
-        title="Back"
+        title=""
         back
         center={
           <XStack space={4} alignItems="center">
@@ -69,18 +63,34 @@ export default function FeedProfile() {
             </Text>
           </XStack>
         }
-        right={
-          <Button
-            bc={isSubscribed ? '$color11' : '#f0353c'}
-            size="$2"
-            color="$color1"
-            onPress={handleSubscribe}
-          >
-            {isSubscribed ? 'Unsubscribe' : 'Subscribe'}
-          </Button>
-        }
+        right={<FeedInfo source={data} />}
       />
       <YStack flex={1}>
+        {error && (
+          <YStack space={8} ai="center" jc="center" pt={100}>
+            <EmojiLookUp
+              width={140}
+              height={140}
+              color="gray"
+              strokeWidth={1}
+            />
+            <Text fontSize={16} color="$gray10">
+              Something went wrong with this feed.
+            </Text>
+            <Text fontSize={16} color="$gray10">
+              Please check the URL, and
+            </Text>
+            <AddFeedButton
+              trigger={
+                <Pressable>
+                  <Text fontSize={16} color="$blue10">
+                    add it again
+                  </Text>
+                </Pressable>
+              }
+            />
+          </YStack>
+        )}
         {desc && (
           <XStack
             space
@@ -95,15 +105,10 @@ export default function FeedProfile() {
             </YStack>
           </XStack>
         )}
-        <FlatList
-          data={data?.entries || []}
-          contentContainerStyle={{ paddingBottom: insets.bottom }}
-          renderItem={({ item }) => {
-            return <EntryItem item={item} />
-          }}
-          ItemSeparatorComponent={() => (
-            <YStack bg="gray" h={StyleSheet.hairlineWidth} />
-          )}
+        <EntryList
+          entries={data?.entries || []}
+          type="tags"
+          withHeader={false}
         />
       </YStack>
     </YStack>

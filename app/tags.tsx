@@ -1,4 +1,4 @@
-import FeedList from 'components/FeedList'
+import EntryList from 'components/EntryList'
 import dayjs from 'dayjs'
 import { useRouter, useSearchParams } from 'expo-router'
 import { NavArrowLeft } from 'iconoir-react-native'
@@ -15,10 +15,10 @@ export default function Tags() {
   const { tag: _tag } = useSearchParams()
   const insets = useSafeAreaInsets()
   const router = useRouter()
-  const entries = useAppSelector((state) =>
+  const compactEntries = useAppSelector((state) =>
     state.feed.flow.map((t) => t.entries || [])
   )
-  const feeds = _.flatten(entries)
+  const entries = _.flatten(compactEntries)
     .filter((t) => t.tags?.includes(tag))
     .sort((a: FeedEntry, b: FeedEntry) =>
       dayjs(b.published).diff(dayjs(a.published))
@@ -29,8 +29,6 @@ export default function Tags() {
       setTag(_tag)
     }
   }, [_tag])
-
-  console.log('feeds', feeds.length)
 
   return (
     <YStack flex={1}>
@@ -46,11 +44,11 @@ export default function Tags() {
       </XStack>
       <XStack ai="center" jc="center" space={4} py={8} o={0.7}>
         <Text fontWeight="600" color="$blue11">
-          {feeds.length}
+          {entries.length}
         </Text>
-        <Text>article{feeds.length > 1 ? 's' : ''} found</Text>
+        <Text>article{entries.length > 1 ? 's' : ''} found</Text>
       </XStack>
-      <FeedList feeds={feeds} type="tags" withHeader={false} />
+      <EntryList entries={entries} type="tags" withHeader={false} />
     </YStack>
   )
 }

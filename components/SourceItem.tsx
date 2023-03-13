@@ -26,7 +26,6 @@ export default function SourceItem({
         router.push({
           pathname: 'feed',
           params: {
-            ...item,
             url: encodeURIComponent(item.url),
           },
         })
@@ -44,7 +43,7 @@ export default function SourceItem({
         <XStack flex={1} alignItems="center" justifyContent="space-between">
           <Text
             fontSize={16}
-            maxWidth={120}
+            maxWidth={180}
             numberOfLines={1}
             ellipsizeMode="tail"
             color="$color11"

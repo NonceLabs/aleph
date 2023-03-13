@@ -5,7 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Input, XStack } from 'tamagui'
 import Shortcut from './Shortcut'
 
-export default function FeedListHeader({
+export default function EntryListHeader({
   keyword,
   setKeyword,
 }: {

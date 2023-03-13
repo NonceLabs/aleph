@@ -12,10 +12,12 @@ import {
 } from 'tamagui'
 import { useRouter } from 'expo-router'
 
-export default function AddFeedButton() {
-  const [url, setUrl] = useState(
-    'https://rss.nytimes.com/services/xml/rss/nyt/World.xml'
-  )
+export default function AddFeedButton({
+  trigger,
+}: {
+  trigger: React.ReactNode
+}) {
+  const [url, setUrl] = useState('')
 
   const router = useRouter()
   const { width } = useWindowDimensions()
@@ -23,9 +25,11 @@ export default function AddFeedButton() {
   return (
     <Dialog modal>
       <Dialog.Trigger asChild>
-        <Pressable hitSlop={15} style={{ marginRight: 10 }}>
-          <AddCircle width={24} height={24} />
-        </Pressable>
+        {trigger || (
+          <Pressable hitSlop={15} style={{ marginRight: 10 }}>
+            <AddCircle width={24} height={24} />
+          </Pressable>
+        )}
       </Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay

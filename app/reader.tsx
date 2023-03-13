@@ -62,9 +62,6 @@ export default function Reader() {
           contentContainerStyle={{ paddingBottom: insets.bottom + 60 }}
           flex={1}
           space={8}
-          // StickyHeaderComponent={() => (
-          //   <ReaderHeader source={source} item={item} />
-          // )}
           stickyHeaderIndices={[0]}
         >
           <ReaderHeader source={source} item={item} />
