@@ -1,5 +1,5 @@
 import useTheme from 'hooks/useTheme'
-import { Tag } from 'types'
+import { FeedListType, Tag } from 'types'
 import { BlurView } from 'expo-blur'
 import { Animated, FlatList, Pressable, ScrollView } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -21,7 +21,7 @@ export default function TagsHeader({
   selectedTag: Tag | undefined
   setSelectedTag: (tag: Tag | undefined) => void
   scrollY: Animated.Value
-  type: 'flow' | 'bookmarks'
+  type: FeedListType
 }) {
   const listRef = useRef<FlatList>(null)
   const theme = useTheme()

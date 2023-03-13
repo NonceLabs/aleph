@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
 import { Image } from 'expo-image'
 import { YStack, Text, XStack, useWindowDimensions } from 'tamagui'
-import { FeedEntry, Source } from 'types'
+import { FeedEntry, FeedListType, Source } from 'types'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import { Pressable, StyleSheet } from 'react-native'
 import { useRouter } from 'expo-router'
@@ -18,7 +18,7 @@ export default function FeedItem({
 }: {
   item: FeedEntry
   source?: Source
-  type?: 'flow' | 'bookmarks'
+  type?: FeedListType
 }) {
   const router = useRouter()
   const images = extractImages(item.description)

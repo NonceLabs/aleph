@@ -1,5 +1,5 @@
 import { useAppSelector } from 'store/hooks'
-import { FeedEntry, Tag } from 'types'
+import { FeedEntry, FeedListType, Tag } from 'types'
 import { FlashList } from '@shopify/flash-list'
 import { Text, YStack } from 'tamagui'
 import EntryItem from './EntryItem'
@@ -17,34 +17,39 @@ import TagsHeader from './TagsHeader'
 import FeedListHeader from './FeedListHeader'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
+const CUSTOM_TAGS = {
+  flow: [
+    {
+      title: 'Today',
+      icon: SeaAndSun,
+      count: 0,
+    },
+    {
+      title: 'Unread',
+      icon: EyeEmpty,
+      count: 0,
+    },
+  ],
+  bookmarks: [
+    {
+      title: 'Bookmarked',
+      icon: BookmarkEmpty,
+      count: 0,
+    },
+  ],
+  tags: [],
+}
+
 export default function FeedList({
   feeds,
   type = 'flow',
+  withHeader = true,
 }: {
   feeds: FeedEntry[]
-  type?: 'flow' | 'bookmarks'
+  type?: FeedListType
+  withHeader?: boolean
 }) {
-  const customTag =
-    type === 'flow'
-      ? [
-          {
-            title: 'Today',
-            icon: SeaAndSun,
-            count: 0,
-          },
-          {
-            title: 'Unread',
-            icon: EyeEmpty,
-            count: 0,
-          },
-        ]
-      : [
-          {
-            title: 'Bookmarked',
-            icon: BookmarkEmpty,
-            count: 0,
-          },
-        ]
+  const customTag = CUSTOM_TAGS[type]
 
   const [page, setPage] = useState(1)
   const listRef = useRef<FlashList<any>>(null)
@@ -85,13 +90,14 @@ export default function FeedList({
   }, [feeds])
 
   const filtered = useMemo(() => {
+    let result = feeds
     if (keyword) {
-      return feeds.filter((t) =>
+      result = feeds.filter((t) =>
         t.title?.toLowerCase().includes(keyword.trim().toLowerCase())
       )
     } else if (selectedTag) {
       if (selectedTag.title === 'Today') {
-        return feeds.filter((t) => {
+        result = feeds.filter((t) => {
           if (t.published) {
             return (
               new Date(t.published).toDateString() === new Date().toDateString()
@@ -100,20 +106,24 @@ export default function FeedList({
           return false
         })
       } else if (selectedTag.title === 'Unread') {
-        return feeds.filter((t) => !t.read)
+        result = feeds.filter((t) => !t.read)
       } else {
-        return feeds.filter((t) => {
+        result = feeds.filter((t) => {
           if (t.tags) {
             return t.tags.includes(selectedTag.title)
           }
           return false
         })
       }
-    } else if (hideRead) {
-      return feeds.filter((t) => !t.read)
+    } else if (hideRead && type === 'flow') {
+      result = feeds.filter((t) => !t.read)
     }
-    return feeds
+    if (type === 'flow') {
+      return ['Header', ...result]
+    }
+    return result
   }, [feeds, keyword, hideRead, selectedTag])
+  console.log('filtered', filtered.length)
 
   useEffect(() => {
     listRef.current?.scrollToIndex({
@@ -126,10 +136,12 @@ export default function FeedList({
     <FlashList
       ref={listRef}
       ListHeaderComponent={
-        <FeedListHeader keyword={keyword} setKeyword={setKeyword} />
+        withHeader ? (
+          <FeedListHeader keyword={keyword} setKeyword={setKeyword} />
+        ) : null
       }
       scrollEventThrottle={16}
-      stickyHeaderIndices={[0]}
+      stickyHeaderIndices={withHeader ? [0] : []}
       removeClippedSubviews={false}
       extraData={{
         keyword,
@@ -139,7 +151,7 @@ export default function FeedList({
         [{ nativeEvent: { contentOffset: { y: scrollY } } }],
         { useNativeDriver: false }
       )}
-      data={['Header', ...filtered.slice(0, page * PAGE_SIZE)]}
+      data={filtered.slice(0, page * PAGE_SIZE)}
       keyExtractor={(item, index) => {
         if (typeof item === 'string') {
           return item

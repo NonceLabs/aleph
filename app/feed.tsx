@@ -9,6 +9,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import EntryItem from 'components/EntryItem'
 import Favicon from 'components/Favicon'
+import _ from 'lodash'
 
 export default function FeedProfile() {
   const [data, setData] = useState<FeedData>()
@@ -38,6 +39,8 @@ export default function FeedProfile() {
         type: 'feed/unsubscribe',
         payload: source,
       })
+    } else {
+      console.log('subscribe', _.omit(data, 'entries'))
     }
   }
 
@@ -62,7 +65,7 @@ export default function FeedProfile() {
         }
         right={
           <Button
-            bc="$color11"
+            bc={isSubscribed ? '$color11' : '#f0353c'}
             size="$2"
             color="$color1"
             onPress={handleSubscribe}

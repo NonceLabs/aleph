@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import { useSearchParams } from 'expo-router'
+import { Link, useSearchParams } from 'expo-router'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useAppSelector } from 'store/hooks'
 import {
@@ -75,7 +75,7 @@ export default function Reader() {
               lineHeight={28}
               color="$color12"
             >
-              {item?.title}
+              {item?.title || 'Untitled'}
             </Text>
             <Text fontSize={12} color="gray" mt={6}>
               {dayjs(item?.published).format('MMM DD, YYYY')}
@@ -87,18 +87,20 @@ export default function Reader() {
                 const title = typeof t === 'string' ? t : t.title
                 const isLast = idx + 1 === item.tags?.length
                 return (
-                  <XStack key={idx} mr={2} mb={4}>
-                    <Text
-                      color="$color11"
-                      fontFamily="$heading"
-                      bbw={StyleSheet.hairlineWidth}
-                      bbc="$color11"
-                      textDecorationLine="underline"
-                    >
-                      {title}
-                    </Text>
-                    {!isLast && <Text>,</Text>}
-                  </XStack>
+                  <Link key={idx} href={`tags?tag=${title}`}>
+                    <XStack mr={2} mb={4}>
+                      <Text
+                        color="$color11"
+                        fontFamily="$heading"
+                        bbw={StyleSheet.hairlineWidth}
+                        bbc="$color11"
+                        textDecorationLine="underline"
+                      >
+                        {title}
+                      </Text>
+                      {!isLast && <Text>,</Text>}
+                    </XStack>
+                  </Link>
                 )
               })}
             </XStack>

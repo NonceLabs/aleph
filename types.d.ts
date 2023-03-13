@@ -109,3 +109,5 @@ export interface CustomTag {
   title: string
   createdAt: Date
 }
+
+export type FeedListType = 'flow' | 'bookmarks' | 'tags'
