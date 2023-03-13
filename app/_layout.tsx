@@ -38,6 +38,7 @@ export default function RootLayout() {
     'Gilroy-Bold': require('../assets/fonts/Gilroy-Bold.ttf'),
     Vollkorn: require('../assets/fonts/Vollkorn.ttf'),
     Arvo: require('../assets/fonts/Arvo-Regular.ttf'),
+    Poppins: require('../assets/fonts/Poppins-Regular.ttf'),
     ...FontAwesome.font,
   })
 

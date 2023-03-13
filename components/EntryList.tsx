@@ -200,7 +200,7 @@ export default function EntryList({
             />
             <Text color="$color11" fontSize={18}>
               {type === 'flow'
-                ? "You don't have entries to read"
+                ? "Nice, everything's read"
                 : "You don't have bookmarks"}
             </Text>
           </YStack>

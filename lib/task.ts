@@ -65,7 +65,6 @@ export async function tagFeedEntries() {
         })
         .map((entry) => entry.id)
         .filter((t) => (t || '').startsWith('http'))
-        .slice(0, 5)
 
       return {
         sourceUrl: feed.url,

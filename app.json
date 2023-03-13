@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "aleph",
-    "slug": "aleph",
+    "name": "Aleph Reader",
+    "slug": "Aleph Reader",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -14,7 +14,10 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "config": {
+        "usesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {

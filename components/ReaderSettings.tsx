@@ -124,35 +124,37 @@ export default function ReaderSettings() {
               space={16}
               showsHorizontalScrollIndicator={false}
             >
-              {['Vollkorn', 'Inter', 'Gilroy', 'SpaceMono', 'Arvo'].map((t) => {
-                return (
-                  <Pressable
-                    key={t}
-                    onPress={() => {
-                      dispatch({
-                        type: 'setting/updateFontFamily',
-                        payload: t,
-                      })
-                    }}
-                  >
-                    <XStack
-                      borderWidth={2}
-                      h={46}
-                      px={8}
-                      br={4}
-                      ai="center"
-                      jc="center"
-                      borderColor={
-                        t === fontFamily ? '$blue7Light' : '$gray7Light'
-                      }
+              {['Vollkorn', 'Inter', 'Poppins', 'SpaceMono', 'Arvo'].map(
+                (t) => {
+                  return (
+                    <Pressable
+                      key={t}
+                      onPress={() => {
+                        dispatch({
+                          type: 'setting/updateFontFamily',
+                          payload: t,
+                        })
+                      }}
                     >
-                      <Text fontSize={20} fontFamily={t} color="$color12">
-                        {t}
-                      </Text>
-                    </XStack>
-                  </Pressable>
-                )
-              })}
+                      <XStack
+                        borderWidth={2}
+                        h={46}
+                        px={8}
+                        br={4}
+                        ai="center"
+                        jc="center"
+                        borderColor={
+                          t === fontFamily ? '$blue7Light' : '$gray7Light'
+                        }
+                      >
+                        <Text fontSize={20} fontFamily={t} color="$color12">
+                          {t}
+                        </Text>
+                      </XStack>
+                    </Pressable>
+                  )
+                }
+              )}
             </ScrollView>
           </YStack>
         </Sheet.Frame>

@@ -87,7 +87,11 @@ export default function TagsHeader({
         <FlatList
           horizontal
           data={sorted}
-          style={{ paddingTop: 10, paddingBottom: 6, paddingHorizontal: 8 }}
+          style={{
+            paddingTop: 10,
+            paddingBottom: 6,
+            paddingHorizontal: 8,
+          }}
           renderItem={({ item, index }) => {
             const active = localTag?.title === item.title
             const Icon = item.icon
@@ -132,7 +136,7 @@ export default function TagsHeader({
           keyExtractor={(item, index) => `${item.title}-${index}`}
           ListFooterComponent={
             type === 'flow' && tags.length > 3 ? (
-              <XStack ai="center" jc="center" pt={4} ml={8}>
+              <XStack ai="center" jc="center" pt={4} ml={8} mr={16}>
                 <Pressable onPress={() => router.push('shared/tags')}>
                   <ArrowRightCircle width={32} height={32} />
                 </Pressable>

@@ -59,7 +59,7 @@ export default function DrawerPanel() {
             source={require('../assets/images/icon.png')}
             style={{ width: 80, height: 80 }}
           />
-          <Text fontFamily={'Gilroy'} color="#f0353c">
+          <Text fontFamily={'Poppins'} color="#f0353c">
             Aleph Reader
           </Text>
         </YStack>
