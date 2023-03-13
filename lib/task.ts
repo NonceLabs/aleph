@@ -92,32 +92,32 @@ export async function tagFeedEntries() {
   } catch (error) {}
 }
 
-// 1. Define the task by providing a name and the function that should be executed
-// Note: This needs to be called in the global scope (e.g outside of your React components)
-TaskManager.defineTask(BACKGROUND_FETCH_TASK, async () => {
-  const now = Date.now()
+// // 1. Define the task by providing a name and the function that should be executed
+// // Note: This needs to be called in the global scope (e.g outside of your React components)
+// TaskManager.defineTask(BACKGROUND_FETCH_TASK, async () => {
+//   const now = Date.now()
 
-  console.log(
-    `Got background fetch call at date: ${new Date(now).toISOString()}`
-  )
-  await fetchFeedFlow()
-  // Be sure to return the successful result type!
-  return BackgroundFetch.BackgroundFetchResult.NewData
-})
+//   console.log(
+//     `Got background fetch call at date: ${new Date(now).toISOString()}`
+//   )
+//   await fetchFeedFlow()
+//   // Be sure to return the successful result type!
+//   return BackgroundFetch.BackgroundFetchResult.NewData
+// })
 
-// 2. Register the task at some point in your app by providing the same name,
-// and some configuration options for how the background fetch should behave
-// Note: This does NOT need to be in the global scope and CAN be used in your React components!
-export async function registerBackgroundFetchAsync() {
-  console.log('registerBackgroundFetchAsync')
+// // 2. Register the task at some point in your app by providing the same name,
+// // and some configuration options for how the background fetch should behave
+// // Note: This does NOT need to be in the global scope and CAN be used in your React components!
+// export async function registerBackgroundFetchAsync() {
+//   console.log('registerBackgroundFetchAsync')
 
-  return BackgroundFetch.registerTaskAsync(BACKGROUND_FETCH_TASK, {
-    minimumInterval: 60 * 5, // 5 minutes
-    stopOnTerminate: false, // android only,
-    startOnBoot: true, // android only
-  })
-}
+//   return BackgroundFetch.registerTaskAsync(BACKGROUND_FETCH_TASK, {
+//     minimumInterval: 60 * 5, // 5 minutes
+//     stopOnTerminate: false, // android only,
+//     startOnBoot: true, // android only
+//   })
+// }
 
-export async function unregisterBackgroundFetchAsync() {
-  return BackgroundFetch.unregisterTaskAsync(BACKGROUND_FETCH_TASK)
-}
+// export async function unregisterBackgroundFetchAsync() {
+//   return BackgroundFetch.unregisterTaskAsync(BACKGROUND_FETCH_TASK)
+// }

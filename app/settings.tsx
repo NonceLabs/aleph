@@ -1,8 +1,15 @@
-import Header from 'components/Header'
 import { Pressable, StyleSheet } from 'react-native'
 import { YStack, YGroup, Separator, ListItem, XStack, Text } from 'tamagui'
 import { ChevronRight } from '@tamagui/lucide-icons'
-import { Crown, Menu, RssFeed, TextAlt } from 'iconoir-react-native'
+import {
+  Crown,
+  Lifebelt,
+  Mail,
+  Menu,
+  RssFeed,
+  TextAlt,
+} from 'iconoir-react-native'
+import * as MailComposer from 'expo-mail-composer'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useNavigation } from 'expo-router'
 import { ScrollView } from 'react-native'
@@ -33,27 +40,25 @@ export default function SettingsPage() {
             <ListItem
               hoverTheme
               pressTheme
-              title="Feeds"
-              icon={<RssFeed width={24} height={24} />}
-              iconAfter={ChevronRight}
-            />
-          </YGroup.Item>
-          <YGroup.Item>
-            <ListItem
-              hoverTheme
-              pressTheme
-              title="Reader"
-              icon={<TextAlt width={24} height={24} />}
-              iconAfter={ChevronRight}
-            />
-          </YGroup.Item>
-          <YGroup.Item>
-            <ListItem
-              hoverTheme
-              pressTheme
-              title="Pro"
-              icon={<Crown width={24} height={24} />}
-              iconAfter={ChevronRight}
+              title="Help"
+              px={8}
+              icon={<Lifebelt width={24} height={24} />}
+              iconAfter={
+                <XStack>
+                  <ChevronRight width={24} height={24} color="$color9" />
+                </XStack>
+              }
+              onPress={async () => {
+                console.log('help')
+
+                try {
+                  await MailComposer.composeAsync({
+                    recipients: ['chezhe@hey.com'],
+                    subject: 'Help - Aleph Reader',
+                    body: 'Hi, I need help with...',
+                  })
+                } catch (error) {}
+              }}
             />
           </YGroup.Item>
         </YGroup>

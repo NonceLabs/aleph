@@ -2,12 +2,11 @@ import Header from 'components/Header'
 import { useSearchParams } from 'expo-router'
 import { extract } from 'lib/parser'
 import { useEffect, useState } from 'react'
-import { FlatList, Pressable, StyleSheet } from 'react-native'
+import { Pressable } from 'react-native'
 import { YStack, Text, XStack } from 'tamagui'
 import { FeedData } from 'types'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useAppSelector } from 'store/hooks'
-import EntryItem from 'components/EntryItem'
 import Favicon from 'components/Favicon'
 import _ from 'lodash'
 import FeedInfo from 'components/FeedInfo'
@@ -90,20 +89,6 @@ export default function FeedProfile() {
               }
             />
           </YStack>
-        )}
-        {desc && (
-          <XStack
-            space
-            alignItems="center"
-            paddingBottom={16}
-            paddingHorizontal={20}
-          >
-            <YStack space={4} alignItems="center" width="100%">
-              <Text fontSize={12} color="$gray10Light" textAlign="center">
-                {desc}
-              </Text>
-            </YStack>
-          </XStack>
         )}
         <EntryList
           entries={data?.entries || []}

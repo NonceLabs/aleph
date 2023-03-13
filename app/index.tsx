@@ -2,7 +2,7 @@ import { YStack } from 'tamagui'
 import { useEffect } from 'react'
 import EntryList from 'components/EntryList'
 import { fetchFeedFlow, tagFeedEntries } from 'lib/task'
-import { useAppDispatch, useAppSelector } from 'store/hooks'
+import { useAppSelector } from 'store/hooks'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { FeedEntry } from 'types'
@@ -13,7 +13,7 @@ export default function FlowPage() {
   )
   useEffect(() => {
     fetchFeedFlow()
-    // tagFeedEntries()
+    tagFeedEntries()
   }, [])
 
   const entries = _.flatten(compactEntries).sort((a: FeedEntry, b: FeedEntry) =>

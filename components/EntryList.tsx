@@ -132,6 +132,10 @@ export default function EntryList({
     })
   }, [selectedTag])
 
+  const isEmpty =
+    filtered.length === 0 ||
+    (filtered.length === 1 && typeof filtered[0] === 'string')
+
   return (
     <FlashList
       ref={listRef}
@@ -185,7 +189,7 @@ export default function EntryList({
         }
       }}
       ListFooterComponent={
-        filtered.length === 0 ? (
+        isEmpty ? (
           <YStack flex={1} ai="center" jc="center" space pt={100}>
             <EmojiSingRightNote
               width={140}

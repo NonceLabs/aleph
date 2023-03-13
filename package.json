@@ -41,6 +41,7 @@
     "expo-font": "^11.1.1",
     "expo-image": "~1.0.0",
     "expo-linking": "~4.0.1",
+    "expo-mail-composer": "~12.1.1",
     "expo-router": "^1.0.0-rc5",
     "expo-sharing": "~11.2.2",
     "expo-splash-screen": "~0.18.1",

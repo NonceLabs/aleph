@@ -49,6 +49,7 @@ export default function FeedItem({
           pathname: 'reader',
           params: {
             id: encodeURIComponent(item.id),
+            type,
           },
         })
       }}
@@ -64,7 +65,14 @@ export default function FeedItem({
           {source && (
             <XStack space={4} alignItems="center">
               <Favicon favicon={source.favicon} size={20} />
-              <Text color="$color11">{source.title}</Text>
+              <Text
+                color="$color11"
+                maxWidth={120}
+                numberOfLines={1}
+                ellipsizeMode="tail"
+              >
+                {source.title}
+              </Text>
               <Text fontSize={12} color="$gray10" marginLeft={10}>
                 {dayjs(item.published).fromNow()}
               </Text>

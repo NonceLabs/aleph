@@ -1,7 +1,7 @@
 import AddFeedButton from 'components/AddFeedButton'
 import SourceItem from 'components/SourceItem'
 import { useNavigation } from 'expo-router'
-import { Menu } from 'iconoir-react-native'
+import { EmojiLookDown, Menu } from 'iconoir-react-native'
 import { FlatList, Pressable } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useAppSelector } from 'store/hooks'
@@ -42,6 +42,19 @@ export default function Feeds() {
         renderItem={({ item }) => {
           return <SourceItem item={item} />
         }}
+        ListEmptyComponent={
+          <YStack flex={1} ai="center" jc="center" space pt={100}>
+            <EmojiLookDown
+              width={140}
+              height={140}
+              color="#999"
+              strokeWidth={1}
+            />
+            <Text color="$color11" fontSize={18}>
+              You don't have any feeds
+            </Text>
+          </YStack>
+        }
       />
     </YStack>
   )

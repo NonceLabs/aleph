@@ -16,20 +16,27 @@ import ReaderHeader from 'components/ReaderHeader'
 import ReaderToolbar from 'components/ReaderToolbar'
 import useTheme from 'hooks/useTheme'
 import { StyleSheet } from 'react-native'
+import { FeedEntry } from 'types'
 
 export default function Reader() {
+  const { id, type } = useSearchParams()
+  const bookmarked = useAppSelector((state) => state.feed.bookmarked)
   const flow = useAppSelector((state) => state.feed.flow)
   const sources = useAppSelector((state) => state.feed.sources)
   const fontSize = useAppSelector((state) => state.setting?.reader?.fontSize)
   const fontFamily = useAppSelector(
     (state) => state.setting?.reader?.fontFamily
   )
-  const { id } = useSearchParams()
   const insets = useSafeAreaInsets()
   const { width } = useWindowDimensions()
   const feed = flow.find((t) => t.entries?.find((m) => m.id === id))
-  const item = feed?.entries?.find((t) => t.id === id)
   const source = sources.find((t) => t.url === feed?.url)
+  let item: FeedEntry | undefined
+  if (type === 'bookmarks') {
+    item = bookmarked.find((t) => t.id === id)
+  } else {
+    item = feed?.entries?.find((t) => t.id === id)
+  }
   const theme = useTheme()
 
   const tagsStyle = useMemo(() => {
