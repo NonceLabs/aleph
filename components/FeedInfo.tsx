@@ -42,8 +42,10 @@ export default function FeedInfo({ source }: { source?: Source | FeedData }) {
           payload: feed,
         })
         post(`${HOST}/addFeed`, feed)
-        router.replace('index')
+        // router.push('')
       }
+      setOpen(false)
+      router.back()
     } catch (error) {}
   }
   return (

@@ -23,7 +23,7 @@ export default function EntryListHeader({
           navigation.openDrawer()
         }}
       >
-        <Menu width={24} height={24} />
+        <Menu width={24} height={24} color="#f0353c" />
       </Pressable>
       <Input
         flex={1}

@@ -22,9 +22,9 @@ export default function Feeds() {
               navigation.openDrawer()
             }}
           >
-            <Menu width={24} height={24} />
+            <Menu width={24} height={24} color="#f0353c" />
           </Pressable>
-          <Text fontFamily="Gilroy-Bold" fontSize={24}>
+          <Text fontFamily="Gilroy-Bold" fontSize={24} color="$color12">
             Feeds
           </Text>
         </XStack>

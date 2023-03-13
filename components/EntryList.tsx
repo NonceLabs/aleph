@@ -3,7 +3,7 @@ import { FeedEntry, FeedListType, Tag } from 'types'
 import { FlashList } from '@shopify/flash-list'
 import { Text, YStack } from 'tamagui'
 import EntryItem from './EntryItem'
-import { Animated, useAnimatedValue } from 'react-native'
+import { Animated, Pressable, useAnimatedValue } from 'react-native'
 import _ from 'lodash'
 import {
   BookmarkEmpty,
@@ -16,6 +16,7 @@ import { PAGE_SIZE } from 'lib/constants'
 import TagsHeader from './TagsHeader'
 import EntryListHeader from './EntryListHeader'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import AddFeedButton from './AddFeedButton'
 
 const CUSTOM_TAGS = {
   flow: [
@@ -199,10 +200,17 @@ export default function EntryList({
               strokeWidth={1}
             />
             <Text color="$color11" fontSize={18}>
-              {type === 'flow'
-                ? "Nice, everything's read"
-                : "You don't have bookmarks"}
+              No feeds
             </Text>
+            {sources.length === 0 && (
+              <AddFeedButton
+                trigger={
+                  <Text color="$blue10" fontSize={18}>
+                    Add feeds
+                  </Text>
+                }
+              />
+            )}
           </YStack>
         ) : null
       }

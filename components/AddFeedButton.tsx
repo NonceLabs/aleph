@@ -80,6 +80,7 @@ export default function AddFeedButton({
                     pathname: 'shared/feed',
                     params: { url: encodeURIComponent(url) },
                   })
+                  setUrl('')
                 }}
               >
                 Confirm

@@ -13,7 +13,7 @@ export default function Shortcut() {
   return (
     <>
       <Pressable onPress={() => setOpen(true)}>
-        <ViewGrid width={32} height={32} color="#f0353c" strokeWidth={2} />
+        <ViewGrid width={32} height={32} color="#f0353c" />
       </Pressable>
       <Sheet
         forceRemoveScrollEnabled={open}
