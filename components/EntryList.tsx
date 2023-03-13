@@ -149,6 +149,7 @@ export default function EntryList({
       removeClippedSubviews={false}
       extraData={{
         keyword,
+        selectedTag,
       }}
       contentContainerStyle={{ paddingBottom: insets.bottom }}
       onScroll={Animated.event(

@@ -19,6 +19,13 @@ const initialState: FeedSlice = {
       link: 'https://www.theverge.com/',
       favicon: 'https://cdn.vox-cdn.com/verge/favicon.ico',
     },
+    {
+      title: 'Michael Tsai',
+      url: 'https://mjtsai.com/blog/feed/',
+      description: '',
+      link: 'https://mjtsai.com/blog',
+      favicon: 'https://mjtsai.com/favicon.ico',
+    },
   ],
   watchlist: [],
   bookmarked: [],

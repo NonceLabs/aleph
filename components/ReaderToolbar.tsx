@@ -36,7 +36,7 @@ export default function ReaderToolbar({ item }: { item?: FeedEntry }) {
   }
   return (
     <BlurView
-      intensity={40}
+      intensity={80}
       tint={theme}
       style={{ position: 'absolute', bottom: 0, width: '100%' }}
     >

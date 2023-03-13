@@ -23,7 +23,7 @@ export default function SourceItem({
     <Pressable
       onPress={() => {
         router.push({
-          pathname: 'feed',
+          pathname: 'shared/feed',
           params: {
             url: encodeURIComponent(item.url),
           },

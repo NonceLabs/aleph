@@ -31,7 +31,7 @@ export default function TagsHeader({
   const [localTag, setLocalTag] = useState(selectedTag)
 
   const onSelectTag = (tag: Tag) => {
-    if (tag.title === localTag?.title && type === 'flow') {
+    if (tag.title === localTag?.title) {
       setSelectedTag(undefined)
       setLocalTag(undefined)
     } else {
@@ -87,7 +87,7 @@ export default function TagsHeader({
         <FlatList
           horizontal
           data={sorted}
-          style={{ paddingTop: 10, paddingBottom: 6 }}
+          style={{ paddingTop: 10, paddingBottom: 6, paddingHorizontal: 8 }}
           renderItem={({ item, index }) => {
             const active = localTag?.title === item.title
             const Icon = item.icon
@@ -133,7 +133,7 @@ export default function TagsHeader({
           ListFooterComponent={
             type === 'flow' && tags.length > 3 ? (
               <XStack ai="center" jc="center" pt={4} ml={8}>
-                <Pressable onPress={() => router.push('tags')}>
+                <Pressable onPress={() => router.push('shared/tags')}>
                   <ArrowRightCircle width={32} height={32} />
                 </Pressable>
               </XStack>

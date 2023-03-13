@@ -77,7 +77,7 @@ export default function AddFeedButton({
                 style={{ marginTop: 16 }}
                 onPress={() => {
                   router.push({
-                    pathname: 'feed',
+                    pathname: 'shared/feed',
                     params: { url: encodeURIComponent(url) },
                   })
                 }}

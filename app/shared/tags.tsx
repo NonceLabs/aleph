@@ -1,6 +1,6 @@
 import EntryList from 'components/EntryList'
 import dayjs from 'dayjs'
-import { useRouter, useSearchParams } from 'expo-router'
+import { Stack, useRouter, useSearchParams } from 'expo-router'
 import { NavArrowLeft } from 'iconoir-react-native'
 import _ from 'lodash'
 import { useEffect, useState } from 'react'

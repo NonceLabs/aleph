@@ -27,7 +27,7 @@ export {
 
 export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: 'flow',
+  initialRouteName: 'index',
 }
 
 export default function RootLayout() {
@@ -68,6 +68,7 @@ function RootLayoutNav() {
                 initialRouteName="feeds"
                 drawerContent={DrawerPanel}
                 screenOptions={{
+                  headerShown: false,
                   drawerStyle: {
                     width: 250,
                   },
@@ -76,44 +77,30 @@ function RootLayoutNav() {
                 <Drawer.Screen
                   name="index"
                   options={{
-                    drawerLabel: 'Flow',
+                    headerShown: false,
                     header: () => null,
                   }}
                 />
                 <Drawer.Screen
                   name="settings"
                   options={{
-                    drawerLabel: 'Settings',
-                    title: 'Settings',
+                    headerShown: false,
                     header: () => null,
                   }}
                 />
                 <Drawer.Screen
                   name="feeds"
                   options={{
-                    drawerLabel: 'Feeds',
-                    title: 'Feeds',
+                    headerShown: false,
                     header: () => null,
                   }}
-                />
-                <Drawer.Screen
-                  name="feed"
-                  options={{ headerShown: false, header: () => null }}
                 />
                 <Drawer.Screen
                   name="bookmarks"
                   options={{ headerShown: false, header: () => null }}
                 />
                 <Drawer.Screen
-                  name="reader"
-                  options={{ headerShown: false, header: () => null }}
-                />
-                <Drawer.Screen
                   name="explore"
-                  options={{ headerShown: false, header: () => null }}
-                />
-                <Drawer.Screen
-                  name="tags"
                   options={{ headerShown: false, header: () => null }}
                 />
               </Drawer>

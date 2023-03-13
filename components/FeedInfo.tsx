@@ -42,7 +42,7 @@ export default function FeedInfo({ source }: { source?: Source | FeedData }) {
           payload: feed,
         })
         post(`${HOST}/addFeed`, feed)
-        router.back()
+        router.replace('index')
       }
     } catch (error) {}
   }

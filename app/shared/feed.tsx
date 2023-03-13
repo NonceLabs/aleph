@@ -1,11 +1,10 @@
 import Header from 'components/Header'
-import { useSearchParams } from 'expo-router'
+import { Stack, useSearchParams } from 'expo-router'
 import { extract } from 'lib/parser'
 import { useEffect, useState } from 'react'
 import { Pressable } from 'react-native'
 import { YStack, Text, XStack } from 'tamagui'
 import { FeedData } from 'types'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useAppSelector } from 'store/hooks'
 import Favicon from 'components/Favicon'
 import _ from 'lodash'
@@ -18,7 +17,6 @@ export default function FeedProfile() {
   const [data, setData] = useState<FeedData>()
   const [error, setError] = useState()
   const { url, title, description } = useSearchParams()
-  const insets = useSafeAreaInsets()
   const flows = useAppSelector((state) => state.feed.flow)
   const source = flows.find((f) => f.url === url)
 
@@ -40,7 +38,6 @@ export default function FeedProfile() {
     }
   }, [url, source])
 
-  const desc = description || data?.description
   const favicon = source?.favicon || data?.favicon
 
   return (

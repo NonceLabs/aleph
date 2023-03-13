@@ -46,10 +46,11 @@ export default function FeedItem({
           },
         })
         router.push({
-          pathname: 'reader',
+          pathname: 'shared/reader',
           params: {
             id: encodeURIComponent(item.id),
             type,
+            sourceUrl: encodeURIComponent(item.sourceUrl || ''),
           },
         })
       }}

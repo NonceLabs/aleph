@@ -36,11 +36,11 @@ export default function ReaderHeader({
         jc="space-between"
         w={width}
       >
-        {source && (
+        {source ? (
           <Pressable
             onPress={() =>
               router.push({
-                pathname: 'feed',
+                pathname: 'shared/feed',
                 params: {
                   url: encodeURIComponent(source.url),
                 },
@@ -54,6 +54,8 @@ export default function ReaderHeader({
               </Text>
             </XStack>
           </Pressable>
+        ) : (
+          <XStack></XStack>
         )}
         <XStack space={8}>
           {(item?.link || item?.id.startsWith('http')) && (

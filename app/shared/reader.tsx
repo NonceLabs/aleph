@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import { Link, useSearchParams } from 'expo-router'
+import { Link, Stack, useSearchParams } from 'expo-router'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useAppSelector } from 'store/hooks'
 import {
@@ -19,7 +19,7 @@ import { StyleSheet } from 'react-native'
 import { FeedEntry } from 'types'
 
 export default function Reader() {
-  const { id, type } = useSearchParams()
+  const { id, type, sourceUrl } = useSearchParams()
   const bookmarked = useAppSelector((state) => state.feed.bookmarked)
   const flow = useAppSelector((state) => state.feed.flow)
   const sources = useAppSelector((state) => state.feed.sources)
@@ -29,12 +29,13 @@ export default function Reader() {
   )
   const insets = useSafeAreaInsets()
   const { width } = useWindowDimensions()
-  const feed = flow.find((t) => t.entries?.find((m) => m.id === id))
-  const source = sources.find((t) => t.url === feed?.url)
+  const source = sources.find((t) => t.url === sourceUrl)
+
   let item: FeedEntry | undefined
   if (type === 'bookmarks') {
     item = bookmarked.find((t) => t.id === id)
   } else {
+    const feed = flow.find((t) => t.url === sourceUrl)
     item = feed?.entries?.find((t) => t.id === id)
   }
   const theme = useTheme()
@@ -89,9 +90,9 @@ export default function Reader() {
             <XStack flexWrap="wrap">
               {item.tags.map((t, idx) => {
                 const title = typeof t === 'string' ? t : t.title
-                const isLast = idx + 1 === item.tags?.length
+                const isLast = idx + 1 === item?.tags?.length
                 return (
-                  <Link key={idx} href={`tags?tag=${title}`}>
+                  <Link key={idx} href={`shared/tags?tag=${title}`}>
                     <XStack mr={2} mb={4}>
                       <Text
                         color="$color11"
