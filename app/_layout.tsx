@@ -6,9 +6,8 @@ import {
   ThemeProvider,
 } from '@react-navigation/native'
 import { useFonts } from 'expo-font'
-import { SplashScreen, Stack } from 'expo-router'
+import { SplashScreen } from 'expo-router'
 import { useEffect } from 'react'
-import { useColorScheme } from 'react-native'
 import { TamaguiProvider } from 'tamagui'
 import config from '../lib/tamagui.config'
 import { LogBox } from 'react-native'
@@ -17,7 +16,6 @@ import { Provider } from 'react-redux'
 import { store } from 'store'
 import { Drawer } from './Drawer'
 import DrawerPanel from 'components/DrawerPanel'
-import AddFeedButton from 'components/AddFeedButton'
 import useTheme from 'hooks/useTheme'
 
 LogBox.ignoreAllLogs()
@@ -87,6 +85,7 @@ function RootLayoutNav() {
                   options={{
                     drawerLabel: 'Settings',
                     title: 'Settings',
+                    header: () => null,
                   }}
                 />
                 <Drawer.Screen
@@ -94,7 +93,7 @@ function RootLayoutNav() {
                   options={{
                     drawerLabel: 'Feeds',
                     title: 'Feeds',
-                    headerRight: AddFeedButton,
+                    header: () => null,
                   }}
                 />
                 <Drawer.Screen

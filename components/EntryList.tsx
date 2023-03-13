@@ -107,6 +107,7 @@ export default function EntryList({
         })
       } else if (selectedTag.title === 'Unread') {
         result = entries.filter((t) => !t.read)
+      } else if (selectedTag.title === 'Bookmarked') {
       } else {
         result = entries.filter((t) => {
           if (t.tags) {

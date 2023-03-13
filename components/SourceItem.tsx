@@ -1,4 +1,3 @@
-import { Image } from 'expo-image'
 import { useRouter } from 'expo-router'
 import { Pressable } from 'react-native'
 import { useAppSelector } from 'store/hooks'

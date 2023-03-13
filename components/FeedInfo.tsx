@@ -1,4 +1,6 @@
 import { Check, InfoEmpty, TextAlt } from 'iconoir-react-native'
+import { HOST } from 'lib/constants'
+import { post } from 'lib/request'
 import { useState } from 'react'
 import { Pressable } from 'react-native'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
@@ -19,23 +21,27 @@ export default function FeedInfo({ source }: { source?: Source | FeedData }) {
   const _source = sources.find((f) => f.url === source.url)
   const isSubscribed = !!_source
   const handleSubscribe = () => {
-    if (_source) {
-      dispatch({
-        type: 'feed/unsubscribe',
-        payload: source,
-      })
-    } else {
-      dispatch({
-        type: 'feed/subscribe',
-        payload: {
+    try {
+      if (_source) {
+        dispatch({
+          type: 'feed/unsubscribe',
+          payload: source,
+        })
+      } else {
+        const feed = {
           url: source.url,
           title: source.title,
           favicon: source.favicon,
           link: source.link,
           description: source.description,
-        },
-      })
-    }
+        }
+        dispatch({
+          type: 'feed/subscribe',
+          payload: feed,
+        })
+        post(`${HOST}/addFeed`, feed)
+      }
+    } catch (error) {}
   }
   return (
     <>

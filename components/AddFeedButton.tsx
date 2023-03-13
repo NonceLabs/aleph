@@ -1,4 +1,4 @@
-import { X, PlusCircle } from '@tamagui/lucide-icons'
+import { X } from '@tamagui/lucide-icons'
 import { AddCircle, Plus } from 'iconoir-react-native'
 import { useState } from 'react'
 import { Pressable } from 'react-native'
@@ -15,7 +15,7 @@ import { useRouter } from 'expo-router'
 export default function AddFeedButton({
   trigger,
 }: {
-  trigger: React.ReactNode
+  trigger?: React.ReactNode
 }) {
   const [url, setUrl] = useState('')
 

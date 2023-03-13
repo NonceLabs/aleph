@@ -27,7 +27,7 @@ export default function FeedItem({
   const withImage = images.length > 0
   let opacity = 1
   let fontWeight = '600'
-  if (type === 'flow') {
+  if (['flow', 'tags'].includes(type || '')) {
     if (item.read) {
       opacity = 0.6
       fontWeight = '300'

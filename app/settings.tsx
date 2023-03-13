@@ -1,20 +1,33 @@
 import Header from 'components/Header'
-import { StyleSheet } from 'react-native'
-import { YStack, YGroup, Separator, ListItem, ScrollView } from 'tamagui'
-import {
-  BookOpen,
-  ChevronRight,
-  Cloud,
-  Moon,
-  Star,
-  Sun,
-} from '@tamagui/lucide-icons'
-import { Crown, RssFeed, TextAlt } from 'iconoir-react-native'
+import { Pressable, StyleSheet } from 'react-native'
+import { YStack, YGroup, Separator, ListItem, XStack, Text } from 'tamagui'
+import { ChevronRight } from '@tamagui/lucide-icons'
+import { Crown, Menu, RssFeed, TextAlt } from 'iconoir-react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { useNavigation } from 'expo-router'
+import { ScrollView } from 'react-native'
 
 export default function SettingsPage() {
+  const insets = useSafeAreaInsets()
+  const navigation = useNavigation()
   return (
     <YStack flex={1}>
-      <ScrollView p={20} flex={1}>
+      <XStack pt={insets.top} px={16} space={8} ai="center">
+        <Pressable
+          onPress={() => {
+            // @ts-ignore
+            navigation.openDrawer()
+          }}
+        >
+          <Menu width={24} height={24} />
+        </Pressable>
+        <Text fontFamily="Gilroy-Bold" fontSize={24}>
+          Settings
+        </Text>
+      </XStack>
+      <ScrollView
+        style={{ flex: 1, paddingVertical: 10, paddingHorizontal: 16 }}
+      >
         <YGroup als="center" bordered size="$5" separator={<Separator />}>
           <YGroup.Item>
             <ListItem

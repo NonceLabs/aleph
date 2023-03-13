@@ -3,6 +3,7 @@ import * as TaskManager from 'expo-task-manager'
 import _ from 'lodash'
 import { store } from 'store'
 import { FeedEntry } from 'types'
+import { HOST } from './constants'
 import { extract } from './parser'
 import { post } from './request'
 
@@ -30,9 +31,6 @@ export async function fetchFeedFlow() {
         }
       })
     )
-    result.forEach((feed) => {
-      console.log('feed', _.omit(feed, 'entries'))
-    })
 
     store.dispatch({
       type: 'feed/updateFlow',
@@ -77,7 +75,7 @@ export async function tagFeedEntries() {
     await Promise.all(
       untagged.map(async (feed) => {
         try {
-          const result = await post('https://uni-ai.vercel.app/api/keywords', {
+          const result = await post(`${HOST}/keywords`, {
             entries: feed.entries,
             sourceUrl: feed.sourceUrl,
           })
