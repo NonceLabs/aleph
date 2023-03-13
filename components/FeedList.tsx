@@ -57,7 +57,32 @@ export default function FeedList({
   const scrollY = useAnimatedValue(0)
   const insets = useSafeAreaInsets()
 
-  const topTags: Tag[] = []
+  const topTags: Tag[] = useMemo(() => {
+    const tags = feeds.reduce((acc, cur) => {
+      if (cur.tags) {
+        cur.tags.forEach((t) => {
+          if (typeof t === 'string') {
+            if (acc[t]) {
+              acc[t] += 1
+            } else {
+              acc[t] = 1
+            }
+          }
+        })
+      }
+      return acc
+    }, {} as Record<string, number>)
+    return Object.keys(tags)
+      .map((t) => {
+        return {
+          title: t,
+          count: tags[t],
+          icon: null,
+        }
+      })
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 5)
+  }, [feeds])
 
   const filtered = useMemo(() => {
     if (keyword) {
@@ -76,6 +101,13 @@ export default function FeedList({
         })
       } else if (selectedTag.title === 'Unread') {
         return feeds.filter((t) => !t.read)
+      } else {
+        return feeds.filter((t) => {
+          if (t.tags) {
+            return t.tags.includes(selectedTag.title)
+          }
+          return false
+        })
       }
     } else if (hideRead) {
       return feeds.filter((t) => !t.read)

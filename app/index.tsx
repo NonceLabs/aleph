@@ -1,14 +1,11 @@
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { XStack, YStack } from 'tamagui'
+import { YStack } from 'tamagui'
 import { useEffect } from 'react'
 import FeedList from 'components/FeedList'
-import { fetchFeedFlow, registerBackgroundFetchAsync } from 'lib/task'
+import { fetchFeedFlow, tagFeedEntries } from 'lib/task'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { FeedEntry } from 'types'
-import { Jellyfish } from 'iconoir-react-native'
-import Shortcut from 'components/Shortcut'
 
 export default function FlowPage() {
   const entries = useAppSelector((state) =>
@@ -17,7 +14,8 @@ export default function FlowPage() {
   const dispatch = useAppDispatch()
   useEffect(() => {
     fetchFeedFlow()
-    registerBackgroundFetchAsync()
+    tagFeedEntries()
+
     // navigation?.addListener("tabLongPress", () => {})
     // dispatch({
     //   type: 'feed/addSource',

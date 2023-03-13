@@ -1,7 +1,4 @@
 export interface FeedEntry {
-  /**
-   * id, guid, or generated identifier for the entry
-   */
   id: string
   link?: string
   title?: string
@@ -9,6 +6,7 @@ export interface FeedEntry {
   published?: Date
   sourceUrl?: string
   read?: boolean
+  tags?: (string | CustomTag)[]
 }
 
 export interface FeedData {
@@ -105,4 +103,9 @@ export interface Tag {
   title: string
   icon: any
   count: number
+}
+
+export interface CustomTag {
+  title: string
+  createdAt: Date
 }

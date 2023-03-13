@@ -69,6 +69,22 @@ export const feedSlice = createSlice({
         }
       })
     },
+    tagFeedEntries: (state, action) => {
+      const { sourceUrl, entries } = action.payload
+      const old = state.flow.find((t) => t.url === sourceUrl)
+      if (old) {
+        old.entries = (old.entries || [])?.map((t) => {
+          const newEntry = entries.find((e: any) => e.url === t.id)
+          if (newEntry) {
+            return {
+              ...t,
+              tags: newEntry.keywords,
+            }
+          }
+          return t
+        })
+      }
+    },
     updateFlow: (state, action) => {
       if (!Array.isArray(state.flow)) {
         state.flow = []

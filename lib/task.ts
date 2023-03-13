@@ -1,8 +1,9 @@
 import * as BackgroundFetch from 'expo-background-fetch'
 import * as TaskManager from 'expo-task-manager'
 import { store } from 'store'
-import { FeedData, FeedEntry } from 'types'
+import { FeedEntry } from 'types'
 import { extract } from './parser'
+import { post } from './request'
 
 const BACKGROUND_FETCH_TASK = 'background-fetch'
 
@@ -24,14 +25,10 @@ export async function fetchFeedFlow() {
             })),
           }
         } catch (error) {
-          console.log('error', error)
-
           return null
         }
       })
     )
-    console.log('fetchingFeedFlow')
-
     store.dispatch({
       type: 'feed/updateFlow',
       payload: result.filter((t) => t),
@@ -39,6 +36,42 @@ export async function fetchFeedFlow() {
   } catch (error) {
     //
   }
+}
+
+export async function tagFeedEntries() {
+  const flow = store.getState().feed.flow || []
+  try {
+    const untagged = flow.map((feed) => {
+      const entries = (feed.entries || [])
+        ?.filter((entry) => {
+          return !entry.tags || entry.tags.length === 0
+        })
+        .map((entry) => entry.id)
+        .filter((t) => (t || '').startsWith('http'))
+
+      return {
+        sourceUrl: feed.url,
+        entries,
+      }
+    })
+    await Promise.all(
+      untagged.map(async (feed) => {
+        try {
+          const result = await post('https://uni-ai.vercel.app/api/keywords', {
+            entries: feed.entries,
+            sourceUrl: feed.sourceUrl,
+          })
+          store.dispatch({
+            type: 'feed/tagFeedEntries',
+            payload: {
+              sourceUrl: feed.sourceUrl,
+              entries: result,
+            },
+          })
+        } catch (error) {}
+      })
+    )
+  } catch (error) {}
 }
 
 // 1. Define the task by providing a name and the function that should be executed

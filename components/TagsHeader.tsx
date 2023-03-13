@@ -1,12 +1,12 @@
 import useTheme from 'hooks/useTheme'
 import { Tag } from 'types'
 import { BlurView } from 'expo-blur'
-import { Animated, Pressable } from 'react-native'
+import { Animated, FlatList, Pressable, ScrollView } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { Button, ScrollView, Text, XStack } from 'tamagui'
+import { Button, Text, XStack } from 'tamagui'
 import { ArrowRightCircle } from 'iconoir-react-native'
 import { useRouter } from 'expo-router'
-import { useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 
 const AnimatedBlurView = Animated.createAnimatedComponent(BlurView)
 
@@ -23,11 +23,38 @@ export default function TagsHeader({
   scrollY: Animated.Value
   type: 'flow' | 'bookmarks'
 }) {
+  const listRef = useRef<FlatList>(null)
   const theme = useTheme()
   const insets = useSafeAreaInsets()
   const router = useRouter()
   const headerHeight = 38
   const [localTag, setLocalTag] = useState(selectedTag)
+
+  const onSelectTag = (tag: Tag) => {
+    if (tag.title === localTag?.title && type === 'flow') {
+      setSelectedTag(undefined)
+      setLocalTag(undefined)
+    } else {
+      setSelectedTag(tag)
+      setLocalTag(tag)
+    }
+    // setTimeout(() => {
+    //   const idx = tags.findIndex((t) => t.title === tag.title)
+    //   listRef.current?.scrollToIndex({ index: idx, animated: true })
+    // }, 1000)
+  }
+
+  const sorted = useMemo(() => {
+    if (!localTag) {
+      return tags
+    } else {
+      const idx = tags.findIndex((t) => t.title === localTag.title)
+      const newTags = [...tags]
+      newTags.splice(idx, 1)
+      newTags.unshift(localTag)
+      return newTags
+    }
+  }, [localTag, tags])
 
   return (
     <AnimatedBlurView
@@ -57,61 +84,62 @@ export default function TagsHeader({
           }),
         }}
       >
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          <XStack space={12} flex={1} px={8} alignItems="center" pt={10} pb={6}>
-            {tags.map((t) => {
-              const active = localTag?.title === t.title
-              const Icon = t.icon
-              const contentColor = active
-                ? 'white'
-                : theme === 'dark'
-                ? 'white'
-                : 'black'
-              return (
-                <Button
-                  key={t.title}
-                  height={40}
-                  borderRadius="50%"
-                  space={4}
-                  icon={
-                    Icon ? (
-                      <Icon width={24} height={24} color={contentColor} />
-                    ) : null
-                  }
-                  onPress={() => {
-                    if (t.title === localTag?.title && type === 'flow') {
-                      setSelectedTag(undefined)
-                      setLocalTag(undefined)
-                    } else {
-                      setSelectedTag(t)
-                      setLocalTag(t)
-                    }
-                  }}
-                  themeInverse={active}
-                  bc={active ? '#f0353c' : '$blue3'}
+        <FlatList
+          horizontal
+          data={sorted}
+          style={{ paddingTop: 10, paddingBottom: 6 }}
+          renderItem={({ item, index }) => {
+            const active = localTag?.title === item.title
+            const Icon = item.icon
+            const contentColor = active
+              ? 'white'
+              : theme === 'dark'
+              ? 'white'
+              : 'black'
+            return (
+              <Button
+                key={item.title}
+                height={40}
+                borderRadius="50%"
+                space={4}
+                mx={4}
+                icon={
+                  Icon ? (
+                    <Icon width={24} height={24} color={contentColor} />
+                  ) : null
+                }
+                onPress={() => onSelectTag(item)}
+                themeInverse={active}
+                bc={active ? '#f0353c' : '$blue3'}
+              >
+                <Text
+                  fontSize={16}
+                  fontFamily="Gilroy-Bold"
+                  color={contentColor}
                 >
-                  <Text
-                    fontSize={16}
-                    fontFamily="Gilroy-Bold"
-                    color={contentColor}
-                  >
-                    {t.title}
-                  </Text>
-                  {t.count > 0 && (
-                    <XStack backgroundColor="$gray7Light" px={8} py={2} br={16}>
-                      <Text fontSize={14}>{t.count}</Text>
-                    </XStack>
-                  )}
-                </Button>
-              )
-            })}
-            {type === 'flow' && tags.length > 3 && (
-              <Pressable onPress={() => router.push('tags')}>
-                <ArrowRightCircle width={32} height={32} />
-              </Pressable>
-            )}
-          </XStack>
-        </ScrollView>
+                  {item.title}
+                </Text>
+                {item.count > 0 && (
+                  <XStack backgroundColor="$gray7Light" px={8} py={2} br={16}>
+                    <Text fontSize={14}>{item.count}</Text>
+                  </XStack>
+                )}
+              </Button>
+            )
+          }}
+          showsHorizontalScrollIndicator={false}
+          ref={listRef}
+          keyExtractor={(item, index) => `${item.title}-${index}`}
+          ListFooterComponent={
+            type === 'flow' && tags.length > 3 ? (
+              <XStack ai="center" jc="center" pt={4} ml={8}>
+                <Pressable onPress={() => router.push('tags')}>
+                  <ArrowRightCircle width={32} height={32} />
+                </Pressable>
+              </XStack>
+            ) : null
+          }
+        />
       </Animated.View>
     </AnimatedBlurView>
   )

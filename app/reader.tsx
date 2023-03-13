@@ -2,12 +2,20 @@ import dayjs from 'dayjs'
 import { useSearchParams } from 'expo-router'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useAppSelector } from 'store/hooks'
-import { ScrollView, Text, useWindowDimensions, YStack, ZStack } from 'tamagui'
+import {
+  ScrollView,
+  Text,
+  useWindowDimensions,
+  XStack,
+  YStack,
+  ZStack,
+} from 'tamagui'
 import RenderHtml from 'react-native-render-html'
 import { useMemo } from 'react'
 import ReaderHeader from 'components/ReaderHeader'
 import ReaderToolbar from 'components/ReaderToolbar'
 import useTheme from 'hooks/useTheme'
+import { StyleSheet } from 'react-native'
 
 export default function Reader() {
   const flow = useAppSelector((state) => state.feed.flow)
@@ -69,10 +77,32 @@ export default function Reader() {
             >
               {item?.title}
             </Text>
-            <Text fontSize={12} color="gray">
+            <Text fontSize={12} color="gray" mt={6}>
               {dayjs(item?.published).format('MMM DD, YYYY')}
             </Text>
           </YStack>
+          {item?.tags?.length ? (
+            <XStack flexWrap="wrap">
+              {item.tags.map((t, idx) => {
+                const title = typeof t === 'string' ? t : t.title
+                const isLast = idx + 1 === item.tags?.length
+                return (
+                  <XStack key={idx} mr={2} mb={4}>
+                    <Text
+                      color="$color11"
+                      fontFamily="$heading"
+                      bbw={StyleSheet.hairlineWidth}
+                      bbc="$color11"
+                      textDecorationLine="underline"
+                    >
+                      {title}
+                    </Text>
+                    {!isLast && <Text>,</Text>}
+                  </XStack>
+                )
+              })}
+            </XStack>
+          ) : null}
           <YStack flex={1}>
             <RenderHtml
               source={{ html: item?.description || '' }}
