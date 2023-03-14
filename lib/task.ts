@@ -3,7 +3,7 @@ import _ from 'lodash'
 import { store } from 'store'
 import { Feed, FeedEntry } from 'types'
 import { HOST } from './constants'
-import { createEntries } from './db'
+import { createEntries, updateEntries } from './db'
 import { extract } from './parser'
 import { post } from './request'
 
@@ -21,23 +21,24 @@ export async function fetchFeedFlow(feeds: Feed[]) {
       feeds.map(async (feed) => {
         try {
           const result = await extract(feed.url)
+          const entries = (result.entries || [])
+            .map((entry: FeedEntry) => ({
+              ...entry,
+              sourceUrl: feed.url,
+              id: entry.link || entry.id,
+              tags: [],
+            }))
+            .filter((entry: FeedEntry) => {
+              return (
+                dayjs().diff(dayjs(entry.published), 'day') <=
+                DAYS_LIMIT[publishLimit]
+              )
+            })
 
           return {
             ...result,
             url: feed.url,
-            entries: (result.entries || [])
-              .map((entry: FeedEntry) => ({
-                ...entry,
-                sourceUrl: feed.url,
-                id: entry.id || entry.link,
-                tags: [],
-              }))
-              .filter((entry: FeedEntry) => {
-                return (
-                  dayjs().diff(dayjs(entry.published), 'day') >
-                  DAYS_LIMIT[publishLimit]
-                )
-              }),
+            entries,
           }
         } catch (error) {
           return null
@@ -54,26 +55,25 @@ export async function fetchFeedFlow(feeds: Feed[]) {
 export async function tagFeedEntries(entries: FeedEntry[]) {
   try {
     const untaggedEntries = entries.filter((entry) => {
-      return !entry.tags || entry.tags.length === 0
+      return (
+        entry.id.startsWith('http') && (!entry.tags || entry.tags.length === 0)
+      )
     })
 
+    if (untaggedEntries.length === 0) {
+      return
+    }
     const result = await post(`${HOST}/keywords`, {
-      entries: untaggedEntries.map((t) => t.id),
+      entries: untaggedEntries.slice(0, 10).map((t) => t.id),
     })
 
-    // await Promise.all(
-    //   untagged.map(async (feed) => {
-    //     try {
+    const taggedEntries = untaggedEntries.map((entry, idx) => {
+      return {
+        ...entry,
+        tags: result[idx] || [],
+      }
+    })
 
-    //       store.dispatch({
-    //         type: 'feed/tagFeedEntries',
-    //         payload: {
-    //           sourceUrl: feed.sourceUrl,
-    //           entries: result,
-    //         },
-    //       })
-    //     } catch (error) {}
-    //   })
-    // )
+    updateEntries(taggedEntries)
   } catch (error) {}
 }

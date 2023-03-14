@@ -40,7 +40,7 @@ export async function initSQLite() {
   }, onError)
 }
 
-export async function createFeed(feed: Feed) {
+export async function subFeed(feed: Feed) {
   const db = await openDatabase('./db/aleph.db')
   db.transaction(
     (tx) => {
@@ -63,16 +63,35 @@ export async function createFeed(feed: Feed) {
   )
 }
 
-export async function deleteFeed(feed: Feed) {
+export async function resubFeed(feed: Feed) {
   const db = await openDatabase('./db/aleph.db')
   db.transaction(
     (tx) => {
-      tx.executeSql('UPDATE feeds deleted = 1 WHERE id = ?', [feed.url])
+      tx.executeSql(
+        'UPDATE feeds SET deleted = 0 WHERE url = ?',
+        [feed.url],
+        () => {
+          onUpdated(tx)
+        }
+      )
+    },
+    onError,
+    function onSuccess() {}
+  )
+}
+
+export async function unsubFeed(feed: Feed) {
+  const db = await openDatabase('./db/aleph.db')
+  db.transaction(
+    (tx) => {
+      tx.executeSql('UPDATE feeds SET deleted = 1 WHERE url = ?', [feed.url])
       tx.executeSql(
         'DELETE FROM entries WHERE sourceUrl = ? AND bookmarked = 0',
-        [feed.url]
+        [feed.url],
+        () => {
+          onUpdated(tx)
+        }
       )
-      onUpdated(tx)
     },
     onError,
     function onSuccess() {}
@@ -83,7 +102,7 @@ export async function updateFeed(feed: Feed) {
   const db = await openDatabase('./db/aleph.db')
   db.transaction(
     (tx) => {
-      tx.executeSql('UPDATE feeds title = ? WHERE id = ?', [
+      tx.executeSql('UPDATE feeds SET title = ? WHERE url = ?', [
         feed.title,
         feed.url,
       ])
@@ -186,7 +205,15 @@ function formatEntry(entry: {
 
 function onUpdated(tx: SQLite.SQLTransaction) {
   tx.executeSql('SELECT * FROM feeds', [], (_, { rows }) => {
-    PubSub.publish(PubEvent.FEEDS_UPDATE, rows._array)
+    PubSub.publish(
+      PubEvent.FEEDS_UPDATE,
+      rows._array.map((t) => {
+        return {
+          ...t,
+          deleted: t.deleted === 1,
+        }
+      })
+    )
   })
 
   tx.executeSql(

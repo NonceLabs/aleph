@@ -1,7 +1,6 @@
 import { useRouter } from 'expo-router'
 import useEntryFlow from 'hooks/useEntryFlow'
 import { Pressable } from 'react-native'
-import { useAppSelector } from 'store/hooks'
 import { Text, XStack } from 'tamagui'
 import { Source } from 'types'
 import Favicon from './Favicon'
@@ -15,7 +14,8 @@ export default function SourceItem({
 }) {
   const router = useRouter()
   const { entries } = useEntryFlow()
-  const unreadCount = entries.filter((t) => !t.read).length || 0
+  const unreadCount =
+    entries.filter((t) => !t.read && t.sourceUrl === item.url).length || 0
 
   return (
     <Pressable

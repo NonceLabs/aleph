@@ -92,7 +92,7 @@ export default function Reader() {
                 const title = typeof t === 'string' ? t : t.title
                 const isLast = idx + 1 === entry?.tags?.length
                 return (
-                  <Link key={idx} href={`shared/tags?tag=${title}`}>
+                  <Link key={idx} href={`shared/entryByTag?tag=${title}`}>
                     <XStack mr={2} mb={4}>
                       <Text
                         color="$color11"

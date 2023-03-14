@@ -23,11 +23,11 @@ const routes = [
     title: 'Feeds',
     Icon: RssFeedTag,
   },
-  {
-    href: '/tags',
-    title: 'Tags',
-    Icon: Label,
-  },
+  // {
+  //   href: '/tags',
+  //   title: 'Tags',
+  //   Icon: Label,
+  // },
   // {
   //   href: '/explore',
   //   title: 'Explore',

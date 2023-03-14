@@ -1,28 +1,20 @@
 import EntryList from 'components/EntryList'
-import dayjs from 'dayjs'
 import { useRouter, useSearchParams } from 'expo-router'
+import useEntryFlow from 'hooks/useEntryFlow'
 import { NavArrowLeft } from 'iconoir-react-native'
 import _ from 'lodash'
 import { useEffect, useState } from 'react'
 import { Pressable } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { useAppSelector } from 'store/hooks'
 import { XStack, YStack, Text, Input } from 'tamagui'
-import { FeedEntry } from 'types'
 
 export default function EntryByTag() {
   const [tag, setTag] = useState('')
   const { tag: _tag } = useSearchParams()
   const insets = useSafeAreaInsets()
   const router = useRouter()
-  const compactEntries = useAppSelector((state) =>
-    state.feed.flow.map((t) => t.entries || [])
-  )
-  const entries = _.flatten(compactEntries)
-    .filter((t) => t.tags?.includes(tag))
-    .sort((a: FeedEntry, b: FeedEntry) =>
-      dayjs(b.published).diff(dayjs(a.published))
-    )
+  const { entries: _entries } = useEntryFlow()
+  const entries = _entries.filter((t) => t.tags?.includes(tag))
 
   useEffect(() => {
     if (typeof _tag === 'string') {

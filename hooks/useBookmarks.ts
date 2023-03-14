@@ -30,8 +30,6 @@ export default function useBookmarks() {
     const listener = PubSub.subscribe(
       PubEvent.BOOKMARKS_UPDATE,
       (_, rows: FeedEntry[]) => {
-        console.log('BOOKMARKS_UPDATE', rows)
-
         entriesStore.set(rows)
       }
     )

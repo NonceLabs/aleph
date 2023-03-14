@@ -21,7 +21,7 @@ export default function FlowPage() {
 
   useEffect(() => {
     fetchFeedFlow(feeds)
-  }, [feeds.length])
+  }, [feeds.filter((t) => !t.deleted).length])
 
   useEffect(() => {
     tagFeedEntries(entries)

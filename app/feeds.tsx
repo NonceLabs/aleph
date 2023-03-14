@@ -31,7 +31,7 @@ export default function Feeds() {
         <AddFeedButton />
       </XStack>
       <FlatList
-        data={feeds}
+        data={feeds.filter((t) => !t.deleted)}
         style={{
           flex: 1,
         }}

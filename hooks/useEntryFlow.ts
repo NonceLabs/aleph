@@ -36,8 +36,6 @@ export default function useEntryFlow() {
     return entriesStore.subscribe(setEntries)
   }, [])
 
-  console.log('entries', entries.length)
-
   useEffect(() => {
     const listener = PubSub.subscribe(
       PubEvent.ENTRYFLOW_UPDATE,

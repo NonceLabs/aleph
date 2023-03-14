@@ -1,37 +1,42 @@
 import Header from 'components/Header'
-import { Stack, useSearchParams } from 'expo-router'
+import { useSearchParams } from 'expo-router'
 import { extract } from 'lib/parser'
 import { useEffect, useState } from 'react'
 import { Pressable } from 'react-native'
 import { YStack, Text, XStack, Spinner } from 'tamagui'
-import { FeedData } from 'types'
-import { useAppSelector } from 'store/hooks'
+import { Feed, FeedData, FeedListType } from 'types'
 import Favicon from 'components/Favicon'
 import _ from 'lodash'
 import FeedInfo from 'components/FeedInfo'
 import { EmojiLookUp } from 'iconoir-react-native'
 import AddFeedButton from 'components/AddFeedButton'
 import EntryList from 'components/EntryList'
+import useFeeds from 'hooks/useFeeds'
+import { createEntries, resubFeed, subFeed, unsubFeed } from 'lib/db'
+import useEntryFlow from 'hooks/useEntryFlow'
 
 export default function FeedProfile() {
   const [data, setData] = useState<FeedData>()
   const [error, setError] = useState()
   const [loading, setLoading] = useState(false)
-  const { url, title, description } = useSearchParams()
-  const flows = useAppSelector((state) => state.feed.flow)
-  const source = flows.find((f) => f.url === url)
+  const { url, title, from } = useSearchParams()
+  const { feeds } = useFeeds()
+  const feed = feeds.find((f) => f.url === url)
+  const { entries } = useEntryFlow()
 
   useEffect(() => {
     setData(undefined)
     setError(undefined)
-    if (source) {
-      setData(source)
+    if (feed) {
+      setData(feed)
     } else if (url) {
       setLoading(true)
       extract(url as string)
         .then((res) => {
           if (res) {
             setData({ ...res, url })
+            // auto sub
+            handleSubscribe({ ...res, url })
           }
           setLoading(false)
         })
@@ -40,9 +45,43 @@ export default function FeedProfile() {
           setLoading(false)
         })
     }
-  }, [url, source])
+  }, [url, feed])
 
-  const favicon = source?.favicon || data?.favicon
+  const handleSubscribe = async (_data?: FeedData) => {
+    try {
+      const fd = _data || data
+
+      if (!fd) {
+        return
+      }
+      const _feed: Feed = {
+        url: url as string,
+        title: fd.title || '',
+        favicon: fd.favicon || '',
+        description: fd.description || '',
+        language: fd.language || '',
+      }
+
+      if (feed) {
+        if (feed.deleted) {
+          resubFeed(_feed)
+        } else {
+          unsubFeed(feed)
+        }
+      } else {
+        subFeed(_feed)
+        if (Array.isArray(fd?.entries)) {
+          createEntries(fd.entries)
+        }
+      }
+    } catch (error) {}
+  }
+
+  const favicon = feed?.favicon || data?.favicon
+  const isSubed = feed && !feed?.deleted
+  const feedEntries = isSubed
+    ? entries.filter((e) => e.sourceUrl === url)
+    : data?.entries || []
 
   return (
     <YStack flex={1}>
@@ -63,7 +102,7 @@ export default function FeedProfile() {
             </Text>
           </XStack>
         }
-        right={<FeedInfo source={data} />}
+        right={<FeedInfo source={data} handleSubscribe={handleSubscribe} />}
       />
       <YStack flex={1}>
         {error && (
@@ -98,8 +137,8 @@ export default function FeedProfile() {
           </YStack>
         ) : (
           <EntryList
-            entries={data?.entries || []}
-            type="tags"
+            entries={feedEntries}
+            type={(from as FeedListType) || 'tags'}
             withHeader={false}
           />
         )}

@@ -4,7 +4,6 @@ import { Heading, YStack } from 'tamagui'
 
 export default function NotFoundScreen() {
   const pathname = usePathname()
-  console.log('pathname', pathname)
 
   return (
     <YStack flex={1}>
