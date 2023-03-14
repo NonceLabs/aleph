@@ -1,12 +1,13 @@
 import { useNavigation, useRouter } from 'expo-router'
 import { InfoEmpty } from 'iconoir-react-native'
 import { HOST } from 'lib/constants'
+import { createFeed } from 'lib/db'
 import { post } from 'lib/request'
 import { useState } from 'react'
 import { Pressable } from 'react-native'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { Text, Sheet, YStack, H5, Anchor, Button } from 'tamagui'
-import { FeedData, Source } from 'types'
+import { Feed, FeedData, Source } from 'types'
 import Favicon from './Favicon'
 
 export default function FeedInfo({ source }: { source?: Source | FeedData }) {
@@ -31,17 +32,14 @@ export default function FeedInfo({ source }: { source?: Source | FeedData }) {
           payload: source,
         })
       } else {
-        const feed = {
-          url: source.url,
-          title: source.title,
-          favicon: source.favicon,
-          link: source.link,
-          description: source.description,
+        const feed: Feed = {
+          url: source.url!,
+          title: source.title || '',
+          favicon: source.favicon || '',
+          description: source.description || '',
+          language: source.language || '',
         }
-        dispatch({
-          type: 'feed/subscribe',
-          payload: feed,
-        })
+        createFeed(feed)
         post(`${HOST}/addFeed`, feed)
       }
       setOpen(false)

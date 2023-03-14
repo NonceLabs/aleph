@@ -6,19 +6,23 @@ import { useAppSelector } from 'store/hooks'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { FeedEntry } from 'types'
-import { usePathname } from 'expo-router'
+import { initSQLite } from 'lib/db'
+import useFeeds from 'hooks/useFeeds'
 
 export default function FlowPage() {
-  const compactEntries = useAppSelector((state) =>
-    state.feed.flow.map((t) => t.entries || [])
-  )
+  useFeeds()
+  useEffect(() => {
+    initSQLite()
+  }, [])
+
   const sources = useAppSelector((state) => state.feed.sources)
   useEffect(() => {
     fetchFeedFlow()
   }, [sources.length])
-  const pathname = usePathname()
-  console.log('pathname', pathname)
 
+  const compactEntries = useAppSelector((state) =>
+    state.feed.flow.map((t) => t.entries || [])
+  )
   useEffect(() => {
     tagFeedEntries()
   }, [compactEntries.length])

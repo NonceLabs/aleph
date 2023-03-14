@@ -1,4 +1,4 @@
-import { Yoga } from 'iconoir-react-native'
+import { Flower } from 'iconoir-react-native'
 import { HOST } from 'lib/constants'
 import { post } from 'lib/request'
 import { useEffect, useState } from 'react'
@@ -59,7 +59,7 @@ export default function Summarize({ entry }: { entry?: FeedEntry }) {
   return (
     <>
       <Pressable onPress={() => onOpenChange(true)}>
-        <Yoga width={24} height={24} color="gray" />
+        <Flower width={24} height={24} color="gray" />
       </Pressable>
       <Sheet
         forceRemoveScrollEnabled={open}

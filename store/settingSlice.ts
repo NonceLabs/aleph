@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { FeedPublishLimit } from '../types'
 
 interface SettingSlice {
   reader: {
@@ -8,6 +9,7 @@ interface SettingSlice {
   }
   flow: {
     hideRead: boolean
+    publishLimit: FeedPublishLimit
   }
 }
 
@@ -19,6 +21,7 @@ const initialState: SettingSlice = {
   },
   flow: {
     hideRead: false,
+    publishLimit: FeedPublishLimit.Month,
   },
 }
 
@@ -36,10 +39,10 @@ export const settingSlice = createSlice({
       state.reader.theme = action.payload
     },
     updateHideRead: (state, action) => {
-      if (!state.flow) {
-        state.flow = { hideRead: false }
-      }
       state.flow.hideRead = action.payload
+    },
+    updatePublishLimit: (state, action) => {
+      state.flow.publishLimit = action.payload
     },
   },
 })

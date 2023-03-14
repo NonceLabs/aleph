@@ -1,13 +1,9 @@
-import * as BackgroundFetch from 'expo-background-fetch'
-import * as TaskManager from 'expo-task-manager'
 import _ from 'lodash'
 import { store } from 'store'
 import { FeedEntry } from 'types'
 import { HOST } from './constants'
 import { extract } from './parser'
 import { post } from './request'
-
-const BACKGROUND_FETCH_TASK = 'background-fetch'
 
 export async function fetchFeedFlow() {
   const sources = store.getState().feed.sources || []

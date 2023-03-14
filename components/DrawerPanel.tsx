@@ -4,6 +4,7 @@ import useTheme from 'hooks/useTheme'
 import {
   BookmarkEmpty,
   Home,
+  Label,
   Planet,
   RssFeedTag,
   Settings,
@@ -21,6 +22,11 @@ const routes = [
     href: '/feeds',
     title: 'Feeds',
     Icon: RssFeedTag,
+  },
+  {
+    href: '/tags',
+    title: 'Tags',
+    Icon: Label,
   },
   // {
   //   href: '/explore',

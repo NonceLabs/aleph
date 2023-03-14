@@ -1,6 +1,6 @@
 import EntryList from 'components/EntryList'
 import dayjs from 'dayjs'
-import { Stack, useRouter, useSearchParams } from 'expo-router'
+import { useRouter, useSearchParams } from 'expo-router'
 import { NavArrowLeft } from 'iconoir-react-native'
 import _ from 'lodash'
 import { useEffect, useState } from 'react'
@@ -10,7 +10,7 @@ import { useAppSelector } from 'store/hooks'
 import { XStack, YStack, Text, Input } from 'tamagui'
 import { FeedEntry } from 'types'
 
-export default function Tags() {
+export default function EntryByTag() {
   const [tag, setTag] = useState('')
   const { tag: _tag } = useSearchParams()
   const insets = useSafeAreaInsets()

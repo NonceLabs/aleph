@@ -137,7 +137,7 @@ export default function TagsHeader({
           ListFooterComponent={
             type === 'flow' && tags.length > 3 ? (
               <XStack ai="center" jc="center" pt={4} ml={8} mr={16}>
-                <Pressable onPress={() => router.push('shared/tags')}>
+                <Pressable onPress={() => router.push('shared/entryByTag')}>
                   <ArrowRightCircle width={32} height={32} />
                 </Pressable>
               </XStack>

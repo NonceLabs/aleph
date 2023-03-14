@@ -1,13 +1,17 @@
 import { DoubleCheck, ViewGrid } from 'iconoir-react-native'
+import { MAIN_COLOR } from 'lib/constants'
 import { useState } from 'react'
 import { Pressable } from 'react-native'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
-import { XStack, Text, Sheet, Switch, Button } from 'tamagui'
+import { XStack, Text, Sheet, Switch, Button, Group } from 'tamagui'
 
 export default function Shortcut() {
   const [position, setPosition] = useState(0)
   const [open, setOpen] = useState(false)
   const hideRead = useAppSelector((state) => state.setting?.flow?.hideRead)
+  const publishLimit = useAppSelector(
+    (state) => state.setting?.flow?.publishLimit || 'Month'
+  )
   const dispatch = useAppDispatch()
 
   return (
@@ -64,6 +68,34 @@ export default function Shortcut() {
               <DoubleCheck width={16} height={16} color="white" />
               <Text color="white">Mark</Text>
             </Button>
+          </XStack>
+
+          <XStack space ai="center" jc="space-between">
+            <Text fontWeight="bold" fontSize={18} color="$color11">
+              Article from last
+            </Text>
+            <Group axis="horizontal">
+              {['Week', 'Month', 'Year'].map((t) => {
+                const isActive = publishLimit === t
+                return (
+                  <Group.Item key={t}>
+                    <Button
+                      size="$3"
+                      bc={isActive ? MAIN_COLOR : '$color8'}
+                      color={isActive ? 'white' : '$color12'}
+                      onPress={() => {
+                        dispatch({
+                          type: 'setting/updatePublishLimit',
+                          payload: t,
+                        })
+                      }}
+                    >
+                      {t}
+                    </Button>
+                  </Group.Item>
+                )
+              })}
+            </Group>
           </XStack>
         </Sheet.Frame>
       </Sheet>

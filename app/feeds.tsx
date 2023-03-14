@@ -1,16 +1,16 @@
 import AddFeedButton from 'components/AddFeedButton'
 import SourceItem from 'components/SourceItem'
 import { useNavigation } from 'expo-router'
+import useFeeds from 'hooks/useFeeds'
 import { EmojiLookDown, Menu } from 'iconoir-react-native'
 import { FlatList, Pressable } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { useAppSelector } from 'store/hooks'
 import { Text, XStack, YStack } from 'tamagui'
 
 export default function Feeds() {
-  const sources = useAppSelector((state) => state.feed.sources)
   const insets = useSafeAreaInsets()
   const navigation = useNavigation()
+  const { feeds } = useFeeds()
 
   return (
     <YStack flex={1}>
@@ -31,7 +31,7 @@ export default function Feeds() {
         <AddFeedButton />
       </XStack>
       <FlatList
-        data={sources}
+        data={feeds}
         style={{
           flex: 1,
         }}

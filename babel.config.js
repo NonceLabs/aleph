@@ -30,6 +30,7 @@ module.exports = function (api) {
             components: './components',
             store: './store',
             hooks: './hooks',
+            types: './types',
           },
         },
       ],

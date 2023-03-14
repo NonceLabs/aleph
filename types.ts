@@ -6,6 +6,7 @@ export interface FeedEntry {
   published?: Date
   sourceUrl?: string
   read?: boolean
+  bookmarked?: boolean
   tags?: (string | CustomTag)[]
 }
 
@@ -98,6 +99,16 @@ export interface Source {
   link?: string
   favicon?: string
   id?: string
+  language?: string
+}
+
+export interface Feed {
+  url: string
+  title: string
+  description: string
+  language: string
+  favicon: string
+  deleted?: boolean
 }
 
 export interface Tag {
@@ -112,3 +123,17 @@ export interface CustomTag {
 }
 
 export type FeedListType = 'flow' | 'bookmarks' | 'tags'
+
+export enum FeedPublishLimit {
+  Week = 'Week',
+  Month = 'Month',
+  Year = 'Year',
+}
+
+export enum PubEvent {
+  FEEDS_UPDATE = 'FEEDS_UPDATE',
+  ENTRYFLOW_UPDATE = 'ENTRYFLOW_UPDATE',
+  BOOKMARKS_UPDATE = 'BOOKMARKS_UPDATE',
+  TAGS_UPDATE = 'TAGS_UPDATE',
+  ENTRIES_UPDATE = 'ENTRIES_UPDATE',
+}
