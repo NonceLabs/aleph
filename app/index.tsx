@@ -2,34 +2,31 @@ import { YStack } from 'tamagui'
 import { useEffect } from 'react'
 import EntryList from 'components/EntryList'
 import { fetchFeedFlow, tagFeedEntries } from 'lib/task'
-import { useAppSelector } from 'store/hooks'
-import dayjs from 'dayjs'
 import _ from 'lodash'
-import { FeedEntry } from 'types'
 import { initSQLite } from 'lib/db'
 import useFeeds from 'hooks/useFeeds'
+import useEntryFlow from 'hooks/useEntryFlow'
+import useBookmarks from 'hooks/useBookmarks'
 
 export default function FlowPage() {
-  useFeeds()
+  const { feeds } = useFeeds()
+  const { entries } = useEntryFlow()
+  useBookmarks()
+
   useEffect(() => {
-    initSQLite()
+    setTimeout(() => {
+      initSQLite()
+    }, 300)
   }, [])
 
-  const sources = useAppSelector((state) => state.feed.sources)
   useEffect(() => {
-    fetchFeedFlow()
-  }, [sources.length])
+    fetchFeedFlow(feeds)
+  }, [feeds.length])
 
-  const compactEntries = useAppSelector((state) =>
-    state.feed.flow.map((t) => t.entries || [])
-  )
   useEffect(() => {
-    tagFeedEntries()
-  }, [compactEntries.length])
+    tagFeedEntries(entries)
+  }, [entries.length])
 
-  const entries = _.flatten(compactEntries).sort((a: FeedEntry, b: FeedEntry) =>
-    dayjs(b.published).diff(dayjs(a.published))
-  )
   return (
     <YStack flex={1} backgroundColor="$background">
       <EntryList entries={entries} />

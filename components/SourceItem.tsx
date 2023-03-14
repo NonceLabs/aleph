@@ -1,4 +1,5 @@
 import { useRouter } from 'expo-router'
+import useEntryFlow from 'hooks/useEntryFlow'
 import { Pressable } from 'react-native'
 import { useAppSelector } from 'store/hooks'
 import { Text, XStack } from 'tamagui'
@@ -12,12 +13,9 @@ export default function SourceItem({
   item: Source
   onPress?: () => void
 }) {
-  const feedData = useAppSelector((state) =>
-    state.feed.flow.find((t) => t.url === item.url)
-  )
   const router = useRouter()
-
-  const unreadCount = feedData?.entries?.filter((t) => !t.read).length || 0
+  const { entries } = useEntryFlow()
+  const unreadCount = entries.filter((t) => !t.read).length || 0
 
   return (
     <Pressable
@@ -26,6 +24,7 @@ export default function SourceItem({
           pathname: 'shared/feed',
           params: {
             url: encodeURIComponent(item.url),
+            from: 'feeds',
           },
         })
       }}

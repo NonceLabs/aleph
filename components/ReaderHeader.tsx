@@ -1,4 +1,3 @@
-import { Image } from 'expo-image'
 import { useRouter } from 'expo-router'
 import { Compass } from 'iconoir-react-native'
 import { Pressable } from 'react-native'
@@ -12,10 +11,10 @@ import Favicon from './Favicon'
 
 export default function ReaderHeader({
   source,
-  item,
+  entry,
 }: {
   source?: Source
-  item?: FeedEntry
+  entry?: FeedEntry
 }) {
   const insets = useSafeAreaInsets()
   const { width } = useWindowDimensions()
@@ -58,9 +57,11 @@ export default function ReaderHeader({
           <XStack></XStack>
         )}
         <XStack space={8}>
-          {(item?.link || item?.id.startsWith('http')) && (
+          {(entry?.link || entry?.id.startsWith('http')) && (
             <Pressable
-              onPress={() => WebBrowser.openBrowserAsync(item.link || item?.id)}
+              onPress={() =>
+                WebBrowser.openBrowserAsync(entry.link || entry?.id)
+              }
             >
               <Compass width={24} height={24} color="gray" />
             </Pressable>

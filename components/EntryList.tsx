@@ -17,6 +17,7 @@ import TagsHeader from './TagsHeader'
 import EntryListHeader from './EntryListHeader'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import AddFeedButton from './AddFeedButton'
+import useFeeds from 'hooks/useFeeds'
 
 const CUSTOM_TAGS = {
   flow: [
@@ -58,7 +59,7 @@ export default function EntryList({
     type === 'bookmarks' ? customTag[0] : undefined
   )
   const [keyword, setKeyword] = useState('')
-  const sources = useAppSelector((state) => state.feed.sources)
+  const { feeds } = useFeeds()
   const hideRead = useAppSelector((state) => state.setting.flow.hideRead)
   const scrollY = useAnimatedValue(0)
   const insets = useSafeAreaInsets()
@@ -179,7 +180,7 @@ export default function EntryList({
         return (
           <EntryItem
             item={item}
-            source={sources.find((t) => t.url === item.sourceUrl)}
+            source={feeds.find((t) => t.url === item.sourceUrl)}
             type={type}
           />
         )
@@ -202,7 +203,7 @@ export default function EntryList({
             <Text color="$color11" fontSize={18}>
               No feeds
             </Text>
-            {sources.length === 0 && (
+            {feeds.length === 0 && (
               <AddFeedButton
                 trigger={
                   <Text color="$blue10" fontSize={18}>

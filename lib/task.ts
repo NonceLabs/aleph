@@ -1,26 +1,43 @@
+import dayjs from 'dayjs'
 import _ from 'lodash'
 import { store } from 'store'
-import { FeedEntry } from 'types'
+import { Feed, FeedEntry } from 'types'
 import { HOST } from './constants'
+import { createEntries } from './db'
 import { extract } from './parser'
 import { post } from './request'
 
-export async function fetchFeedFlow() {
-  const sources = store.getState().feed.sources || []
+const DAYS_LIMIT = {
+  Day: 1,
+  Week: 7,
+  Month: 30,
+  Year: 365,
+}
+
+export async function fetchFeedFlow(feeds: Feed[]) {
   try {
+    const publishLimit = store.getState().setting.flow.publishLimit || 'Month'
     const result = await Promise.all(
-      sources.map(async (source) => {
+      feeds.map(async (feed) => {
         try {
-          const result = await extract(source.url)
+          const result = await extract(feed.url)
 
           return {
             ...result,
-            url: source.url,
-            entries: (result.entries || []).map((entry: FeedEntry) => ({
-              ...entry,
-              sourceUrl: source.url,
-              id: entry.id || entry.link,
-            })),
+            url: feed.url,
+            entries: (result.entries || [])
+              .map((entry: FeedEntry) => ({
+                ...entry,
+                sourceUrl: feed.url,
+                id: entry.id || entry.link,
+                tags: [],
+              }))
+              .filter((entry: FeedEntry) => {
+                return (
+                  dayjs().diff(dayjs(entry.published), 'day') >
+                  DAYS_LIMIT[publishLimit]
+                )
+              }),
           }
         } catch (error) {
           return null
@@ -28,92 +45,35 @@ export async function fetchFeedFlow() {
       })
     )
 
-    store.dispatch({
-      type: 'feed/updateFlow',
-      payload: result.filter((t) => t),
-    })
-    store.dispatch({
-      type: 'feed/updateSources',
-      payload: sources.map((t) => {
-        const feed = result.find((f) => f.url === t.url)
-        if (feed) {
-          return {
-            ...t,
-            favicon: feed.favicon,
-            description: feed.description,
-          }
-        }
-        return t
-      }),
-    })
-  } catch (error) {
-    //
-  }
-}
+    const entries = _.flatten(result.map((t) => t?.entries || []))
 
-export async function tagFeedEntries() {
-  const flow = store.getState().feed.flow || []
-  try {
-    const untagged = flow.map((feed) => {
-      const entries = (feed.entries || [])
-        ?.filter((entry) => {
-          return !entry.tags || entry.tags.length === 0
-        })
-        .map((entry) => entry.id)
-        .filter((t) => (t || '').startsWith('http'))
-        .slice(10)
-
-      return {
-        sourceUrl: feed.url,
-        entries,
-      }
-    })
-    await Promise.all(
-      untagged.map(async (feed) => {
-        try {
-          const result = await post(`${HOST}/keywords`, {
-            entries: feed.entries,
-            sourceUrl: feed.sourceUrl,
-          })
-          store.dispatch({
-            type: 'feed/tagFeedEntries',
-            payload: {
-              sourceUrl: feed.sourceUrl,
-              entries: result,
-            },
-          })
-        } catch (error) {}
-      })
-    )
+    createEntries(entries)
   } catch (error) {}
 }
 
-// // 1. Define the task by providing a name and the function that should be executed
-// // Note: This needs to be called in the global scope (e.g outside of your React components)
-// TaskManager.defineTask(BACKGROUND_FETCH_TASK, async () => {
-//   const now = Date.now()
+export async function tagFeedEntries(entries: FeedEntry[]) {
+  try {
+    const untaggedEntries = entries.filter((entry) => {
+      return !entry.tags || entry.tags.length === 0
+    })
 
-//   console.log(
-//     `Got background fetch call at date: ${new Date(now).toISOString()}`
-//   )
-//   await fetchFeedFlow()
-//   // Be sure to return the successful result type!
-//   return BackgroundFetch.BackgroundFetchResult.NewData
-// })
+    const result = await post(`${HOST}/keywords`, {
+      entries: untaggedEntries.map((t) => t.id),
+    })
 
-// // 2. Register the task at some point in your app by providing the same name,
-// // and some configuration options for how the background fetch should behave
-// // Note: This does NOT need to be in the global scope and CAN be used in your React components!
-// export async function registerBackgroundFetchAsync() {
-//   console.log('registerBackgroundFetchAsync')
+    // await Promise.all(
+    //   untagged.map(async (feed) => {
+    //     try {
 
-//   return BackgroundFetch.registerTaskAsync(BACKGROUND_FETCH_TASK, {
-//     minimumInterval: 60 * 5, // 5 minutes
-//     stopOnTerminate: false, // android only,
-//     startOnBoot: true, // android only
-//   })
-// }
-
-// export async function unregisterBackgroundFetchAsync() {
-//   return BackgroundFetch.unregisterTaskAsync(BACKGROUND_FETCH_TASK)
-// }
+    //       store.dispatch({
+    //         type: 'feed/tagFeedEntries',
+    //         payload: {
+    //           sourceUrl: feed.sourceUrl,
+    //           entries: result,
+    //         },
+    //       })
+    //     } catch (error) {}
+    //   })
+    // )
+  } catch (error) {}
+}

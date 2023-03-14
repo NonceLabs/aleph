@@ -1,15 +1,15 @@
 import EntryList from 'components/EntryList'
 import { useNavigation } from 'expo-router'
+import useBookmarks from 'hooks/useBookmarks'
 import { Menu } from 'iconoir-react-native'
 import { Pressable } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { useAppSelector } from 'store/hooks'
 import { XStack, YStack, Text } from 'tamagui'
 
 export default function Bookmarks() {
   const insets = useSafeAreaInsets()
   const navigation = useNavigation()
-  const entries = useAppSelector((state) => state.feed.bookmarked)
+  const { entries } = useBookmarks()
 
   return (
     <YStack flex={1}>

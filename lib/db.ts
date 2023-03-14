@@ -31,7 +31,7 @@ export async function initSQLite() {
   const db = await openDatabase('./db/aleph.db')
   db.transaction((tx) => {
     tx.executeSql(
-      'CREATE TABLE IF NOT EXISTS feeds (url TEXT PRIMARY KEY NOT NULL, title TEXT, description TEXT, favicon TEXT, language TEXT, deleted INTEGER);'
+      'CREATE TABLE IF NOT EXISTS feeds (url TEXT PRIMARY KEY NOT NULL, title TEXT, description TEXT, favicon TEXT, language TEXT, deleted INTEGER, type TEXT);'
     )
     tx.executeSql(
       'CREATE TABLE IF NOT EXISTS entries (id TEXT PRIMARY KEY NOT NULL, title TEXT, description TEXT, sourceUrl TEXT, read INTEGER, bookmarked INTEGER, published INTEGER, tags TEXT);'
@@ -45,9 +45,18 @@ export async function createFeed(feed: Feed) {
   db.transaction(
     (tx) => {
       tx.executeSql(
-        'INSERT INTO feeds (url, title, description, favicon, language) VALUES (?, ?, ?, ?, ?, ?)',
-        [feed.url, feed.title, feed.description, feed.favicon, feed.language, 0]
+        'INSERT INTO feeds (url, title, description, favicon, language, deleted, type) VALUES (?, ?, ?, ?, ?, ?, ?)',
+        [
+          feed.url,
+          feed.title,
+          feed.description,
+          feed.favicon,
+          feed.language,
+          0,
+          'RSS',
+        ]
       )
+      onUpdated(tx)
     },
     onError,
     function onSuccess() {}
@@ -114,7 +123,7 @@ export async function createEntries(entries: FeedEntry[]) {
     (tx) => {
       for (const entry of entries) {
         tx.executeSql(
-          'INSERT INTO entries (id, title, description, sourceUrl, read, bookmarked, published, tags) VALUES (?,?,?,?,?,?,?,?)',
+          'INSERT OR IGNORE INTO entries (id, title, description, sourceUrl, read, bookmarked, published, tags) VALUES (?,?,?,?,?,?,?,?)',
           [
             entry.id,
             entry.title || '',
@@ -127,6 +136,7 @@ export async function createEntries(entries: FeedEntry[]) {
           ]
         )
       }
+      onUpdated(tx)
     },
     onError,
     function onSuccess() {}
@@ -155,6 +165,25 @@ export async function updateEntries(entries: FeedEntry[]) {
   )
 }
 
+function formatEntry(entry: {
+  id: string
+  title: string
+  description: string
+  sourceUrl: string
+  read: number
+  bookmarked: number
+  published: number
+  tags: string
+}) {
+  return {
+    ...entry,
+    read: entry.read === 1,
+    bookmarked: entry.bookmarked === 1,
+    published: dayjs.unix(entry.published).toDate(),
+    tags: entry.tags ? JSON.parse(entry.tags) : [],
+  }
+}
+
 function onUpdated(tx: SQLite.SQLTransaction) {
   tx.executeSql('SELECT * FROM feeds', [], (_, { rows }) => {
     PubSub.publish(PubEvent.FEEDS_UPDATE, rows._array)
@@ -164,7 +193,7 @@ function onUpdated(tx: SQLite.SQLTransaction) {
     'SELECT * FROM entries WHERE bookmarked = 1',
     [],
     (_, { rows }) => {
-      PubSub.publish(PubEvent.BOOKMARKS_UPDATE, rows._array)
+      PubSub.publish(PubEvent.BOOKMARKS_UPDATE, rows._array.map(formatEntry))
     }
   )
 
@@ -172,7 +201,7 @@ function onUpdated(tx: SQLite.SQLTransaction) {
     'SELECT * FROM entries ORDER BY published DESC LIMIT 300',
     [],
     (_, { rows }) => {
-      PubSub.publish(PubEvent.ENTRIES_UPDATE, rows._array)
+      PubSub.publish(PubEvent.ENTRYFLOW_UPDATE, rows._array.map(formatEntry))
     }
   )
 }

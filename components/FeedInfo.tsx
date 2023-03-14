@@ -1,11 +1,10 @@
-import { useNavigation, useRouter } from 'expo-router'
+import { useNavigation } from 'expo-router'
+import useFeeds from 'hooks/useFeeds'
 import { InfoEmpty } from 'iconoir-react-native'
-import { HOST } from 'lib/constants'
-import { createFeed } from 'lib/db'
-import { post } from 'lib/request'
+import { createFeed, deleteFeed } from 'lib/db'
 import { useState } from 'react'
 import { Pressable } from 'react-native'
-import { useAppDispatch, useAppSelector } from 'store/hooks'
+import { useAppDispatch } from 'store/hooks'
 import { Text, Sheet, YStack, H5, Anchor, Button } from 'tamagui'
 import { Feed, FeedData, Source } from 'types'
 import Favicon from './Favicon'
@@ -13,34 +12,29 @@ import Favicon from './Favicon'
 export default function FeedInfo({ source }: { source?: Source | FeedData }) {
   const [position, setPosition] = useState(0)
   const [open, setOpen] = useState(false)
-  const dispatch = useAppDispatch()
 
-  const router = useRouter()
   const navigation = useNavigation()
-  const sources = useAppSelector((state) => state.feed.sources)
+  const { feeds } = useFeeds()
   if (!source) {
     return null
   }
 
-  const _source = sources.find((f) => f.url === source.url)
+  const _source = feeds.find((f) => f.url === source.url)
   const isSubscribed = !!_source
   const handleSubscribe = () => {
     try {
+      const feed: Feed = {
+        url: source.url!,
+        title: source.title || '',
+        favicon: source.favicon || '',
+        description: source.description || '',
+        language: source.language || '',
+      }
+
       if (_source) {
-        dispatch({
-          type: 'feed/unsubscribe',
-          payload: source,
-        })
+        deleteFeed(feed)
       } else {
-        const feed: Feed = {
-          url: source.url!,
-          title: source.title || '',
-          favicon: source.favicon || '',
-          description: source.description || '',
-          language: source.language || '',
-        }
         createFeed(feed)
-        post(`${HOST}/addFeed`, feed)
       }
       setOpen(false)
       // @ts-ignore

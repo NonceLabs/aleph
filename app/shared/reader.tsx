@@ -11,34 +11,34 @@ import {
   ZStack,
 } from 'tamagui'
 import RenderHtml from 'react-native-render-html'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import ReaderHeader from 'components/ReaderHeader'
 import ReaderToolbar from 'components/ReaderToolbar'
 import useTheme from 'hooks/useTheme'
 import { StyleSheet } from 'react-native'
-import { FeedEntry } from 'types'
+import useEntry from 'hooks/useEntry'
+import useFeeds from 'hooks/useFeeds'
+import { FeedListType } from 'types'
 
 export default function Reader() {
-  const { id, type, sourceUrl } = useSearchParams()
-  const bookmarked = useAppSelector((state) => state.feed.bookmarked)
-  const flow = useAppSelector((state) => state.feed.flow)
-  const sources = useAppSelector((state) => state.feed.sources)
+  const { id, sourceUrl, type } = useSearchParams()
+  const { entry, onUpdateEntry } = useEntry(id as string)
+  const { feeds } = useFeeds()
   const fontSize = useAppSelector((state) => state.setting?.reader?.fontSize)
   const fontFamily = useAppSelector(
     (state) => state.setting?.reader?.fontFamily
   )
   const insets = useSafeAreaInsets()
   const { width } = useWindowDimensions()
-  const source = sources.find((t) => t.url === sourceUrl)
+  const source = feeds.find((t) => t.url === sourceUrl)
 
-  let item: FeedEntry | undefined
-  if (type === 'bookmarks') {
-    item = bookmarked.find((t) => t.id === id)
-  } else {
-    const feed = flow.find((t) => t.url === sourceUrl)
-    item = feed?.entries?.find((t) => t.id === id)
-  }
   const theme = useTheme()
+
+  useEffect(() => {
+    if (entry && !entry?.read) {
+      onUpdateEntry({ ...entry, read: true })
+    }
+  }, [entry?.read])
 
   const tagsStyle = useMemo(() => {
     return {
@@ -72,7 +72,7 @@ export default function Reader() {
           space={8}
           stickyHeaderIndices={[0]}
         >
-          <ReaderHeader source={source} item={item} />
+          <ReaderHeader source={source} entry={entry} />
           <YStack>
             <Text
               fontWeight="bold"
@@ -80,17 +80,17 @@ export default function Reader() {
               lineHeight={28}
               color="$color12"
             >
-              {item?.title || 'Untitled'}
+              {entry?.title || 'Untitled'}
             </Text>
             <Text fontSize={12} color="gray" mt={6}>
-              {dayjs(item?.published).format('MMM DD, YYYY')}
+              {dayjs(entry?.published).format('MMM DD, YYYY')}
             </Text>
           </YStack>
-          {item?.tags?.length ? (
+          {entry?.tags?.length ? (
             <XStack flexWrap="wrap">
-              {item.tags.map((t, idx) => {
+              {entry.tags.map((t, idx) => {
                 const title = typeof t === 'string' ? t : t.title
-                const isLast = idx + 1 === item?.tags?.length
+                const isLast = idx + 1 === entry?.tags?.length
                 return (
                   <Link key={idx} href={`shared/tags?tag=${title}`}>
                     <XStack mr={2} mb={4}>
@@ -112,7 +112,7 @@ export default function Reader() {
           ) : null}
           <YStack flex={1}>
             <RenderHtml
-              source={{ html: item?.description || '' }}
+              source={{ html: entry?.description || '' }}
               enableExperimentalMarginCollapsing
               contentWidth={width}
               systemFonts={[fontFamily, 'Vollkorn', 'Gilroy-Bold']}
@@ -121,7 +121,11 @@ export default function Reader() {
           </YStack>
         </ScrollView>
 
-        <ReaderToolbar item={item} />
+        <ReaderToolbar
+          entry={entry}
+          type={type as FeedListType}
+          onUpdateEntry={onUpdateEntry}
+        />
       </ZStack>
     </YStack>
   )

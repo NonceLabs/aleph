@@ -1,38 +1,42 @@
 import { BlurView } from 'expo-blur'
-import { useRouter } from 'expo-router'
+import { useNavigation } from 'expo-router'
 import useTheme from 'hooks/useTheme'
 import { BookmarkEmpty, NavArrowLeft } from 'iconoir-react-native'
 import { Pressable } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { XStack } from 'tamagui'
-import { FeedEntry } from 'types'
+import { FeedEntry, FeedListType } from 'types'
 import ReaderSettings from './ReaderSettings'
-import * as Sharing from 'expo-sharing'
 import Summarize from './Summarize'
 
-export default function ReaderToolbar({ item }: { item?: FeedEntry }) {
+export default function ReaderToolbar({
+  entry,
+  type,
+  onUpdateEntry,
+}: {
+  entry?: FeedEntry
+  type?: FeedListType
+  onUpdateEntry: (entry: FeedEntry) => void
+}) {
   const theme = useTheme()
-  const router = useRouter()
   const insets = useSafeAreaInsets()
-  const bookmarked = useAppSelector((state) => state.feed.bookmarked)
-  const dispatch = useAppDispatch()
-  const isBookmarked = bookmarked.some((t) => t.id === item?.id)
-  const onBookmark = () => {
-    dispatch({
-      type: 'feed/bookmark',
-      payload: item,
-    })
+  const navigation = useNavigation()
+  const isBookmarked = entry?.bookmarked
+  const onBack = () => {
+    let pathname = 'index'
+    if (type === 'flow') {
+      pathname = 'index'
+    } else if (type === 'bookmarks') {
+      pathname = 'bookmarks'
+    } else if (type === 'feeds') {
+      pathname = 'feeds'
+    }
+    // @ts-ignore
+    navigation.jumpTo(pathname)
   }
-  const onShare = async () => {
-    try {
-      await Sharing.shareAsync(item?.link!, {
-        mimeType: 'text/html',
-        dialogTitle: item?.title,
-        UTI: item?.link,
-      })
-    } catch (error) {
-      console.log('error sharing', error)
+  const onBookmark = () => {
+    if (entry) {
+      onUpdateEntry({ ...entry, bookmarked: !isBookmarked })
     }
   }
   return (
@@ -48,11 +52,11 @@ export default function ReaderToolbar({ item }: { item?: FeedEntry }) {
         justifyContent="space-between"
         pt={8}
       >
-        <Pressable hitSlop={16} onPress={() => router.back()}>
+        <Pressable hitSlop={16} onPress={onBack}>
           <NavArrowLeft width={28} height={28} />
         </Pressable>
         <XStack space={24}>
-          <Summarize entry={item} />
+          <Summarize entry={entry} />
           <ReaderSettings />
           <Pressable onPress={onBookmark}>
             <BookmarkEmpty

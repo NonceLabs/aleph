@@ -3,7 +3,7 @@ export interface FeedEntry {
   link?: string
   title?: string
   description?: string
-  published?: Date
+  published: number
   sourceUrl?: string
   read?: boolean
   bookmarked?: boolean
@@ -109,6 +109,7 @@ export interface Feed {
   language: string
   favicon: string
   deleted?: boolean
+  type?: 'RSS' | 'Podcast'
 }
 
 export interface Tag {
@@ -122,7 +123,7 @@ export interface CustomTag {
   createdAt: Date
 }
 
-export type FeedListType = 'flow' | 'bookmarks' | 'tags'
+export type FeedListType = 'flow' | 'bookmarks' | 'tags' | 'feeds'
 
 export enum FeedPublishLimit {
   Week = 'Week',

@@ -5,7 +5,6 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 import { Pressable, StyleSheet, Image } from 'react-native'
 import { useRouter } from 'expo-router'
 import { extractImages } from 'lib/helper'
-import { useAppDispatch } from 'store/hooks'
 import Favicon from './Favicon'
 
 dayjs.extend(relativeTime)
@@ -22,7 +21,6 @@ export default function FeedItem({
   const router = useRouter()
   const images = extractImages(item.description)
   const { width } = useWindowDimensions()
-  const dispatch = useAppDispatch()
   const withImage = images.length > 0
   let opacity = 1
   let fontWeight = '600'
@@ -38,13 +36,6 @@ export default function FeedItem({
   return (
     <Pressable
       onPress={() => {
-        dispatch({
-          type: 'feed/read',
-          payload: {
-            url: item.sourceUrl,
-            id: item.id,
-          },
-        })
         router.push({
           pathname: 'shared/reader',
           params: {
