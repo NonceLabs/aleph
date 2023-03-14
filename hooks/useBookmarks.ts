@@ -22,6 +22,14 @@ export default function useBookmarks() {
     updateEntries(_entries)
   }
 
+  const onToggleBookmark = (entry: FeedEntry) => {
+    if (entry.bookmarked) {
+      entriesStore.set(entries.filter((t) => t.id !== entry.id))
+    } else {
+      entriesStore.set([...entries, entry])
+    }
+  }
+
   useEffect(() => {
     return entriesStore.subscribe(setEntries)
   }, [])
@@ -42,5 +50,6 @@ export default function useBookmarks() {
   return {
     entries,
     onUpdateEntries,
+    onToggleBookmark,
   }
 }

@@ -6,6 +6,7 @@ import * as MailComposer from 'expo-mail-composer'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useNavigation } from 'expo-router'
 import { ScrollView } from 'react-native'
+import { MAIN_COLOR } from 'lib/constants'
 
 export default function SettingsPage() {
   const insets = useSafeAreaInsets()
@@ -21,7 +22,7 @@ export default function SettingsPage() {
         >
           <Menu width={24} height={24} color="#f0353c" />
         </Pressable>
-        <Text fontFamily="Gilroy-Bold" fontSize={24} color="$color12">
+        <Text fontFamily="Gilroy-Bold" fontSize={24} color={MAIN_COLOR}>
           Settings
         </Text>
       </XStack>

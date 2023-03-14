@@ -40,16 +40,19 @@ const CUSTOM_TAGS = {
     },
   ],
   tags: [],
+  feeds: [],
 }
 
 export default function EntryList({
   entries,
   type = 'flow',
   withHeader = true,
+  onRefresh = () => {},
 }: {
   entries: FeedEntry[]
   type?: FeedListType
   withHeader?: boolean
+  onRefresh?: () => void
 }) {
   const customTag = CUSTOM_TAGS[type]
 
@@ -191,6 +194,8 @@ export default function EntryList({
           setPage(page + 1)
         }
       }}
+      onRefresh={onRefresh}
+      refreshing={false}
       ListFooterComponent={
         isEmpty ? (
           <YStack flex={1} ai="center" jc="center" space pt={100}>

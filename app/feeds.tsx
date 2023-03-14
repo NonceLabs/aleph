@@ -3,6 +3,7 @@ import SourceItem from 'components/SourceItem'
 import { useNavigation } from 'expo-router'
 import useFeeds from 'hooks/useFeeds'
 import { EmojiLookDown, Menu } from 'iconoir-react-native'
+import { MAIN_COLOR } from 'lib/constants'
 import { FlatList, Pressable } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Text, XStack, YStack } from 'tamagui'
@@ -24,7 +25,7 @@ export default function Feeds() {
           >
             <Menu width={24} height={24} color="#f0353c" />
           </Pressable>
-          <Text fontFamily="Gilroy-Bold" fontSize={24} color="$color12">
+          <Text fontFamily="Gilroy-Bold" fontSize={24} color={MAIN_COLOR}>
             Feeds
           </Text>
         </XStack>

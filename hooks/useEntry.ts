@@ -1,3 +1,4 @@
+import { updateEntries } from 'lib/db'
 import { useEffect, useState } from 'react'
 import { FeedEntry } from 'types'
 import useBookmarks from './useBookmarks'
@@ -25,6 +26,11 @@ export default function useEntry(id: string) {
     }
   }
 
+  const _onToggleBookmark = (e: FeedEntry) => {
+    setEntry(e)
+    updateEntries([e])
+  }
+
   useEffect(() => {
     setEntry(undefined)
     const entry = flowEntries.find((t) => t.id === id)
@@ -41,5 +47,6 @@ export default function useEntry(id: string) {
   return {
     entry,
     onUpdateEntry,
+    onToggleBookmark: _onToggleBookmark,
   }
 }

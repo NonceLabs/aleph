@@ -22,7 +22,7 @@ import { FeedListType } from 'types'
 
 export default function Reader() {
   const { id, sourceUrl, type } = useSearchParams()
-  const { entry, onUpdateEntry } = useEntry(id as string)
+  const { entry, onUpdateEntry, onToggleBookmark } = useEntry(id as string)
   const { feeds } = useFeeds()
   const fontSize = useAppSelector((state) => state.setting?.reader?.fontSize)
   const fontFamily = useAppSelector(
@@ -125,6 +125,7 @@ export default function Reader() {
           entry={entry}
           type={type as FeedListType}
           onUpdateEntry={onUpdateEntry}
+          onToggleBookmark={onToggleBookmark}
         />
       </ZStack>
     </YStack>

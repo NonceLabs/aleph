@@ -268,7 +268,10 @@ export async function getBookmarkedEntries() {
         'SELECT * FROM entries WHERE bookmarked = 1',
         [],
         (_, { rows }) => {
-          // bookmarked
+          PubSub.publish(
+            PubEvent.BOOKMARKS_UPDATE,
+            rows._array.map(formatEntry)
+          )
         }
       )
     },

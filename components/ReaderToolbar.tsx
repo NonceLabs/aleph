@@ -13,10 +13,12 @@ export default function ReaderToolbar({
   entry,
   type,
   onUpdateEntry,
+  onToggleBookmark,
 }: {
   entry?: FeedEntry
   type?: FeedListType
   onUpdateEntry: (entry: FeedEntry) => void
+  onToggleBookmark: (entry: FeedEntry) => void
 }) {
   const theme = useTheme()
   const insets = useSafeAreaInsets()
@@ -36,7 +38,7 @@ export default function ReaderToolbar({
   }
   const onBookmark = () => {
     if (entry) {
-      onUpdateEntry({ ...entry, bookmarked: !isBookmarked })
+      onToggleBookmark({ ...entry, bookmarked: !isBookmarked })
     }
   }
   return (
