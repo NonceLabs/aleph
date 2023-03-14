@@ -1,7 +1,7 @@
 import { Flower } from 'iconoir-react-native'
 import { HOST } from 'lib/constants'
 import { post } from 'lib/request'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Pressable } from 'react-native'
 import { useAppSelector } from 'store/hooks'
 import { Text, Sheet, YStack, Spinner, ScrollView } from 'tamagui'
@@ -18,11 +18,16 @@ export default function Summarize({ entry }: { entry?: FeedEntry }) {
     (state) => state.setting?.reader?.fontFamily
   )
 
-  useEffect(() => {
+  if (!entry) {
+    return null
+  }
+
+  const onOpenChange = (_open: boolean) => {
     setGenerating(true)
     setSummary('')
     setErrorMessage('')
-    if (entry) {
+    setOpen(_open)
+    if (_open && entry) {
       post(`${HOST}/summarize`, {
         url: entry.id,
       })
@@ -43,17 +48,6 @@ export default function Summarize({ entry }: { entry?: FeedEntry }) {
           )
         })
     }
-  }, [entry])
-
-  if (!entry) {
-    return null
-  }
-
-  const onOpenChange = (_open: boolean) => {
-    setGenerating(true)
-    setSummary('')
-    setErrorMessage('')
-    setOpen(_open)
   }
 
   return (
