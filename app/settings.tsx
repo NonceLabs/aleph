@@ -1,14 +1,7 @@
 import { Pressable, StyleSheet } from 'react-native'
 import { YStack, YGroup, Separator, ListItem, XStack, Text } from 'tamagui'
 import { ChevronRight } from '@tamagui/lucide-icons'
-import {
-  Crown,
-  Lifebelt,
-  Mail,
-  Menu,
-  RssFeed,
-  TextAlt,
-} from 'iconoir-react-native'
+import { Lifebelt, Menu } from 'iconoir-react-native'
 import * as MailComposer from 'expo-mail-composer'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useNavigation } from 'expo-router'

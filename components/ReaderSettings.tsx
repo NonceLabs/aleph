@@ -1,16 +1,8 @@
-import { Check, TextAlt } from 'iconoir-react-native'
+import { TextAlt } from 'iconoir-react-native'
 import { useState } from 'react'
 import { Pressable } from 'react-native'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
-import {
-  XStack,
-  Text,
-  Sheet,
-  YStack,
-  Slider,
-  Circle,
-  ScrollView,
-} from 'tamagui'
+import { XStack, Text, Sheet, YStack, Slider, ScrollView } from 'tamagui'
 
 export default function ReaderSettings() {
   const [position, setPosition] = useState(0)

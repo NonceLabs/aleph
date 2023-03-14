@@ -3,7 +3,7 @@ import { FeedEntry, FeedListType, Tag } from 'types'
 import { FlashList } from '@shopify/flash-list'
 import { Text, YStack } from 'tamagui'
 import EntryItem from './EntryItem'
-import { Animated, Pressable, useAnimatedValue } from 'react-native'
+import { Animated, useAnimatedValue } from 'react-native'
 import _ from 'lodash'
 import {
   BookmarkEmpty,

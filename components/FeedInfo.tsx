@@ -1,5 +1,5 @@
 import { useNavigation, useRouter } from 'expo-router'
-import { Check, InfoEmpty, TextAlt } from 'iconoir-react-native'
+import { InfoEmpty } from 'iconoir-react-native'
 import { HOST } from 'lib/constants'
 import { post } from 'lib/request'
 import { useState } from 'react'
@@ -43,10 +43,8 @@ export default function FeedInfo({ source }: { source?: Source | FeedData }) {
           payload: feed,
         })
         post(`${HOST}/addFeed`, feed)
-        // router.push('')
       }
       setOpen(false)
-      // router.replace('/')
       // @ts-ignore
       navigation.jumpTo('index')
     } catch (error) {}

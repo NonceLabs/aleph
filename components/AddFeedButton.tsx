@@ -1,5 +1,5 @@
 import { X } from '@tamagui/lucide-icons'
-import { AddCircle, Plus } from 'iconoir-react-native'
+import { AddCircle } from 'iconoir-react-native'
 import { useState } from 'react'
 import { Pressable } from 'react-native'
 import {

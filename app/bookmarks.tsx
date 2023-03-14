@@ -4,7 +4,7 @@ import { Menu } from 'iconoir-react-native'
 import { Pressable } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useAppSelector } from 'store/hooks'
-import { Heading, XStack, YStack, Text } from 'tamagui'
+import { XStack, YStack, Text } from 'tamagui'
 
 export default function Bookmarks() {
   const insets = useSafeAreaInsets()

@@ -1,12 +1,7 @@
 import { BlurView } from 'expo-blur'
 import { useRouter } from 'expo-router'
 import useTheme from 'hooks/useTheme'
-import {
-  BookmarkEmpty,
-  NavArrowLeft,
-  ShareIos,
-  Yoga,
-} from 'iconoir-react-native'
+import { BookmarkEmpty, NavArrowLeft } from 'iconoir-react-native'
 import { Pressable } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
