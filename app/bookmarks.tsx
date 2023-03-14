@@ -1,3 +1,4 @@
+import DrawerHeader from 'components/DrawerHeader'
 import EntryList from 'components/EntryList'
 import { useNavigation } from 'expo-router'
 import useBookmarks from 'hooks/useBookmarks'
@@ -20,19 +21,7 @@ export default function Bookmarks() {
 
   return (
     <YStack flex={1}>
-      <XStack pt={insets.top} px={16} space={8} ai="center">
-        <Pressable
-          onPress={() => {
-            // @ts-ignore
-            navigation.openDrawer()
-          }}
-        >
-          <Menu width={24} height={24} color="#f0353c" />
-        </Pressable>
-        <Text fontFamily="Gilroy-Bold" fontSize={24} color={MAIN_COLOR}>
-          Bookmarks
-        </Text>
-      </XStack>
+      <DrawerHeader title="Bookmarks" />
       <EntryList
         entries={entries}
         type="bookmarks"

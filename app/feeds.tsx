@@ -1,36 +1,17 @@
 import AddFeedButton from 'components/AddFeedButton'
+import DrawerHeader from 'components/DrawerHeader'
 import SourceItem from 'components/SourceItem'
-import { useNavigation } from 'expo-router'
 import useFeeds from 'hooks/useFeeds'
-import { EmojiLookDown, Menu } from 'iconoir-react-native'
-import { MAIN_COLOR } from 'lib/constants'
-import { FlatList, Pressable } from 'react-native'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { Text, XStack, YStack } from 'tamagui'
+import { EmojiLookDown } from 'iconoir-react-native'
+import { FlatList } from 'react-native'
+import { Text, YStack } from 'tamagui'
 
 export default function Feeds() {
-  const insets = useSafeAreaInsets()
-  const navigation = useNavigation()
   const { feeds } = useFeeds()
 
   return (
     <YStack flex={1}>
-      <XStack pt={insets.top} px={16} ai="center" jc="space-between">
-        <XStack ai="center" space={8}>
-          <Pressable
-            onPress={() => {
-              // @ts-ignore
-              navigation.openDrawer()
-            }}
-          >
-            <Menu width={24} height={24} color="#f0353c" />
-          </Pressable>
-          <Text fontFamily="Gilroy-Bold" fontSize={24} color={MAIN_COLOR}>
-            Feeds
-          </Text>
-        </XStack>
-        <AddFeedButton />
-      </XStack>
+      <DrawerHeader title="Feeds" right={<AddFeedButton />} />
       <FlatList
         data={feeds.filter((t) => !t.deleted)}
         style={{

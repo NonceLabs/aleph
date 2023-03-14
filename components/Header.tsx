@@ -23,7 +23,9 @@ export default function Header({
     <Pressable onPress={() => router.back()}>
       <XStack alignItems="center">
         <NavArrowLeft width={32} height={32} />
-        <Text fontSize={20}>{title}</Text>
+        <Text fontSize={20} color="$color12">
+          {title}
+        </Text>
       </XStack>
     </Pressable>
   ) : (
@@ -33,7 +35,7 @@ export default function Header({
   return (
     <XStack
       space
-      alignItems="center"
+      ac="center"
       justifyContent={justifyContent}
       style={{
         ...styles.container,

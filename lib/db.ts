@@ -40,6 +40,17 @@ export async function initSQLite() {
   }, onError)
 }
 
+export async function purgeAllData() {
+  const db = await openDatabase('./db/aleph.db')
+  db.transaction((tx) => {
+    tx.executeSql('DROP TABLE IF EXISTS feeds;')
+    tx.executeSql('DROP TABLE IF EXISTS entries;')
+    PubSub.publish(PubEvent.FEEDS_UPDATE, [])
+    PubSub.publish(PubEvent.ENTRYFLOW_UPDATE, [])
+    PubSub.publish(PubEvent.BOOKMARKS_UPDATE, [])
+  }, onError)
+}
+
 export async function subFeed(feed: Feed) {
   const db = await openDatabase('./db/aleph.db')
   db.transaction(

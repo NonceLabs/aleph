@@ -2,6 +2,7 @@ import { BlurView } from 'expo-blur'
 import { useNavigation } from 'expo-router'
 import useTheme from 'hooks/useTheme'
 import { BookmarkEmpty, NavArrowLeft } from 'iconoir-react-native'
+import { MAIN_COLOR } from 'lib/constants'
 import { Pressable } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { XStack } from 'tamagui'
@@ -64,7 +65,7 @@ export default function ReaderToolbar({
             <BookmarkEmpty
               width={24}
               height={24}
-              color={isBookmarked ? 'blue' : 'gray'}
+              color={isBookmarked ? MAIN_COLOR : 'gray'}
               strokeWidth={isBookmarked ? 2 : 1.5}
             />
           </Pressable>

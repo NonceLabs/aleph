@@ -8,6 +8,7 @@ import * as WebBrowser from 'expo-web-browser'
 import { BlurView } from 'expo-blur'
 import useTheme from 'hooks/useTheme'
 import Favicon from './Favicon'
+import { MAIN_COLOR } from 'lib/constants'
 
 export default function ReaderHeader({
   source,
@@ -48,7 +49,7 @@ export default function ReaderHeader({
           >
             <XStack space={8} alignItems="center">
               <Favicon favicon={source.favicon} />
-              <Text fontWeight="bold" fontSize={20} color="$blue10Light">
+              <Text fontWeight="bold" fontSize={20} color={MAIN_COLOR}>
                 {source.title}
               </Text>
             </XStack>

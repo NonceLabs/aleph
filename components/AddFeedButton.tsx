@@ -11,6 +11,7 @@ import {
   useWindowDimensions,
 } from 'tamagui'
 import { useRouter } from 'expo-router'
+import { MAIN_COLOR } from 'lib/constants'
 
 export default function AddFeedButton({
   trigger,
@@ -27,7 +28,7 @@ export default function AddFeedButton({
       <Dialog.Trigger asChild>
         {trigger || (
           <Pressable hitSlop={15} style={{ marginRight: 10 }}>
-            <AddCircle width={24} height={24} />
+            <AddCircle width={24} height={24} color={MAIN_COLOR} />
           </Pressable>
         )}
       </Dialog.Trigger>
@@ -73,7 +74,8 @@ export default function AddFeedButton({
             />
             <Dialog.Close asChild>
               <Button
-                themeInverse
+                bc={MAIN_COLOR}
+                color="white"
                 style={{ marginTop: 16 }}
                 onPress={() => {
                   router.push({

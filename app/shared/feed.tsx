@@ -1,19 +1,19 @@
 import Header from 'components/Header'
-import { useSearchParams } from 'expo-router'
+import { Link, useSearchParams } from 'expo-router'
 import { extract } from 'lib/parser'
 import { useEffect, useState } from 'react'
 import { Pressable } from 'react-native'
 import { YStack, Text, XStack, Spinner } from 'tamagui'
-import { Feed, FeedData, FeedListType } from 'types'
+import { Feed, FeedData, FeedEntry, FeedListType } from 'types'
 import Favicon from 'components/Favicon'
 import _ from 'lodash'
-import FeedInfo from 'components/FeedInfo'
-import { EmojiLookUp } from 'iconoir-react-native'
+import { EmojiLookUp, InfoEmpty } from 'iconoir-react-native'
 import AddFeedButton from 'components/AddFeedButton'
 import EntryList from 'components/EntryList'
 import useFeeds from 'hooks/useFeeds'
 import { createEntries, resubFeed, subFeed, unsubFeed } from 'lib/db'
 import useEntryFlow from 'hooks/useEntryFlow'
+import { MAIN_COLOR } from 'lib/constants'
 
 export default function FeedProfile() {
   const [data, setData] = useState<FeedData>()
@@ -34,9 +34,17 @@ export default function FeedProfile() {
       extract(url as string)
         .then((res) => {
           if (res) {
-            setData({ ...res, url })
+            const fd = {
+              ...res,
+              url,
+              entries: res?.entries.map((t: FeedEntry) => ({
+                ...t,
+                sourceUrl: url,
+              })),
+            }
+            setData(fd)
             // auto sub
-            handleSubscribe({ ...res, url })
+            handleSubscribe(fd)
           }
           setLoading(false)
         })
@@ -47,15 +55,10 @@ export default function FeedProfile() {
     }
   }, [url, feed])
 
-  const handleSubscribe = async (_data?: FeedData) => {
+  const handleSubscribe = async (fd: FeedData) => {
     try {
-      const fd = _data || data
-
-      if (!fd) {
-        return
-      }
       const _feed: Feed = {
-        url: url as string,
+        url: fd.url!,
         title: fd.title || '',
         favicon: fd.favicon || '',
         description: fd.description || '',
@@ -65,8 +68,6 @@ export default function FeedProfile() {
       if (feed) {
         if (feed.deleted) {
           resubFeed(_feed)
-        } else {
-          unsubFeed(feed)
         }
       } else {
         subFeed(_feed)
@@ -94,7 +95,7 @@ export default function FeedProfile() {
             <Text
               fontSize={20}
               fontWeight="bold"
-              color="$blue10Light"
+              color={MAIN_COLOR}
               maxWidth={140}
               numberOfLines={1}
             >
@@ -102,7 +103,13 @@ export default function FeedProfile() {
             </Text>
           </XStack>
         }
-        right={<FeedInfo source={data} handleSubscribe={handleSubscribe} />}
+        right={
+          <Link
+            href={`shared/feedInfo?url=${encodeURIComponent(url as string)}`}
+          >
+            <InfoEmpty width={24} height={24} color={MAIN_COLOR} />
+          </Link>
+        }
       />
       <YStack flex={1}>
         {error && (

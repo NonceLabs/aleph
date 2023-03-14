@@ -38,7 +38,9 @@ export default function EntryByTag() {
         <Text fontWeight="600" color="$blue11">
           {entries.length}
         </Text>
-        <Text>article{entries.length > 1 ? 's' : ''} found</Text>
+        <Text color="$color11">
+          article{entries.length > 1 ? 's' : ''} found
+        </Text>
       </XStack>
       <EntryList entries={entries} type="tags" withHeader={false} />
     </YStack>
