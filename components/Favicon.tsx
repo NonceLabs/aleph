@@ -17,6 +17,9 @@ export default function Favicon({
   return (
     <Image
       source={favicon}
+      placeholder={require('../assets/images/rss.png')}
+      contentFit="cover"
+      placeholderContentFit="cover"
       style={{
         width: size,
         height: size,

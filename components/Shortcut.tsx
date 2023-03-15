@@ -72,7 +72,7 @@ export default function Shortcut() {
 
           <XStack space ai="center" jc="space-between">
             <Text fontWeight="bold" fontSize={18} color="$color11">
-              Article from last
+              Articles in last
             </Text>
             <Group axis="horizontal">
               {['Week', 'Month', 'Year'].map((t) => {

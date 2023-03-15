@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import { Link, Stack, useSearchParams } from 'expo-router'
+import { Link, useSearchParams } from 'expo-router'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useAppSelector } from 'store/hooks'
 import {

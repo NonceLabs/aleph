@@ -20,7 +20,7 @@ export default function FlowPage() {
   }, [])
 
   useEffect(() => {
-    fetchFeedFlow(feeds)
+    fetchFeedFlow(feeds.filter((t) => !t.deleted))
   }, [feeds.filter((t) => !t.deleted).length])
 
   useEffect(() => {

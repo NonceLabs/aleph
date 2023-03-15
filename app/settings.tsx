@@ -40,6 +40,25 @@ export default function SettingsPage() {
                 } catch (error) {}
               }}
             />
+            <ListItem
+              hoverTheme
+              pressTheme
+              title="Destroy"
+              px={8}
+              icon={<Lifebelt width={24} height={24} />}
+              iconAfter={
+                <XStack>
+                  <ChevronRight width={24} height={24} color="$color9" />
+                </XStack>
+              }
+              onPress={async () => {
+                try {
+                  await purgeAllData()
+                  // @ts-ignore
+                  navigation.jumpTo('index')
+                } catch (error) {}
+              }}
+            />
           </YGroup.Item>
         </YGroup>
       </ScrollView>

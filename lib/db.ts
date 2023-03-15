@@ -83,7 +83,8 @@ export async function resubFeed(feed: Feed) {
         [feed.url],
         () => {
           onUpdated(tx)
-        }
+        },
+        onError
       )
     },
     onError,
@@ -113,10 +114,10 @@ export async function updateFeed(feed: Feed) {
   const db = await openDatabase('./db/aleph.db')
   db.transaction(
     (tx) => {
-      tx.executeSql('UPDATE feeds SET title = ? WHERE url = ?', [
-        feed.title,
-        feed.url,
-      ])
+      tx.executeSql(
+        'UPDATE feeds SET title = ?, description = ?, favicon = ? WHERE url = ?',
+        [feed.title, feed.description, feed.favicon, feed.url]
+      )
     },
     onError,
     function onSuccess() {}

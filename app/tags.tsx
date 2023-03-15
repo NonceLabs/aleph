@@ -2,8 +2,10 @@ import { FlashList } from '@shopify/flash-list'
 import DrawerHeader from 'components/DrawerHeader'
 import { Link } from 'expo-router'
 import useEntryFlow from 'hooks/useEntryFlow'
+import { NavArrowRight } from 'iconoir-react-native'
 import { PAGE_SIZE } from 'lib/constants'
 import { useMemo, useState } from 'react'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Text, useWindowDimensions, XStack, YStack } from 'tamagui'
 import { Tag } from 'types'
 
@@ -11,6 +13,7 @@ export default function TagsPage() {
   const [page, setPage] = useState(1)
   const { entries } = useEntryFlow()
   const { width } = useWindowDimensions()
+  const insets = useSafeAreaInsets()
   const topTags: Tag[] = useMemo(() => {
     const tags = entries.reduce((acc, cur) => {
       if (cur.tags) {
@@ -38,26 +41,52 @@ export default function TagsPage() {
   }, [entries])
   return (
     <YStack flex={1}>
-      <DrawerHeader title="Tags" />
+      <DrawerHeader
+        title="Tags"
+        right={
+          <XStack>
+            <Text color="$blue10" fontWeight="bold">
+              {topTags.length}
+            </Text>
+            <Text color="$color10"> tags in total</Text>
+          </XStack>
+        }
+      />
       <FlashList
         data={topTags.slice(0, page * PAGE_SIZE)}
         estimatedItemSize={40}
+        style={{ flex: 1 }}
+        contentContainerStyle={{
+          padding: 20,
+          paddingBottom: insets.bottom + 20,
+        }}
         renderItem={({ item }) => {
           return (
             <Link
               href={`shared/entryByTag?tag=${encodeURIComponent(item.title)}`}
             >
-              <XStack ai="center" jc="space-between" w={width} px={20} py={8}>
-                <XStack>
-                  <Text color="white" fontSize={18}>
-                    {item.title}
-                  </Text>
+              <XStack
+                ai="center"
+                jc="space-between"
+                w={width - 32}
+                px={20}
+                py={8}
+                backgroundColor="$background"
+              >
+                <Text color="$color12" fontSize={18} fontFamily="Gilroy-Bold">
+                  {item.title}
+                </Text>
+                <XStack ai="center">
+                  <Text color="$color11">{item.count}</Text>
+                  <NavArrowRight width={28} height={28} color="gray" />
                 </XStack>
-                <Text color="$color11">{item.count}</Text>
               </XStack>
             </Link>
           )
         }}
+        ItemSeparatorComponent={() => (
+          <YStack height={1} backgroundColor="$borderColor" />
+        )}
         onMomentumScrollEnd={({ nativeEvent }) => {
           if (nativeEvent.contentOffset.y > 0) {
             setPage(page + 1)

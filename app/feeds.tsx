@@ -4,9 +4,11 @@ import SourceItem from 'components/SourceItem'
 import useFeeds from 'hooks/useFeeds'
 import { EmojiLookDown } from 'iconoir-react-native'
 import { FlatList } from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Text, YStack } from 'tamagui'
 
 export default function Feeds() {
+  const insets = useSafeAreaInsets()
   const { feeds } = useFeeds()
 
   return (
@@ -17,7 +19,10 @@ export default function Feeds() {
         style={{
           flex: 1,
         }}
-        contentContainerStyle={{ padding: 20 }}
+        contentContainerStyle={{
+          padding: 20,
+          paddingBottom: insets.bottom + 20,
+        }}
         ItemSeparatorComponent={() => (
           <YStack height={1} backgroundColor="$borderColor" />
         )}

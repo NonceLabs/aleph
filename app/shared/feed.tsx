@@ -70,10 +70,10 @@ export default function FeedProfile() {
           resubFeed(_feed)
         }
       } else {
-        subFeed(_feed)
         if (Array.isArray(fd?.entries)) {
           createEntries(fd.entries)
         }
+        subFeed(_feed)
       }
     } catch (error) {}
   }
@@ -142,7 +142,7 @@ export default function FeedProfile() {
             <Spinner size="large" />
             <Text color="$color10">Loading</Text>
           </YStack>
-        ) : (
+        ) : error ? null : (
           <EntryList
             entries={feedEntries}
             type={(from as FeedListType) || 'tags'}

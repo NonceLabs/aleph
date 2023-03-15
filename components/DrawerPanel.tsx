@@ -44,11 +44,11 @@ const routes = [
     title: 'Bookmarks',
     Icon: BookmarkEmpty,
   },
-  {
-    href: '/settings',
-    title: 'Settings',
-    Icon: Settings,
-  },
+  // {
+  //   href: '/settings',
+  //   title: 'Settings',
+  //   Icon: Settings,
+  // },
 ]
 
 export default function DrawerPanel() {
