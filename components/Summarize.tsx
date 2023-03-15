@@ -79,7 +79,12 @@ export default function Summarize({ entry }: { entry?: FeedEntry }) {
         <Sheet.Frame f={1} p="$4">
           <ScrollView f={1} p={8}>
             {summary && (
-              <Text fontSize={18} color="$color12" fontFamily={fontFamily}>
+              <Text
+                fontSize={18}
+                color="$color12"
+                ta="center"
+                fontFamily={fontFamily}
+              >
                 {summary.trim()}
               </Text>
             )}

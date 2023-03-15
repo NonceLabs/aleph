@@ -12,7 +12,7 @@ export default function NotFoundScreen() {
         <Text color="$color10">Invalid pathname </Text>
         <Text color="$red10">{pathname}</Text>
       </XStack>
-      <Link href="index">
+      <Link href="/">
         <Text color="$blue11">Go Home</Text>
       </Link>
     </YStack>

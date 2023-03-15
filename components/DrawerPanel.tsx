@@ -25,6 +25,11 @@ const routes = [
     Icon: RssFeedTag,
   },
   {
+    href: '/podcasts',
+    title: 'Podcasts',
+    Icon: Podcast,
+  },
+  {
     href: '/tags',
     title: 'Tags',
     Icon: Label,
@@ -33,11 +38,6 @@ const routes = [
   //   href: '/explore',
   //   title: 'Explore',
   //   Icon: Planet,
-  // },
-  // {
-  //   href: '/podcasts',
-  //   title: 'Podcasts',
-  //   Icon: Podcast,
   // },
   {
     href: '/bookmarks',
