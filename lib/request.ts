@@ -33,8 +33,6 @@ export const fetcher = async (url: string, headers = {}) => {
       signal: controller.signal,
       headers: {
         ...headers,
-        'app-version': getBuildVersion(),
-        platform: Platform.OS,
       },
     })
     clearTimeout(id)
