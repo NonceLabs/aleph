@@ -14,8 +14,6 @@ export const post = async (url: string, json: object) => {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        'app-version': getBuildVersion(),
-        platform: Platform.OS,
       },
     })
     const responseJson = await response.json()

@@ -4,7 +4,15 @@ import { post } from 'lib/request'
 import { useState } from 'react'
 import { Pressable } from 'react-native'
 import { useAppSelector } from 'store/hooks'
-import { Text, Sheet, YStack, Spinner, ScrollView } from 'tamagui'
+import {
+  Text,
+  Sheet,
+  YStack,
+  Spinner,
+  ScrollView,
+  XStack,
+  Button,
+} from 'tamagui'
 import { FeedEntry } from 'types'
 
 export default function Summarize({ entry }: { entry?: FeedEntry }) {
