@@ -71,6 +71,7 @@ export default function AddFeedButton({
               placeholder=""
               value={url}
               onChangeText={setUrl}
+              textContentType="URL"
             />
             <Dialog.Close asChild>
               <Button

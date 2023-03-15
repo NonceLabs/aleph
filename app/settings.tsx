@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native'
 import { YStack, YGroup, Separator, ListItem, XStack, Text } from 'tamagui'
 import { ChevronRight } from '@tamagui/lucide-icons'
-import { Lifebelt, RemoveSquare } from 'iconoir-react-native'
+import { Lifebelt } from 'iconoir-react-native'
 import * as MailComposer from 'expo-mail-composer'
 import { ScrollView } from 'react-native'
 import DrawerHeader from 'components/DrawerHeader'

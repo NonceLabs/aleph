@@ -11,7 +11,7 @@ import { EmojiLookUp, InfoEmpty } from 'iconoir-react-native'
 import AddFeedButton from 'components/AddFeedButton'
 import EntryList from 'components/EntryList'
 import useFeeds from 'hooks/useFeeds'
-import { createEntries, resubFeed, subFeed, unsubFeed } from 'lib/db'
+import { createEntries, resubFeed, subFeed } from 'lib/db'
 import useEntryFlow from 'hooks/useEntryFlow'
 import { MAIN_COLOR } from 'lib/constants'
 

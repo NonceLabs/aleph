@@ -1,3 +1,4 @@
+import * as Updates from 'expo-updates'
 import 'react-native-url-polyfill/auto'
 import FontAwesome from '@expo/vector-icons/FontAwesome'
 import {

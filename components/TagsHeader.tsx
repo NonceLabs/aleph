@@ -1,7 +1,7 @@
 import useTheme from 'hooks/useTheme'
 import { FeedListType, Tag } from 'types'
 import { BlurView } from 'expo-blur'
-import { Animated, FlatList, Pressable, ScrollView } from 'react-native'
+import { Animated, FlatList, Pressable } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Button, Text, XStack } from 'tamagui'
 import { ArrowRightCircle } from 'iconoir-react-native'
@@ -38,10 +38,6 @@ export default function TagsHeader({
       setSelectedTag(tag)
       setLocalTag(tag)
     }
-    // setTimeout(() => {
-    //   const idx = tags.findIndex((t) => t.title === tag.title)
-    //   listRef.current?.scrollToIndex({ index: idx, animated: true })
-    // }, 1000)
   }
 
   const sorted = useMemo(() => {
