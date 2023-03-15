@@ -1,14 +1,11 @@
-// parseJsonFeed.js
-
 // specs: https://www.jsonfeed.org/version/1.1/
 
-import { isArray } from 'bellajs'
+import { toISODateString, buildDescription, getEntryId } from './normalizer'
 
-import { toISODateString, buildDescription, getEntryId } from './normalizer.js'
+import { purify as purifyUrl } from './linker'
+import { ReaderOptions } from 'types'
 
-import { purify as purifyUrl } from './linker.js'
-
-const transform = (item, options) => {
+const transform = (item: any, options: ReaderOptions) => {
   const { useISODateFormat, descriptionMaxLen, getExtraEntryFields } = options
 
   const {
@@ -22,7 +19,7 @@ const transform = (item, options) => {
   } = item
 
   const published = useISODateFormat ? toISODateString(pubDate) : pubDate
-  const extraFields = getExtraEntryFields(item)
+  const extraFields = getExtraEntryFields ? getExtraEntryFields(item) : {}
 
   const entry = {
     id: getEntryId(id, link, pubDate),
@@ -41,7 +38,7 @@ const transform = (item, options) => {
   }
 }
 
-const parseJson = (data, options) => {
+const parseJson = (data: any, options: ReaderOptions) => {
   const { normalization, getExtraFeedFields } = options
 
   if (!normalization) {
@@ -56,9 +53,9 @@ const parseJson = (data, options) => {
     items: item = [],
   } = data
 
-  const extraFields = getExtraFeedFields(data)
+  const extraFields = getExtraFeedFields ? getExtraFeedFields(data) : {}
 
-  const items = isArray(item) ? item : [item]
+  const items = Array.isArray(item) ? item : [item]
 
   return {
     title,
@@ -74,6 +71,6 @@ const parseJson = (data, options) => {
   }
 }
 
-export default (data, options = {}) => {
+export default (data: any, options = {}) => {
   return parseJson(data, options)
 }

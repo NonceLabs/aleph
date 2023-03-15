@@ -1,10 +1,10 @@
-import { isValid as isValidUrl } from './utils/linker.js'
-import retrieve from './utils/retrieve.js'
-import { validate, xml2obj, isRSS, isAtom } from './utils/xmlparser.js'
-import parseJsonFeed from './utils/parseJsonFeed.js'
-import parseRssFeed from './utils/parseRssFeed.js'
-import parseAtomFeed from './utils/parseAtomFeed.js'
-import { FetchOptions, ReaderOptions } from '../types'
+import { isValid as isValidUrl } from './utils/linker'
+import retrieve from './utils/retrieve'
+import { validate, xml2obj, isRSS, isAtom } from './utils/xmlparser'
+import parseJsonFeed from './utils/parseJsonFeed'
+import parseRssFeed from './utils/parseRssFeed'
+import parseAtomFeed from './utils/parseAtomFeed'
+import { FetchOptions, ReaderOptions } from 'types'
 
 const getopt = (options: ReaderOptions = {}) => {
   const {
@@ -36,7 +36,6 @@ export const extractFromXml = (xml: string | undefined, options = {}) => {
   }
   const opts = getopt(options)
   const data = xml2obj(xml, opts.xmlParserOptions)
-  console.log(isRSS(data) ? 'RSS' : isAtom(data) ? 'Atom' : 'Unknown')
 
   return isRSS(data)
     ? parseRssFeed(data, opts)
@@ -55,8 +54,6 @@ export const extract = async (url: string, options = {}, fetchOptions = {}) => {
   }
 
   const { type, json, text } = data
-
-  console.log('url', url)
 
   return type === 'json'
     ? extractFromJson(json, options)

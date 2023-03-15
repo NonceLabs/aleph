@@ -82,7 +82,7 @@ const blacklistKeys = [
   'pk_campaign',
 ]
 
-export const purify = (url) => {
+export const purify = (url: string) => {
   try {
     const pureUrl = new URL(url)
     blacklistKeys.forEach((key) => {
@@ -91,6 +91,6 @@ export const purify = (url) => {
 
     return pureUrl.toString().replace(pureUrl.hash, '')
   } catch (err) {
-    return null
+    return ''
   }
 }

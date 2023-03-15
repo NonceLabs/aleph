@@ -3,7 +3,8 @@
 // specs: https://datatracker.ietf.org/doc/html/rfc5023
 // refer: https://validator.w3.org/feed/docs/atom.html
 
-import { isArray, hasProperty } from 'bellajs'
+import { has, isArray } from 'lodash'
+import { ReaderOptions } from 'types'
 
 import {
   getText,
@@ -11,9 +12,9 @@ import {
   buildDescription,
   getPureUrl,
   getEntryId,
-} from './normalizer.js'
+} from './normalizer'
 
-const transform = (item, options) => {
+const transform = (item: any, options: ReaderOptions) => {
   const { useISODateFormat, descriptionMaxLen, getExtraEntryFields } = options
 
   const {
@@ -38,7 +39,7 @@ const transform = (item, options) => {
     description: buildDescription(htmlContent || summary, descriptionMaxLen),
   }
 
-  const extraFields = getExtraEntryFields(item)
+  const extraFields = getExtraEntryFields ? getExtraEntryFields(item) : {}
 
   return {
     ...entry,
@@ -46,7 +47,7 @@ const transform = (item, options) => {
   }
 }
 
-const flatten = (feed) => {
+const flatten = (feed: any) => {
   const { id, title = '', link = '', entry } = feed
 
   const entries = isArray(entry) ? entry : [entry]
@@ -57,10 +58,10 @@ const flatten = (feed) => {
       title: getText(title),
       link: getPureUrl(link, id),
     }
-    if (hasProperty(item, 'summary')) {
+    if (has(item, 'summary')) {
       item.summary = getText(summary)
     }
-    if (hasProperty(item, 'content')) {
+    if (has(item, 'content')) {
       item.content = getText(content)
     }
     return item
@@ -75,7 +76,7 @@ const flatten = (feed) => {
   return output
 }
 
-function getFavicon(feed, link) {
+function getFavicon(feed: any, link: string) {
   const linkUrl = new URL(link)
   let faviconUrl = new URL('/favicon.ico', linkUrl.origin)
 
@@ -86,7 +87,7 @@ function getFavicon(feed, link) {
   return faviconUrl.href
 }
 
-const parseAtom = (data, options = {}) => {
+const parseAtom = (data: any, options: ReaderOptions = {}) => {
   const { normalization, getExtraFeedFields } = options
 
   if (!normalization) {
@@ -104,7 +105,7 @@ const parseAtom = (data, options = {}) => {
     entry: item = [],
   } = data.feed
 
-  const extraFields = getExtraFeedFields(data.feed)
+  const extraFields = getExtraFeedFields ? getExtraFeedFields(data.feed) : {}
 
   const items = isArray(item) ? item : [item]
 
@@ -128,6 +129,6 @@ const parseAtom = (data, options = {}) => {
   }
 }
 
-export default (data, options = {}) => {
+export default (data: any, options = {}) => {
   return parseAtom(data, options)
 }

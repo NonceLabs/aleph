@@ -1,19 +1,17 @@
-// utils / xmlparser
-
-import { hasProperty, isString } from 'bellajs'
+import { has, isString } from 'lodash'
 
 import { XMLValidator, XMLParser } from 'fast-xml-parser'
 
-export const isRSS = (data = {}) => {
-  return hasProperty(data, 'rss') && hasProperty(data.rss, 'channel')
+export const isRSS = (data: any = {}) => {
+  return has(data, 'rss') && has(data.rss, 'channel')
 }
 
-export const isAtom = (data = {}) => {
-  return hasProperty(data, 'feed') && hasProperty(data.feed, 'entry')
+export const isAtom = (data: any = {}) => {
+  return has(data, 'feed') && has(data.feed, 'entry')
 }
 
-export const validate = (xml) => {
-  return !isString(xml) || !xml.length
+export const validate = (xml: string | undefined) => {
+  return !xml || !isString(xml) || !xml.length
     ? false
     : XMLValidator.validate(xml) === true
 }

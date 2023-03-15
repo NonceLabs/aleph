@@ -1,4 +1,6 @@
-const profetch = async (url, proxy = {}) => {
+import { FetchOptions, ProxyConfig } from 'types'
+
+const profetch = async (url: string, proxy: ProxyConfig = {}) => {
   const { target, headers = {} } = proxy
   const res = await fetch(target + encodeURIComponent(url), {
     headers,
@@ -6,7 +8,7 @@ const profetch = async (url, proxy = {}) => {
   return res
 }
 
-export default async (url, options = {}) => {
+export default async (url: string, options: FetchOptions = {}) => {
   const {
     headers = {
       'user-agent':
@@ -21,7 +23,7 @@ export default async (url, options = {}) => {
   if (status >= 400) {
     throw new Error(`Request failed with error code ${status}`)
   }
-  const contentType = res.headers.get('content-type')
+  const contentType = res.headers.get('content-type') || ''
   const text = await res.text()
 
   if (/(\+|\/)(xml|html)/.test(contentType)) {
