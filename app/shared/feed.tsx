@@ -4,7 +4,7 @@ import { extract } from 'lib/parser'
 import { useEffect, useState } from 'react'
 import { Pressable } from 'react-native'
 import { YStack, Text, XStack, Spinner } from 'tamagui'
-import { Feed, FeedData, FeedEntry, FeedListType } from 'types'
+import { Feed, FeedData, FeedEntry, FeedListType, FeedType } from 'types'
 import Favicon from 'components/Favicon'
 import _ from 'lodash'
 import { EmojiLookUp, InfoEmpty } from 'iconoir-react-native'
@@ -19,7 +19,7 @@ export default function FeedProfile() {
   const [data, setData] = useState<FeedData>()
   const [error, setError] = useState()
   const [loading, setLoading] = useState(false)
-  const { url, title, from } = useSearchParams()
+  const { url, title, from, feedType } = useSearchParams()
   const { feeds } = useFeeds()
   const feed = feeds.find((f) => f.url === url)
   const { entries } = useEntryFlow()
@@ -63,6 +63,7 @@ export default function FeedProfile() {
         favicon: fd.favicon || '',
         description: fd.description || '',
         language: fd.language || '',
+        type: (feedType as FeedType) || FeedType.RSS,
       }
 
       if (feed) {

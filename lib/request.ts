@@ -20,7 +20,7 @@ export const post = async (url: string, json: object) => {
     console.log('✅POST - ', url, json)
     return responseJson
   } catch (error) {
-    console.log('❌POST - ', url, json)
+    console.log('❌POST - ', url, json, error)
     throw error
   }
 }

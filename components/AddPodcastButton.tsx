@@ -12,16 +12,16 @@ import {
 } from 'tamagui'
 import { useRouter } from 'expo-router'
 import { MAIN_COLOR } from 'lib/constants'
-import { FeedType } from 'types'
+import { extract } from 'lib/parser'
 
-export default function AddFeedButton({
-  feedType = FeedType.RSS,
+export default function AddPodcastButton({
   trigger,
 }: {
-  feedType?: FeedType
   trigger?: React.ReactNode
 }) {
-  const [url, setUrl] = useState('')
+  const [url, setUrl] = useState(
+    'https://api.vistopia.com.cn/rss/program/11.xml'
+  )
 
   const router = useRouter()
   const { width } = useWindowDimensions()
@@ -66,7 +66,7 @@ export default function AddFeedButton({
               Add Feed
             </Dialog.Title>
             <Dialog.Description size="$2">
-              Paste URL of RSS below.
+              Paste URL of Podcast RSS below.
             </Dialog.Description>
             <Input
               size="$4"
@@ -81,12 +81,16 @@ export default function AddFeedButton({
                 bc={MAIN_COLOR}
                 color="white"
                 style={{ marginTop: 16 }}
-                onPress={() => {
-                  router.push({
-                    pathname: 'shared/feed',
-                    params: { url: encodeURIComponent(url), feedType },
-                  })
-                  setUrl('')
+                onPress={async () => {
+                  try {
+                    const res = await extract(url)
+                    console.log(res)
+                  } catch (error) {}
+                  // router.push({
+                  //   pathname: 'shared/feed',
+                  //   params: { url: encodeURIComponent(url) },
+                  // })
+                  // setUrl('')
                 }}
               >
                 Confirm

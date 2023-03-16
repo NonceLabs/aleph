@@ -1,6 +1,6 @@
 import * as FileSystem from 'expo-file-system'
 import * as SQLite from 'expo-sqlite'
-import { Feed, FeedEntry, PubEvent } from '../types'
+import { Feed, FeedEntry, FeedType, PubEvent } from '../types'
 import dayjs from 'dayjs'
 
 interface SQLiteUpdateOption {
@@ -64,7 +64,7 @@ export async function subFeed(feed: Feed) {
           feed.favicon,
           feed.language,
           0,
-          'RSS',
+          feed.type || FeedType.RSS,
         ]
       )
       onUpdated(tx)
@@ -83,8 +83,7 @@ export async function resubFeed(feed: Feed) {
         [feed.url],
         () => {
           onUpdated(tx)
-        },
-        onError
+        }
       )
     },
     onError,

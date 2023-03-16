@@ -3839,11 +3839,6 @@ base@^0.11.1:
     mixin-deep "^1.2.0"
     pascalcase "^0.1.1"
 
-bellajs@^11.1.2:
-  version "11.1.2"
-  resolved "https://registry.npmjs.org/bellajs/-/bellajs-11.1.2.tgz#1b7d5660bd7f34158349e76b1451461d938f1d50"
-  integrity sha512-2Fy3Km5JKyIy/KunW3oica2gZtkjD2qSqti2Q3xPhHvXXdMbc+32pEMOPG+xrSat0BXVhRjHIx++lzxIPK0GqQ==
-
 better-opn@~3.0.2:
   version "3.0.2"
   resolved "https://registry.npmjs.org/better-opn/-/better-opn-3.0.2.tgz#f96f35deaaf8f34144a4102651babcf00d1d8817"

@@ -109,7 +109,7 @@ export interface Feed {
   language: string
   favicon: string
   deleted?: boolean
-  type?: 'RSS' | 'Podcast'
+  type?: FeedType
 }
 
 export interface Tag {
@@ -137,4 +137,9 @@ export enum PubEvent {
   BOOKMARKS_UPDATE = 'BOOKMARKS_UPDATE',
   TAGS_UPDATE = 'TAGS_UPDATE',
   ENTRIES_UPDATE = 'ENTRIES_UPDATE',
+}
+
+export enum FeedType {
+  RSS = 'RSS',
+  Podcast = 'Podcast',
 }
