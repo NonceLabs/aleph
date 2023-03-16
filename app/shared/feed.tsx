@@ -19,7 +19,7 @@ export default function FeedProfile() {
   const [feedData, setFeedData] = useState<FeedData>()
   const [error, setError] = useState()
   const [loading, setLoading] = useState(false)
-  const { url, title, from, feedType } = useSearchParams()
+  const { url, title, from } = useSearchParams()
   const { feeds } = useFeeds()
   const feed = feeds.find((f) => f.url === url)
   const { entries } = useEntryFlow()
@@ -88,11 +88,13 @@ export default function FeedProfile() {
           </XStack>
         }
         right={
-          <Link
-            href={`shared/feedInfo?url=${encodeURIComponent(url as string)}`}
-          >
-            <InfoEmpty width={24} height={24} color={MAIN_COLOR} />
-          </Link>
+          feedData && (
+            <Link
+              href={`shared/feedInfo?url=${encodeURIComponent(url as string)}`}
+            >
+              <InfoEmpty width={24} height={24} color={MAIN_COLOR} />
+            </Link>
+          )
         }
       />
       <YStack flex={1}>

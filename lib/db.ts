@@ -139,6 +139,7 @@ export async function markAllRead() {
   db.transaction(
     (tx) => {
       tx.executeSql('UPDATE entries SET read = 1', [])
+      onUpdated(tx)
     },
     onError,
     function onSuccess() {}

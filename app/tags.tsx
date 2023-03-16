@@ -63,7 +63,9 @@ export default function TagsPage() {
         renderItem={({ item }) => {
           return (
             <Link
-              href={`shared/entryByTag?tag=${encodeURIComponent(item.title)}`}
+              href={`shared/entryByTag?tag=${encodeURIComponent(
+                item.title
+              )}&from=tags`}
             >
               <XStack
                 ai="center"

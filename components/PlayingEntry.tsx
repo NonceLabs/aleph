@@ -10,36 +10,52 @@ const AnimetedImage = Animated.createAnimatedComponent(ImageBackground)
 
 export default function PlayingEntry({
   playing,
+  animate = false,
   isPlaying,
   size = 80,
+  withControl = true,
+  onPress,
 }: {
   playing: FeedEntry
   isPlaying: boolean
+  animate?: boolean
   size?: number
+  withControl?: boolean
+  onPress?: () => void
 }) {
   const dispatch = useAppDispatch()
   const spinValue = useRef(new Animated.Value(0)).current
+  const anim = useRef(
+    Animated.loop(
+      Animated.timing(spinValue, {
+        toValue: 1,
+        duration: 5000,
+        easing: Easing.linear,
+        useNativeDriver: true,
+      })
+    )
+  ).current
 
   useEffect(() => {
-    if (isPlaying) {
-      Animated.loop(
-        Animated.timing(spinValue, {
-          toValue: 1,
-          duration: 5000,
-          easing: Easing.linear,
-          useNativeDriver: true,
-        })
-      ).start()
+    if (isPlaying && animate) {
+      anim.start()
+    } else if (!isPlaying) {
+      anim.reset()
+      // anim.stop()
     }
-  }, [isPlaying, spinValue])
+  }, [isPlaying, anim, animate])
 
   return (
     <Pressable
       onPress={() => {
-        dispatch({
-          type: 'feed/play',
-          payload: playing,
-        })
+        if (onPress) {
+          onPress()
+        } else {
+          dispatch({
+            type: 'feed/play',
+            payload: playing,
+          })
+        }
       }}
     >
       <AnimetedImage
@@ -62,21 +78,23 @@ export default function PlayingEntry({
         }}
         borderRadius={size / 2}
       >
-        <XStack
-          bc={MAIN_COLOR}
-          w={50}
-          h={50}
-          ai="center"
-          jc="center"
-          br={25}
-          o={0.7}
-        >
-          {isPlaying ? (
-            <Pause width={28} height={28} color="white" />
-          ) : (
-            <Play width={28} height={28} color="white" />
-          )}
-        </XStack>
+        {withControl && (
+          <XStack
+            bc={MAIN_COLOR}
+            w={50}
+            h={50}
+            ai="center"
+            jc="center"
+            br={25}
+            o={0.7}
+          >
+            {isPlaying ? (
+              <Pause width={28} height={28} color="white" />
+            ) : (
+              <Play width={28} height={28} color="white" />
+            )}
+          </XStack>
+        )}
       </AnimetedImage>
     </Pressable>
   )

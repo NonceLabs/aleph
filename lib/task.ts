@@ -14,7 +14,7 @@ const DAYS_LIMIT = {
 }
 
 export async function extract(url: string): Promise<FeedData> {
-  return await fetcher(`${HOST}/extract?url=${url}`)
+  return await fetcher(`${HOST}/extract?url=${encodeURIComponent(url)}`)
 }
 
 export async function fetchFeedFlow(feeds: Feed[]) {

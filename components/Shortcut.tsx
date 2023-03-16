@@ -1,5 +1,6 @@
 import { DoubleCheck, ViewGrid } from 'iconoir-react-native'
 import { MAIN_COLOR } from 'lib/constants'
+import { markAllRead } from 'lib/db'
 import { useState } from 'react'
 import { Pressable } from 'react-native'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
@@ -63,6 +64,7 @@ export default function Shortcut() {
                 dispatch({
                   type: 'feed/markAllAsRead',
                 })
+                markAllRead()
               }}
             >
               <DoubleCheck width={16} height={16} color="white" />

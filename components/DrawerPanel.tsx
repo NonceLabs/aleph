@@ -11,6 +11,7 @@ import {
   Pause,
   Planet,
   Play,
+  Playlist,
   RssFeedTag,
   Settings,
 } from 'iconoir-react-native'
@@ -62,9 +63,9 @@ export default function DrawerPanel() {
   const theme = useTheme()
   const fontSize = 32
 
-  const { playing, isPlaying } = usePlaylist()
-  const { feeds } = useFeeds()
-  const feed = feeds.find((t) => t.url === playing?.feedUrl)
+  // const { playing, isPlaying } = usePlaylist()
+  // const { feeds } = useFeeds()
+  // const feed = feeds.find((t) => t.url === playing?.feedUrl)
 
   return (
     <YStack
@@ -87,43 +88,47 @@ export default function DrawerPanel() {
           </Text>
         </YStack>
       </XStack>
-      {playing && (
-        <YStack ai="flex-end" jc="flex-end" space={8}>
-          <XStack>
-            <PlayingEntry playing={playing} isPlaying={isPlaying} size={100} />
-          </XStack>
-          {feed && (
-            <XStack ai="center" jc="flex-end" space={8}>
-              <Favicon favicon={feed?.favicon} />
-              <Text
-                color="$color12"
-                fontFamily="Gilroy-Bold"
-                fontWeight="bold"
-                fontSize={14}
-                numberOfLines={1}
-                ta="right"
-              >
-                {feed?.title}
-              </Text>
-            </XStack>
-          )}
+      {/* {playing && (
+        <XStack space={8} w="100%" ai="center" jc="flex-end">
+          <YStack ai="flex-end" jc="flex-end" space={8} pt={10}>
+            <Link href={`shared/reader?id=${encodeURIComponent(playing.id)}`}>
+              <YStack ai="flex-end" jc="flex-end" space={4}>
+                {feed && (
+                  <XStack ai="center" jc="flex-end" space={8}>
+                    <Favicon favicon={feed?.favicon} />
+                    <Text
+                      color="$color12"
+                      fontFamily="Gilroy-Bold"
+                      fontWeight="bold"
+                      fontSize={14}
+                      numberOfLines={1}
+                      ta="right"
+                    >
+                      {feed?.title}
+                    </Text>
+                  </XStack>
+                )}
+                <Text
+                  fontFamily="Gilroy-Bold"
+                  fontWeight="bold"
+                  fontSize={16}
+                  numberOfLines={1}
+                  color="$color11"
+                  ellipsizeMode="tail"
+                  maxWidth={120}
+                >
+                  {playing.title}
+                </Text>
+              </YStack>
+            </Link>
 
-          <Link href={`shared/reader?id=${encodeURIComponent(playing.id)}`}>
-            <XStack>
-              <Text
-                fontFamily="Gilroy-Bold"
-                fontWeight="bold"
-                fontSize={16}
-                numberOfLines={1}
-                color="$color11"
-                ellipsizeMode="tail"
-              >
-                {playing.title}
-              </Text>
-            </XStack>
-          </Link>
-        </YStack>
-      )}
+            <Link href={`shared/playlist`}>
+              <Playlist width={30} height={30} color={MAIN_COLOR} />
+            </Link>
+          </YStack>
+          <PlayingEntry playing={playing} isPlaying={isPlaying} size={100} />
+        </XStack>
+      )} */}
       <YStack width="100%" space={8} ai="flex-end" pr={8}>
         {routes.map(({ href, title, Icon }) => {
           return (

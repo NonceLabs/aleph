@@ -1,5 +1,5 @@
 import EntryList from 'components/EntryList'
-import { useRouter, useSearchParams } from 'expo-router'
+import { useNavigation, useRouter, useSearchParams } from 'expo-router'
 import useEntryFlow from 'hooks/useEntryFlow'
 import { NavArrowLeft } from 'iconoir-react-native'
 import _ from 'lodash'
@@ -10,11 +10,12 @@ import { XStack, YStack, Text, Input } from 'tamagui'
 
 export default function EntryByTag() {
   const [tag, setTag] = useState('')
-  const { tag: _tag } = useSearchParams()
+  const { tag: _tag, from } = useSearchParams()
   const insets = useSafeAreaInsets()
   const router = useRouter()
   const { entries: _entries } = useEntryFlow()
   const entries = _entries.filter((t) => t.tags?.includes(tag))
+  const navigation = useNavigation()
 
   useEffect(() => {
     if (typeof _tag === 'string') {
@@ -22,10 +23,19 @@ export default function EntryByTag() {
     }
   }, [_tag])
 
+  const onBack = () => {
+    if (from) {
+      // @ts-ignore
+      navigation.jumpTo(from)
+    } else {
+      router.back()
+    }
+  }
+
   return (
     <YStack flex={1}>
       <XStack pt={insets.top} space={4} ai="center" pr={16}>
-        <Pressable onPress={() => router.back()}>
+        <Pressable onPress={onBack}>
           <XStack alignItems="center">
             <NavArrowLeft width={32} height={32} />
           </XStack>

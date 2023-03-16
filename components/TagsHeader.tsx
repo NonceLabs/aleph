@@ -7,6 +7,8 @@ import { Button, Text, XStack } from 'tamagui'
 import { ArrowRightCircle } from 'iconoir-react-native'
 import { useRouter } from 'expo-router'
 import { useMemo, useRef, useState } from 'react'
+import PlayingEntry from './PlayingEntry'
+import usePlaylist from 'hooks/usePlaylist'
 
 const AnimatedBlurView = Animated.createAnimatedComponent(BlurView)
 
@@ -29,6 +31,7 @@ export default function TagsHeader({
   const router = useRouter()
   const headerHeight = 38
   const [localTag, setLocalTag] = useState(selectedTag)
+  const { isPlaying, playing } = usePlaylist()
 
   const onSelectTag = (tag: Tag) => {
     if (tag.title === localTag?.title) {
@@ -136,6 +139,19 @@ export default function TagsHeader({
                 <Pressable onPress={() => router.push('tags')}>
                   <ArrowRightCircle width={32} height={32} />
                 </Pressable>
+              </XStack>
+            ) : null
+          }
+          ListHeaderComponent={
+            playing ? (
+              <XStack mx={8}>
+                <PlayingEntry
+                  playing={playing}
+                  isPlaying={isPlaying}
+                  size={40}
+                  animate
+                  withControl={false}
+                />
               </XStack>
             ) : null
           }

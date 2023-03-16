@@ -21,7 +21,7 @@ import useFeeds from 'hooks/useFeeds'
 import { FeedListType } from 'types'
 
 export default function Reader() {
-  const { id, feedUrl, type } = useSearchParams()
+  const { id, type } = useSearchParams()
   const { entry, onUpdateEntry, onToggleBookmark } = useEntry(id as string)
   const { feeds } = useFeeds()
   const fontSize = useAppSelector((state) => state.setting?.reader?.fontSize)
@@ -30,7 +30,7 @@ export default function Reader() {
   )
   const insets = useSafeAreaInsets()
   const { width } = useWindowDimensions()
-  const feed = feeds.find((t) => t.url === feedUrl)
+  const feed = feeds.find((t) => t.url === entry?.feedUrl)
 
   const theme = useTheme()
 
