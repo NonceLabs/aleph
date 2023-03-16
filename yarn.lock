@@ -5069,6 +5069,11 @@ expo-asset@~8.9.1:
     path-browserify "^1.0.0"
     url-parse "^1.5.9"
 
+expo-av@~13.2.1:
+  version "13.2.1"
+  resolved "https://registry.npmjs.org/expo-av/-/expo-av-13.2.1.tgz#ce502a4c5d4a57962fd9f5f1a40c76c39c88f5ee"
+  integrity sha512-mC0mYSzaOaZgXjzhW2l4Ag325JjH6q5IbptfwD7gkMOFYy7VPOMxEMUnetadbs3DDzmgE6vUWrTjUIUbwq59qg==
+
 expo-background-fetch@~11.1.1:
   version "11.1.1"
   resolved "https://registry.npmjs.org/expo-background-fetch/-/expo-background-fetch-11.1.1.tgz#7cf88d7cd3d9dca9be4262f3489d79e370e9f970"

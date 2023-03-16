@@ -1,12 +1,19 @@
 import { BlurView } from 'expo-blur'
 import { useNavigation } from 'expo-router'
 import useTheme from 'hooks/useTheme'
-import { BookmarkEmpty, NavArrowLeft } from 'iconoir-react-native'
+import {
+  BookmarkEmpty,
+  NavArrowLeft,
+  Pause,
+  Play,
+  PlaylistAdd,
+} from 'iconoir-react-native'
 import { MAIN_COLOR } from 'lib/constants'
 import { Pressable } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { XStack } from 'tamagui'
-import { FeedEntry, FeedListType } from 'types'
+import { FeedEntry, FeedListType, FeedType } from 'types'
 import ReaderSettings from './ReaderSettings'
 import Summarize from './Summarize'
 
@@ -24,6 +31,8 @@ export default function ReaderToolbar({
   const theme = useTheme()
   const insets = useSafeAreaInsets()
   const navigation = useNavigation()
+  const dispatch = useAppDispatch()
+  const { isPlaying, playing } = useAppSelector((state) => state.feed)
   const isBookmarked = entry?.bookmarked
   const onBack = () => {
     let pathname = 'index'
@@ -42,6 +51,21 @@ export default function ReaderToolbar({
       onToggleBookmark({ ...entry, bookmarked: !isBookmarked })
     }
   }
+
+  const onAddToList = () => {
+    dispatch({
+      type: 'feed/addToList',
+      payload: entry,
+    })
+  }
+
+  const onPlay = () => {
+    dispatch({
+      type: 'feed/play',
+      payload: entry,
+    })
+  }
+
   return (
     <BlurView
       intensity={80}
@@ -59,8 +83,25 @@ export default function ReaderToolbar({
           <NavArrowLeft width={28} height={28} />
         </Pressable>
         <XStack space={24}>
-          <Summarize entry={entry} />
-          <ReaderSettings />
+          {entry?.entryType === FeedType.RSS && <Summarize entry={entry} />}
+          {entry?.entryType === FeedType.RSS && <ReaderSettings />}
+          {entry?.entryType === FeedType.Podcast && (
+            <Pressable onPress={onPlay}>
+              {isPlaying && entry.id === playing?.id ? (
+                <Pause width={24} height={24} color="gray" />
+              ) : (
+                <Play width={24} height={24} color="gray" />
+              )}
+            </Pressable>
+          )}
+          {entry?.entryType === FeedType.Podcast &&
+            entry.id !== playing?.id &&
+            !isPlaying && (
+              <Pressable onPress={onAddToList}>
+                <PlaylistAdd width={24} height={24} color="gray" />
+              </Pressable>
+            )}
+
           <Pressable onPress={onBookmark}>
             <BookmarkEmpty
               width={24}

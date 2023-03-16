@@ -6,7 +6,9 @@ import { Pressable, StyleSheet, Image, ImageBackground } from 'react-native'
 import { useRouter } from 'expo-router'
 import Favicon from './Favicon'
 import { MAIN_COLOR } from 'lib/constants'
-import { Play } from 'iconoir-react-native'
+import { Pause, Play } from 'iconoir-react-native'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
+import PlayingEntry from './PlayingEntry'
 
 dayjs.extend(relativeTime)
 
@@ -42,7 +44,7 @@ export default function FeedItem({
           params: {
             id: encodeURIComponent(item.id),
             type,
-            sourceUrl: encodeURIComponent(item.sourceUrl || ''),
+            feedUrl: encodeURIComponent(item.feedUrl || ''),
           },
         })
       }}
@@ -94,6 +96,9 @@ export default function FeedItem({
 }
 
 function Cover({ item, feed }: { item: FeedEntry; feed?: Feed }) {
+  const { playing, isPlaying } = useAppSelector((state) => state.feed)
+  const dispatch = useAppDispatch()
+
   if (item.entryType === FeedType.RSS) {
     return item.cover ? (
       <Image
@@ -107,21 +112,32 @@ function Cover({ item, feed }: { item: FeedEntry; feed?: Feed }) {
   const cover = item.cover || feed?.favicon
 
   return (
-    <Pressable>
-      <ImageBackground
-        source={{ uri: cover }}
-        borderRadius={8}
-        style={{
-          height: 80,
-          width: 80,
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        <XStack bc={MAIN_COLOR} w={50} h={50} ai="center" jc="center" br={25}>
-          <Play width={28} height={28} color="white" />
-        </XStack>
-      </ImageBackground>
+    <Pressable
+      onPress={() => {
+        dispatch({
+          type: 'feed/play',
+          payload: item,
+        })
+      }}
+    >
+      {playing?.id === item.id && isPlaying ? (
+        <PlayingEntry isPlaying={isPlaying} playing={playing} />
+      ) : (
+        <ImageBackground
+          source={{ uri: cover }}
+          borderRadius={8}
+          style={{
+            height: 80,
+            width: 80,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <XStack bc={MAIN_COLOR} w={50} h={50} ai="center" jc="center" br={25}>
+            <Play width={28} height={28} color="white" />
+          </XStack>
+        </ImageBackground>
+      )}
     </Pressable>
   )
 }

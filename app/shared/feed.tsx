@@ -30,7 +30,7 @@ export default function FeedProfile() {
     if (feed && !feed.deleted) {
       setFeedData({
         feed,
-        entries: entries.filter((e) => e.sourceUrl === url),
+        entries: entries.filter((e) => e.feedUrl === url),
       })
     } else if (url) {
       setLoading(true)

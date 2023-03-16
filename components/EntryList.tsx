@@ -191,7 +191,7 @@ export default function EntryList({
         return (
           <EntryItem
             item={item}
-            feed={feeds.find((t) => t.url === item.sourceUrl)}
+            feed={feeds.find((t) => t.url === item.feedUrl)}
             type={type}
           />
         )

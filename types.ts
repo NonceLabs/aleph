@@ -19,10 +19,10 @@ export interface FeedEntry {
   title: string
   description: string
   published: Date
-  sourceUrl: string
+  feedUrl: string
   read?: boolean
   bookmarked?: boolean
-  tags?: string[]
+  tags: string[]
   entryType: FeedType
   media?: string
   cover?: string

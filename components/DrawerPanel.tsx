@@ -1,16 +1,26 @@
+import { BlurView } from 'expo-blur'
 import { Image } from 'expo-image'
 import { Link } from 'expo-router'
+import useFeeds from 'hooks/useFeeds'
+import usePlaylist from 'hooks/usePlaylist'
 import useTheme from 'hooks/useTheme'
 import {
   BookmarkEmpty,
   Home,
   Label,
+  Pause,
   Planet,
+  Play,
   RssFeedTag,
   Settings,
 } from 'iconoir-react-native'
+import { MAIN_COLOR } from 'lib/constants'
+import { useEffect, useRef } from 'react'
+import { Animated, Easing, ImageBackground } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Text, XStack, YStack } from 'tamagui'
+import Favicon from './Favicon'
+import PlayingEntry from './PlayingEntry'
 
 const routes = [
   {
@@ -45,10 +55,17 @@ const routes = [
   // },
 ]
 
+const AnimetedImage = Animated.createAnimatedComponent(ImageBackground)
+
 export default function DrawerPanel() {
   const insets = useSafeAreaInsets()
   const theme = useTheme()
   const fontSize = 32
+
+  const { playing, isPlaying } = usePlaylist()
+  const { feeds } = useFeeds()
+  const feed = feeds.find((t) => t.url === playing?.feedUrl)
+
   return (
     <YStack
       flex={1}
@@ -70,6 +87,43 @@ export default function DrawerPanel() {
           </Text>
         </YStack>
       </XStack>
+      {playing && (
+        <YStack ai="flex-end" jc="flex-end" space={8}>
+          <XStack>
+            <PlayingEntry playing={playing} isPlaying={isPlaying} size={100} />
+          </XStack>
+          {feed && (
+            <XStack ai="center" jc="flex-end" space={8}>
+              <Favicon favicon={feed?.favicon} />
+              <Text
+                color="$color12"
+                fontFamily="Gilroy-Bold"
+                fontWeight="bold"
+                fontSize={14}
+                numberOfLines={1}
+                ta="right"
+              >
+                {feed?.title}
+              </Text>
+            </XStack>
+          )}
+
+          <Link href={`shared/reader?id=${encodeURIComponent(playing.id)}`}>
+            <XStack>
+              <Text
+                fontFamily="Gilroy-Bold"
+                fontWeight="bold"
+                fontSize={16}
+                numberOfLines={1}
+                color="$color11"
+                ellipsizeMode="tail"
+              >
+                {playing.title}
+              </Text>
+            </XStack>
+          </Link>
+        </YStack>
+      )}
       <YStack width="100%" space={8} ai="flex-end" pr={8}>
         {routes.map(({ href, title, Icon }) => {
           return (

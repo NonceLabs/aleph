@@ -40,7 +40,7 @@ export async function initSQLite() {
         entryType INTEGER,
         media TEXT,
         cover TEXT,
-        sourceUrl TEXT,
+        feedUrl TEXT,
         read INTEGER,
         bookmarked INTEGER,
         tags TEXT,
@@ -108,7 +108,7 @@ export async function unsubFeed(feed: Feed) {
     (tx) => {
       tx.executeSql('UPDATE feeds SET deleted = 1 WHERE url = ?', [feed.url])
       tx.executeSql(
-        'DELETE FROM entries WHERE sourceUrl = ? AND bookmarked = 0',
+        'DELETE FROM entries WHERE feedUrl = ? AND bookmarked = 0',
         [feed.url],
         () => {
           onUpdated(tx)
@@ -164,13 +164,13 @@ export async function createEntries(entries: FeedEntry[]) {
     (tx) => {
       for (const entry of entries) {
         tx.executeSql(
-          'INSERT OR IGNORE INTO entries (id, link, title, description, sourceUrl, entryType, media, cover, read, bookmarked, published, tags) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)',
+          'INSERT OR IGNORE INTO entries (id, link, title, description, feedUrl, entryType, media, cover, read, bookmarked, published, tags) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)',
           [
             entry.id,
             entry.link || '',
             entry.title || '',
             entry.description || '',
-            entry.sourceUrl || '',
+            entry.feedUrl || '',
             entry.entryType === FeedType.Podcast ? 1 : 0,
             entry.media || '',
             entry.cover || '',
@@ -214,7 +214,7 @@ function formatEntry(entry: {
   title: string
   link: string
   description: string
-  sourceUrl: string
+  feedUrl: string
   read: number
   bookmarked: number
   published: number

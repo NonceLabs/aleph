@@ -21,7 +21,7 @@ import useFeeds from 'hooks/useFeeds'
 import { FeedListType } from 'types'
 
 export default function Reader() {
-  const { id, sourceUrl, type } = useSearchParams()
+  const { id, feedUrl, type } = useSearchParams()
   const { entry, onUpdateEntry, onToggleBookmark } = useEntry(id as string)
   const { feeds } = useFeeds()
   const fontSize = useAppSelector((state) => state.setting?.reader?.fontSize)
@@ -30,7 +30,7 @@ export default function Reader() {
   )
   const insets = useSafeAreaInsets()
   const { width } = useWindowDimensions()
-  const feed = feeds.find((t) => t.url === sourceUrl)
+  const feed = feeds.find((t) => t.url === feedUrl)
 
   const theme = useTheme()
 
@@ -86,13 +86,12 @@ export default function Reader() {
               {dayjs(entry?.published).format('MMM DD, YYYY')}
             </Text>
           </YStack>
-          {entry?.tags?.length ? (
+          {entry?.tags.length ? (
             <XStack flexWrap="wrap">
-              {entry.tags.map((t, idx) => {
-                const title = typeof t === 'string' ? t : t.title
+              {entry.tags.map((tag: string, idx) => {
                 const isLast = idx + 1 === entry?.tags?.length
                 return (
-                  <Link key={idx} href={`shared/entryByTag?tag=${title}`}>
+                  <Link key={idx} href={`shared/entryByTag?tag=${tag}`}>
                     <XStack mr={2} mb={4}>
                       <Text
                         color="$color11"
@@ -101,7 +100,7 @@ export default function Reader() {
                         bbc="$color11"
                         textDecorationLine="underline"
                       >
-                        {title}
+                        {tag}
                       </Text>
                       {!isLast && <Text>,</Text>}
                     </XStack>

@@ -19,7 +19,10 @@
       "config": {
         "usesNonExemptEncryption": false
       },
-      "bundleIdentifier": "dev.chezhe.aleph"
+      "bundleIdentifier": "dev.chezhe.aleph",
+      "infoPlist": {
+        "UIBackgroundModes": ["audio"]
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -39,6 +42,14 @@
     "runtimeVersion": {
       "policy": "sdkVersion"
     },
+    "plugins": [
+      [
+        "expo-av",
+        {
+          "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone."
+        }
+      ]
+    ],
     "updates": {
       "url": "https://u.expo.dev/39c42834-f3f1-497e-87ab-415a17550054"
     }

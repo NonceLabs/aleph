@@ -15,7 +15,7 @@ export default function SourceItem({
   const router = useRouter()
   const { entries } = useEntryFlow()
   const unreadCount =
-    entries.filter((t) => !t.read && t.sourceUrl === item.url).length || 0
+    entries.filter((t) => !t.read && t.feedUrl === item.url).length || 0
 
   return (
     <Pressable
