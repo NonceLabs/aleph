@@ -121,7 +121,7 @@ function Cover({ item, feed }: { item: FeedEntry; feed?: Feed }) {
       }}
     >
       {playing?.id === item.id && isPlaying ? (
-        <PlayingEntry isPlaying={isPlaying} playing={playing} animate />
+        <PlayingEntry isPlaying={isPlaying} entry={playing} animate />
       ) : (
         <ImageBackground
           source={{ uri: cover }}

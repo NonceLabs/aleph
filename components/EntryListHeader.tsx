@@ -3,6 +3,7 @@ import { Menu } from 'iconoir-react-native'
 import { Pressable } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Input, XStack } from 'tamagui'
+import PlayerPortal from './PlayerPortal'
 import Shortcut from './Shortcut'
 
 export default function EntryListHeader({
@@ -37,7 +38,8 @@ export default function EntryListHeader({
           console.log('end editing', keyword)
         }}
       />
-      <Shortcut />
+      <PlayerPortal />
+      {/* <Shortcut /> */}
     </XStack>
   )
 }

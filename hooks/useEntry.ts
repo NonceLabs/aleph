@@ -4,7 +4,7 @@ import { FeedEntry } from 'types'
 import useBookmarks from './useBookmarks'
 import useEntryFlow from './useEntryFlow'
 
-export default function useEntry(id: string) {
+export default function useEntry(id?: string) {
   const [entry, setEntry] = useState<FeedEntry>()
   const { entries: flowEntries, onUpdateEntries: onUpdateFlowEntries } =
     useEntryFlow()
@@ -33,13 +33,15 @@ export default function useEntry(id: string) {
 
   useEffect(() => {
     setEntry(undefined)
-    const entry = flowEntries.find((t) => t.id === id)
-    if (entry) {
-      setEntry(entry)
-    } else {
-      const entry = bookmarkedEntries.find((t) => t.id === id)
+    if (id) {
+      const entry = flowEntries.find((t) => t.id === id)
       if (entry) {
         setEntry(entry)
+      } else {
+        const entry = bookmarkedEntries.find((t) => t.id === id)
+        if (entry) {
+          setEntry(entry)
+        }
       }
     }
   }, [id, flowEntries, bookmarkedEntries])

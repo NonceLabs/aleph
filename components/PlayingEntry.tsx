@@ -9,14 +9,14 @@ import { FeedEntry } from 'types'
 const AnimetedImage = Animated.createAnimatedComponent(ImageBackground)
 
 export default function PlayingEntry({
-  playing,
+  entry,
   animate = false,
   isPlaying,
   size = 80,
   withControl = true,
   onPress,
 }: {
-  playing: FeedEntry
+  entry: FeedEntry
   isPlaying: boolean
   animate?: boolean
   size?: number
@@ -53,14 +53,14 @@ export default function PlayingEntry({
         } else {
           dispatch({
             type: 'feed/play',
-            payload: playing,
+            payload: entry,
           })
         }
       }}
     >
       <AnimetedImage
         source={{
-          uri: playing.cover,
+          uri: entry.cover,
         }}
         style={{
           width: size,
