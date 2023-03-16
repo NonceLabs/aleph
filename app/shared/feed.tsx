@@ -6,7 +6,7 @@ import { YStack, Text, XStack, Spinner } from 'tamagui'
 import { FeedData, FeedListType } from 'types'
 import Favicon from 'components/Favicon'
 import _ from 'lodash'
-import { EmojiLookUp, InfoEmpty } from 'iconoir-react-native'
+import { EmojiLookUp } from 'iconoir-react-native'
 import AddFeedButton from 'components/AddFeedButton'
 import EntryList from 'components/EntryList'
 import useFeeds from 'hooks/useFeeds'
@@ -14,6 +14,7 @@ import { createEntries, resubFeed, subFeed } from 'lib/db'
 import useEntryFlow from 'hooks/useEntryFlow'
 import { MAIN_COLOR } from 'lib/constants'
 import { extract } from 'lib/task'
+import { Info } from '@tamagui/lucide-icons'
 
 export default function FeedProfile() {
   const [feedData, setFeedData] = useState<FeedData>()
@@ -92,7 +93,7 @@ export default function FeedProfile() {
             <Link
               href={`shared/feedInfo?url=${encodeURIComponent(url as string)}`}
             >
-              <InfoEmpty width={24} height={24} color={MAIN_COLOR} />
+              <Info width={24} height={24} color={MAIN_COLOR} />
             </Link>
           )
         }

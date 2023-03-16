@@ -1,5 +1,4 @@
 import { useRouter } from 'expo-router'
-import { Compass } from 'iconoir-react-native'
 import { Pressable } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Text, useWindowDimensions, XStack } from 'tamagui'
@@ -9,6 +8,7 @@ import { BlurView } from 'expo-blur'
 import useTheme from 'hooks/useTheme'
 import Favicon from './Favicon'
 import { MAIN_COLOR } from 'lib/constants'
+import { Compass } from '@tamagui/lucide-icons'
 
 export default function ReaderHeader({
   feed,
@@ -64,7 +64,7 @@ export default function ReaderHeader({
                 WebBrowser.openBrowserAsync(entry.link || entry?.id)
               }
             >
-              <Compass width={24} height={24} color="gray" />
+              <Compass width={28} height={28} color="$blue10" />
             </Pressable>
           )}
         </XStack>

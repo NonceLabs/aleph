@@ -1,10 +1,9 @@
+import { Menu } from '@tamagui/lucide-icons'
 import { useNavigation } from 'expo-router'
-import { Menu } from 'iconoir-react-native'
 import { Pressable } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Input, XStack } from 'tamagui'
 import PlayerPortal from './PlayerPortal'
-import Shortcut from './Shortcut'
 
 export default function EntryListHeader({
   keyword,
@@ -24,7 +23,7 @@ export default function EntryListHeader({
           navigation.openDrawer()
         }}
       >
-        <Menu width={24} height={24} color="#f0353c" />
+        <Menu width={28} height={28} color="#f0353c" />
       </Pressable>
       <Input
         flex={1}

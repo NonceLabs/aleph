@@ -6,9 +6,9 @@ import { Pressable, StyleSheet, Image, ImageBackground } from 'react-native'
 import { useRouter } from 'expo-router'
 import Favicon from './Favicon'
 import { MAIN_COLOR } from 'lib/constants'
-import { Pause, Play } from 'iconoir-react-native'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import PlayingEntry from './PlayingEntry'
+import { Play } from '@tamagui/lucide-icons'
 
 dayjs.extend(relativeTime)
 

@@ -1,5 +1,4 @@
-import { X } from '@tamagui/lucide-icons'
-import { AddCircle } from 'iconoir-react-native'
+import { PlusCircle, X } from '@tamagui/lucide-icons'
 import { useState } from 'react'
 import { Pressable } from 'react-native'
 import {
@@ -31,7 +30,7 @@ export default function AddFeedButton({
       <Dialog.Trigger asChild>
         {trigger || (
           <Pressable hitSlop={15} style={{ marginRight: 10 }}>
-            <AddCircle width={24} height={24} color={MAIN_COLOR} />
+            <PlusCircle width={28} height={28} color={MAIN_COLOR} />
           </Pressable>
         )}
       </Dialog.Trigger>

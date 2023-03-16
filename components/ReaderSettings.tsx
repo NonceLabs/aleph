@@ -1,4 +1,4 @@
-import { TextAlt } from 'iconoir-react-native'
+import { Type } from '@tamagui/lucide-icons'
 import { useState } from 'react'
 import { Pressable } from 'react-native'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
@@ -11,15 +11,12 @@ export default function ReaderSettings() {
   const fontFamily = useAppSelector(
     (state) => state.setting?.reader?.fontFamily
   )
-  const theme = useAppSelector(
-    (state) => state.setting?.reader?.theme || 'light'
-  )
   const dispatch = useAppDispatch()
 
   return (
     <>
       <Pressable onPress={() => setOpen(true)}>
-        <TextAlt width={24} height={24} color="gray" />
+        <Type width={28} height={28} color="$color11" />
       </Pressable>
       <Sheet
         forceRemoveScrollEnabled={open}

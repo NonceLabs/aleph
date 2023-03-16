@@ -1,7 +1,7 @@
+import { ChevronLeft } from '@tamagui/lucide-icons'
 import EntryList from 'components/EntryList'
 import { useNavigation, useRouter, useSearchParams } from 'expo-router'
 import useEntryFlow from 'hooks/useEntryFlow'
-import { NavArrowLeft } from 'iconoir-react-native'
 import _ from 'lodash'
 import { useEffect, useState } from 'react'
 import { Pressable } from 'react-native'
@@ -37,7 +37,7 @@ export default function EntryByTag() {
       <XStack pt={insets.top} space={4} ai="center" pr={16}>
         <Pressable onPress={onBack}>
           <XStack alignItems="center">
-            <NavArrowLeft width={32} height={32} />
+            <ChevronLeft width={32} height={32} color="$blue10" />
           </XStack>
         </Pressable>
         <XStack ai="center" flex={1}>

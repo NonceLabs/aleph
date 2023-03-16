@@ -1,5 +1,5 @@
+import { ChevronLeft } from '@tamagui/lucide-icons'
 import { useRouter } from 'expo-router'
-import { NavArrowLeft } from 'iconoir-react-native'
 import React from 'react'
 import { Pressable, StyleSheet } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -22,7 +22,7 @@ export default function Header({
   const left = back ? (
     <Pressable onPress={() => router.back()}>
       <XStack alignItems="center">
-        <NavArrowLeft width={32} height={32} />
+        <ChevronLeft width={32} height={32} />
         <Text fontSize={20} color="$color12">
           {title}
         </Text>

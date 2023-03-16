@@ -4,10 +4,9 @@ import { BlurView } from 'expo-blur'
 import { Animated, FlatList, Pressable } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Button, Text, XStack } from 'tamagui'
-import { ArrowRightCircle } from 'iconoir-react-native'
 import { useRouter } from 'expo-router'
 import { useMemo, useRef, useState } from 'react'
-import usePlaylist from 'hooks/usePlaylist'
+import { ArrowRightCircle } from '@tamagui/lucide-icons'
 
 const AnimatedBlurView = Animated.createAnimatedComponent(BlurView)
 
@@ -111,7 +110,7 @@ export default function TagsHeader({
                 }
                 onPress={() => onSelectTag(item)}
                 themeInverse={active}
-                bc={active ? '#f0353c' : '$blue3'}
+                bc={active ? '#f0353c' : '$blue5'}
               >
                 <Text
                   fontSize={16}
@@ -135,7 +134,7 @@ export default function TagsHeader({
             type === 'flow' && tags.length > 3 ? (
               <XStack ai="center" jc="center" pt={4} ml={8} mr={16}>
                 <Pressable onPress={() => router.push('tags')}>
-                  <ArrowRightCircle width={32} height={32} />
+                  <ArrowRightCircle width={32} height={32} color="$color11" />
                 </Pressable>
               </XStack>
             ) : null

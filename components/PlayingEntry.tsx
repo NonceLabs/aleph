@@ -1,4 +1,4 @@
-import { Pause, Play } from 'iconoir-react-native'
+import { Pause, Play } from '@tamagui/lucide-icons'
 import { MAIN_COLOR } from 'lib/constants'
 import { useEffect, useRef } from 'react'
 import { Animated, Easing, ImageBackground, Pressable } from 'react-native'

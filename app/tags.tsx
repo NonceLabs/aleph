@@ -1,8 +1,8 @@
 import { FlashList } from '@shopify/flash-list'
+import { ChevronRight } from '@tamagui/lucide-icons'
 import DrawerHeader from 'components/DrawerHeader'
 import { Link } from 'expo-router'
 import useEntryFlow from 'hooks/useEntryFlow'
-import { NavArrowRight } from 'iconoir-react-native'
 import { PAGE_SIZE } from 'lib/constants'
 import { useMemo, useState } from 'react'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -80,7 +80,7 @@ export default function TagsPage() {
                 </Text>
                 <XStack ai="center">
                   <Text color="$color11">{item.count}</Text>
-                  <NavArrowRight width={28} height={28} color="gray" />
+                  <ChevronRight width={28} height={28} color="$color11" />
                 </XStack>
               </XStack>
             </Link>

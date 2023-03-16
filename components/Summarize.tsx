@@ -1,18 +1,10 @@
 import { Flower } from 'iconoir-react-native'
-import { HOST } from 'lib/constants'
+import { HOST, MAIN_COLOR } from 'lib/constants'
 import { post } from 'lib/request'
 import { useState } from 'react'
 import { Pressable } from 'react-native'
 import { useAppSelector } from 'store/hooks'
-import {
-  Text,
-  Sheet,
-  YStack,
-  Spinner,
-  ScrollView,
-  XStack,
-  Button,
-} from 'tamagui'
+import { Text, Sheet, YStack, Spinner, ScrollView } from 'tamagui'
 import { FeedEntry } from 'types'
 
 export default function Summarize({ entry }: { entry?: FeedEntry }) {
@@ -61,7 +53,7 @@ export default function Summarize({ entry }: { entry?: FeedEntry }) {
   return (
     <>
       <Pressable onPress={() => onOpenChange(true)}>
-        <Flower width={24} height={24} color="gray" />
+        <Flower width={28} height={28} color={MAIN_COLOR} />
       </Pressable>
       <Sheet
         forceRemoveScrollEnabled={open}

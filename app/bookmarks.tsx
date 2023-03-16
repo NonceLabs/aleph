@@ -2,13 +2,10 @@ import DrawerHeader from 'components/DrawerHeader'
 import EntryList from 'components/EntryList'
 import { useNavigation } from 'expo-router'
 import useBookmarks from 'hooks/useBookmarks'
-import { Menu } from 'iconoir-react-native'
-import { MAIN_COLOR } from 'lib/constants'
 import { getBookmarkedEntries } from 'lib/db'
 import { useEffect } from 'react'
-import { Pressable } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { XStack, YStack, Text } from 'tamagui'
+import { YStack } from 'tamagui'
 
 export default function Bookmarks() {
   const insets = useSafeAreaInsets()
