@@ -5,10 +5,9 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 import { Pressable, StyleSheet, Image, ImageBackground } from 'react-native'
 import { useRouter } from 'expo-router'
 import Favicon from './Favicon'
-import { MAIN_COLOR } from 'lib/constants'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import PlayingEntry from './PlayingEntry'
-import { Play } from '@tamagui/lucide-icons'
+import { PlayCircle } from '@tamagui/lucide-icons'
 
 dayjs.extend(relativeTime)
 
@@ -133,9 +132,7 @@ function Cover({ item, feed }: { item: FeedEntry; feed?: Feed }) {
             justifyContent: 'center',
           }}
         >
-          <XStack bc={MAIN_COLOR} w={50} h={50} ai="center" jc="center" br={25}>
-            <Play width={28} height={28} color="white" />
-          </XStack>
+          <PlayCircle size={32} color="white" />
         </ImageBackground>
       )}
     </Pressable>

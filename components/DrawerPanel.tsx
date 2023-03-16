@@ -1,6 +1,6 @@
 import { BlurView } from 'expo-blur'
 import { Image } from 'expo-image'
-import { Link } from 'expo-router'
+import { Link, useNavigation } from 'expo-router'
 import useFeeds from 'hooks/useFeeds'
 import usePlaylist from 'hooks/usePlaylist'
 import useTheme from 'hooks/useTheme'
@@ -19,7 +19,9 @@ import { MAIN_COLOR } from 'lib/constants'
 import { useEffect, useRef } from 'react'
 import { Animated, Easing, ImageBackground } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { useAppSelector } from 'store/hooks'
 import { Text, XStack, YStack } from 'tamagui'
+import { PubEvent } from 'types'
 import Favicon from './Favicon'
 import PlayingEntry from './PlayingEntry'
 
@@ -56,16 +58,18 @@ const routes = [
   // },
 ]
 
-const AnimetedImage = Animated.createAnimatedComponent(ImageBackground)
-
 export default function DrawerPanel() {
   const insets = useSafeAreaInsets()
   const theme = useTheme()
   const fontSize = 32
 
-  // const { playing, isPlaying } = usePlaylist()
-  // const { feeds } = useFeeds()
-  // const feed = feeds.find((t) => t.url === playing?.feedUrl)
+  const { playing } = useAppSelector((state) => state.feed)
+  const { feeds } = useFeeds()
+  const feed = feeds.find((t) => t.url === playing?.feedUrl)
+
+  const onPlayInfo = () => {
+    PubSub.publish(PubEvent.ON_PODCAST_PORTAL)
+  }
 
   return (
     <YStack
@@ -88,47 +92,45 @@ export default function DrawerPanel() {
           </Text>
         </YStack>
       </XStack>
-      {/* {playing && (
-        <XStack space={8} w="100%" ai="center" jc="flex-end">
-          <YStack ai="flex-end" jc="flex-end" space={8} pt={10}>
-            <Link href={`shared/reader?id=${encodeURIComponent(playing.id)}`}>
-              <YStack ai="flex-end" jc="flex-end" space={4}>
-                {feed && (
-                  <XStack ai="center" jc="flex-end" space={8}>
-                    <Favicon favicon={feed?.favicon} />
-                    <Text
-                      color="$color12"
-                      fontFamily="Gilroy-Bold"
-                      fontWeight="bold"
-                      fontSize={14}
-                      numberOfLines={1}
-                      ta="right"
-                    >
-                      {feed?.title}
-                    </Text>
-                  </XStack>
-                )}
-                <Text
-                  fontFamily="Gilroy-Bold"
-                  fontWeight="bold"
-                  fontSize={16}
-                  numberOfLines={1}
-                  color="$color11"
-                  ellipsizeMode="tail"
-                  maxWidth={120}
-                >
-                  {playing.title}
-                </Text>
-              </YStack>
-            </Link>
-
-            <Link href={`shared/playlist`}>
-              <Playlist width={30} height={30} color={MAIN_COLOR} />
-            </Link>
-          </YStack>
-          <PlayingEntry playing={playing} isPlaying={isPlaying} size={100} />
-        </XStack>
-      )} */}
+      {playing && (
+        <Link href="/" onPress={onPlayInfo}>
+          <XStack space={8} w={234} ai="center" jc="flex-end" pr={8}>
+            <YStack flex={1} ai="flex-end" jc="flex-end" space={8}>
+              {feed && (
+                <XStack ai="center" jc="flex-end" space={8}>
+                  <Favicon favicon={feed?.favicon} />
+                  <Text
+                    color="$color12"
+                    fontFamily="Gilroy-Bold"
+                    fontWeight="bold"
+                    fontSize={14}
+                    numberOfLines={1}
+                    ta="right"
+                  >
+                    {feed?.title}
+                  </Text>
+                </XStack>
+              )}
+              <Text
+                fontFamily="Gilroy-Bold"
+                fontWeight="bold"
+                fontSize={16}
+                numberOfLines={1}
+                color="$color11"
+                ellipsizeMode="tail"
+              >
+                {playing.title}
+              </Text>
+            </YStack>
+            {playing.cover && (
+              <Image
+                source={{ uri: playing.cover }}
+                style={{ width: 60, height: 60, borderRadius: 8 }}
+              />
+            )}
+          </XStack>
+        </Link>
+      )}
       <YStack width="100%" space={8} ai="flex-end" pr={8}>
         {routes.map(({ href, title, Icon }) => {
           return (

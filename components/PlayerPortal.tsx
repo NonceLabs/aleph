@@ -1,7 +1,7 @@
 import { Image } from 'expo-image'
 import usePlaylist from 'hooks/usePlaylist'
 import { MAIN_COLOR } from 'lib/constants'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Pressable, StyleSheet, View } from 'react-native'
 import { XStack, Text, Sheet, YStack, Slider } from 'tamagui'
 import PlayingEntry from './PlayingEntry'
@@ -21,6 +21,7 @@ import {
   PlayCircle,
 } from '@tamagui/lucide-icons'
 import { useAppDispatch } from 'store/hooks'
+import { PubEvent } from 'types'
 
 export default function PlayerPortal() {
   const [position, setPosition] = useState(0)
@@ -31,6 +32,16 @@ export default function PlayerPortal() {
   const { entry, onToggleBookmark } = useEntry(playing?.id)
   const feed = useFeed(playing?.feedUrl)
   const iconSize = 32
+
+  useEffect(() => {
+    const listener = PubSub.subscribe(PubEvent.ON_PODCAST_PORTAL, () => {
+      setOpen(true)
+    })
+
+    return () => {
+      listener && PubSub.unsubscribe(listener)
+    }
+  }, [])
 
   if (!entry) {
     return null
