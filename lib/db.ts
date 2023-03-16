@@ -7,9 +7,7 @@ interface SQLiteUpdateOption {
   isUpdate?: boolean
 }
 
-async function openDatabase(
-  pathToDatabaseFile: string
-): Promise<SQLite.WebSQLDatabase> {
+async function openDatabase(): Promise<SQLite.WebSQLDatabase> {
   if (
     !(await FileSystem.getInfoAsync(FileSystem.documentDirectory + 'SQLite'))
       .exists
@@ -28,20 +26,33 @@ function onError(error: SQLite.SQLError) {
 }
 
 export async function initSQLite() {
-  const db = await openDatabase('./db/aleph.db')
+  const db = await openDatabase()
   db.transaction((tx) => {
     tx.executeSql(
-      'CREATE TABLE IF NOT EXISTS feeds (url TEXT PRIMARY KEY NOT NULL, title TEXT, description TEXT, favicon TEXT, language TEXT, deleted INTEGER, type TEXT);'
+      'CREATE TABLE IF NOT EXISTS feeds (url TEXT PRIMARY KEY NOT NULL, title TEXT, description TEXT, favicon TEXT, language TEXT, deleted INTEGER, type INTEGER);'
     )
     tx.executeSql(
-      'CREATE TABLE IF NOT EXISTS entries (id TEXT PRIMARY KEY NOT NULL, title TEXT, description TEXT, sourceUrl TEXT, read INTEGER, bookmarked INTEGER, published INTEGER, tags TEXT);'
+      `CREATE TABLE IF NOT EXISTS entries (
+        id TEXT PRIMARY KEY NOT NULL,
+        link TEXT,
+        title TEXT,
+        description TEXT,
+        entryType INTEGER,
+        media TEXT,
+        cover TEXT,
+        sourceUrl TEXT,
+        read INTEGER,
+        bookmarked INTEGER,
+        tags TEXT,
+        published INTEGER
+      );`
     )
     onUpdated(tx)
   }, onError)
 }
 
 export async function purgeAllData() {
-  const db = await openDatabase('./db/aleph.db')
+  const db = await openDatabase()
   db.transaction((tx) => {
     tx.executeSql('DROP TABLE IF EXISTS feeds;')
     tx.executeSql('DROP TABLE IF EXISTS entries;')
@@ -52,7 +63,7 @@ export async function purgeAllData() {
 }
 
 export async function subFeed(feed: Feed) {
-  const db = await openDatabase('./db/aleph.db')
+  const db = await openDatabase()
   db.transaction(
     (tx) => {
       tx.executeSql(
@@ -62,9 +73,9 @@ export async function subFeed(feed: Feed) {
           feed.title,
           feed.description,
           feed.favicon,
-          feed.language,
+          feed.language || '',
           0,
-          feed.type || FeedType.RSS,
+          feed.type === FeedType.Podcast ? 1 : 0,
         ]
       )
       onUpdated(tx)
@@ -75,7 +86,7 @@ export async function subFeed(feed: Feed) {
 }
 
 export async function resubFeed(feed: Feed) {
-  const db = await openDatabase('./db/aleph.db')
+  const db = await openDatabase()
   db.transaction(
     (tx) => {
       tx.executeSql(
@@ -92,7 +103,7 @@ export async function resubFeed(feed: Feed) {
 }
 
 export async function unsubFeed(feed: Feed) {
-  const db = await openDatabase('./db/aleph.db')
+  const db = await openDatabase()
   db.transaction(
     (tx) => {
       tx.executeSql('UPDATE feeds SET deleted = 1 WHERE url = ?', [feed.url])
@@ -110,7 +121,7 @@ export async function unsubFeed(feed: Feed) {
 }
 
 export async function updateFeed(feed: Feed) {
-  const db = await openDatabase('./db/aleph.db')
+  const db = await openDatabase()
   db.transaction(
     (tx) => {
       tx.executeSql(
@@ -124,7 +135,7 @@ export async function updateFeed(feed: Feed) {
 }
 
 export async function markAllRead() {
-  const db = await openDatabase('./db/aleph.db')
+  const db = await openDatabase()
   db.transaction(
     (tx) => {
       tx.executeSql('UPDATE entries SET read = 1', [])
@@ -135,7 +146,7 @@ export async function markAllRead() {
 }
 
 export async function readEntries(entries: FeedEntry[]) {
-  const db = await openDatabase('./db/aleph.db')
+  const db = await openDatabase()
   db.transaction(
     (tx) => {
       for (const entry of entries) {
@@ -148,17 +159,20 @@ export async function readEntries(entries: FeedEntry[]) {
 }
 
 export async function createEntries(entries: FeedEntry[]) {
-  const db = await openDatabase('./db/aleph.db')
+  const db = await openDatabase()
   db.transaction(
     (tx) => {
       for (const entry of entries) {
         tx.executeSql(
-          'INSERT OR IGNORE INTO entries (id, title, description, sourceUrl, read, bookmarked, published, tags) VALUES (?,?,?,?,?,?,?,?)',
+          'INSERT OR IGNORE INTO entries (id, link, title, description, sourceUrl, media, cover, read, bookmarked, published, tags) VALUES (?,?,?,?,?,?,?,?,?,?,?)',
           [
             entry.id,
+            entry.link || '',
             entry.title || '',
             entry.description || '',
             entry.sourceUrl || '',
+            entry.media || '',
+            entry.cover || '',
             0,
             0,
             dayjs(entry.published).unix(),
@@ -174,16 +188,15 @@ export async function createEntries(entries: FeedEntry[]) {
 }
 
 export async function updateEntries(entries: FeedEntry[]) {
-  const db = await openDatabase('./db/aleph.db')
+  const db = await openDatabase()
   db.transaction(
     (tx) => {
       for (const entry of entries) {
         tx.executeSql(
-          'UPDATE entries SET read = ?, bookmarked = ?, published = ?, tags = ? WHERE id = ?',
+          'UPDATE entries SET read = ?, bookmarked = ?, tags = ? WHERE id = ?',
           [
             entry.read ? 1 : 0,
             entry.bookmarked ? 1 : 0,
-            dayjs(entry.published).unix(),
             JSON.stringify(entry.tags),
             entry.id,
           ]
@@ -198,19 +211,24 @@ export async function updateEntries(entries: FeedEntry[]) {
 function formatEntry(entry: {
   id: string
   title: string
+  link: string
   description: string
   sourceUrl: string
   read: number
   bookmarked: number
   published: number
   tags: string
-}) {
+  cover: string
+  media: string
+  entryType: number
+}): FeedEntry {
   return {
     ...entry,
     read: entry.read === 1,
     bookmarked: entry.bookmarked === 1,
     published: dayjs.unix(entry.published).toDate(),
     tags: entry.tags ? JSON.parse(entry.tags) : [],
+    entryType: entry.entryType === 1 ? FeedType.Podcast : FeedType.RSS,
   }
 }
 
@@ -245,7 +263,7 @@ function onUpdated(tx: SQLite.SQLTransaction) {
 }
 
 export async function getFeeds(callback: (rows: Feed[]) => void) {
-  const db = await openDatabase('./db/aleph.db')
+  const db = await openDatabase()
   db.transaction(
     (tx) => {
       tx.executeSql('SELECT * FROM feeds', [], (_, { rows }) => {
@@ -258,7 +276,7 @@ export async function getFeeds(callback: (rows: Feed[]) => void) {
 }
 
 export async function getEntries() {
-  const db = await openDatabase('./db/aleph.db')
+  const db = await openDatabase()
   db.transaction(
     (tx) => {
       tx.executeSql('SELECT * FROM entries', [], (_, { rows }) => {})
@@ -272,7 +290,7 @@ export async function getEntries() {
 }
 
 export async function getBookmarkedEntries() {
-  const db = await openDatabase('./db/aleph.db')
+  const db = await openDatabase()
   db.transaction(
     (tx) => {
       tx.executeSql(

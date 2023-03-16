@@ -6,7 +6,6 @@ import {
   Home,
   Label,
   Planet,
-  Podcast,
   RssFeedTag,
   Settings,
 } from 'iconoir-react-native'
@@ -23,11 +22,6 @@ const routes = [
     href: '/feeds',
     title: 'Feeds',
     Icon: RssFeedTag,
-  },
-  {
-    href: '/podcasts',
-    title: 'Podcasts',
-    Icon: Podcast,
   },
   {
     href: '/tags',

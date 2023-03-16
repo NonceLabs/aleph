@@ -10,6 +10,7 @@ import {
   EmojiSingRightNote,
   EyeEmpty,
   SeaAndSun,
+  Podcast,
 } from 'iconoir-react-native'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { PAGE_SIZE } from 'lib/constants'
@@ -29,6 +30,11 @@ const CUSTOM_TAGS = {
     {
       title: 'Unread',
       icon: EyeEmpty,
+      count: 0,
+    },
+    {
+      title: 'Podcast',
+      icon: Podcast,
       count: 0,
     },
   ],

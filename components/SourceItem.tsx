@@ -2,14 +2,14 @@ import { useRouter } from 'expo-router'
 import useEntryFlow from 'hooks/useEntryFlow'
 import { Pressable } from 'react-native'
 import { Text, XStack } from 'tamagui'
-import { Source } from 'types'
+import { Feed } from 'types'
 import Favicon from './Favicon'
 
 export default function SourceItem({
   item,
   onPress,
 }: {
-  item: Source
+  item: Feed
   onPress?: () => void
 }) {
   const router = useRouter()

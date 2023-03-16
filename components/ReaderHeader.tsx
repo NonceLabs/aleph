@@ -3,7 +3,7 @@ import { Compass } from 'iconoir-react-native'
 import { Pressable } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Text, useWindowDimensions, XStack } from 'tamagui'
-import { FeedEntry, Source } from 'types'
+import { Feed, FeedEntry } from 'types'
 import * as WebBrowser from 'expo-web-browser'
 import { BlurView } from 'expo-blur'
 import useTheme from 'hooks/useTheme'
@@ -14,7 +14,7 @@ export default function ReaderHeader({
   source,
   entry,
 }: {
-  source?: Source
+  source?: Feed
   entry?: FeedEntry
 }) {
   const insets = useSafeAreaInsets()

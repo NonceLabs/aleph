@@ -1,11 +1,10 @@
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { store } from 'store'
-import { Feed, FeedEntry } from 'types'
+import { Feed, FeedData, FeedEntry } from 'types'
 import { HOST } from './constants'
 import { createEntries, updateEntries } from './db'
-import { extract } from './parser'
-import { post } from './request'
+import { fetcher, post } from './request'
 
 const DAYS_LIMIT = {
   Day: 1,
@@ -14,41 +13,29 @@ const DAYS_LIMIT = {
   Year: 365,
 }
 
+export async function extract(url: string): Promise<FeedData> {
+  return await fetcher(`${HOST}/extract?url=${url}`)
+}
+
 export async function fetchFeedFlow(feeds: Feed[]) {
   try {
     const publishLimit = store.getState().setting.flow.publishLimit || 'Month'
-    const result = await Promise.all(
+    await Promise.all(
       feeds.map(async (feed) => {
         try {
           const result = await extract(feed.url)
-          const entries = (result.entries || [])
-            .map((entry: FeedEntry) => ({
-              ...entry,
-              sourceUrl: feed.url,
-              id: entry.link || entry.id,
-              tags: [],
-            }))
-            .filter((entry: FeedEntry) => {
-              return (
-                dayjs().diff(dayjs(entry.published), 'day') <=
-                DAYS_LIMIT[publishLimit]
-              )
-            })
-
-          return {
-            ...result,
-            url: feed.url,
-            entries,
-          }
+          const entries = (result.entries || []).filter((entry: FeedEntry) => {
+            return (
+              dayjs().diff(dayjs(entry.published), 'day') <=
+              DAYS_LIMIT[publishLimit]
+            )
+          })
+          createEntries(entries)
         } catch (error) {
           return null
         }
       })
     )
-
-    const entries = _.flatten(result.map((t) => t?.entries || []))
-
-    createEntries(entries)
   } catch (error) {}
 }
 
