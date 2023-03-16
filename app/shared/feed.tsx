@@ -27,7 +27,7 @@ export default function FeedProfile() {
   useEffect(() => {
     setFeedData(undefined)
     setError(undefined)
-    if (feed) {
+    if (feed && !feed.deleted) {
       setFeedData({
         feed,
         entries: entries.filter((e) => e.sourceUrl === url),
@@ -45,7 +45,7 @@ export default function FeedProfile() {
           setLoading(false)
         })
     }
-  }, [url, feed])
+  }, [url, feed, entries])
 
   const handleSubscribe = async (fd: FeedData) => {
     try {
@@ -54,6 +54,7 @@ export default function FeedProfile() {
       if (feed) {
         if (feed.deleted) {
           resubFeed(_feed)
+          createEntries(entries)
         }
       } else {
         if (Array.isArray(entries)) {

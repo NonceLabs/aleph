@@ -24,12 +24,13 @@ export async function fetchFeedFlow(feeds: Feed[]) {
       feeds.map(async (feed) => {
         try {
           const result = await extract(feed.url)
-          const entries = (result.entries || []).filter((entry: FeedEntry) => {
-            return (
-              dayjs().diff(dayjs(entry.published), 'day') <=
-              DAYS_LIMIT[publishLimit]
-            )
-          })
+          const entries = result.entries || []
+          // .filter((entry: FeedEntry) => {
+          //   return (
+          //     dayjs().diff(dayjs(entry.published), 'day') <=
+          //     DAYS_LIMIT[publishLimit]
+          //   )
+          // })
           createEntries(entries)
         } catch (error) {
           return null

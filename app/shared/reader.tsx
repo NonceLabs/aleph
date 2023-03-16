@@ -30,7 +30,7 @@ export default function Reader() {
   )
   const insets = useSafeAreaInsets()
   const { width } = useWindowDimensions()
-  const source = feeds.find((t) => t.url === sourceUrl)
+  const feed = feeds.find((t) => t.url === sourceUrl)
 
   const theme = useTheme()
 
@@ -72,7 +72,7 @@ export default function Reader() {
           space={8}
           stickyHeaderIndices={[0]}
         >
-          <ReaderHeader source={source} entry={entry} />
+          <ReaderHeader feed={feed} entry={entry} />
           <YStack>
             <Text
               fontWeight="bold"

@@ -1,5 +1,5 @@
 import { useAppSelector } from 'store/hooks'
-import { FeedEntry, FeedListType, Tag } from 'types'
+import { FeedEntry, FeedListType, FeedType, Tag } from 'types'
 import { FlashList } from '@shopify/flash-list'
 import { Text, YStack } from 'tamagui'
 import EntryItem from './EntryItem'
@@ -119,6 +119,8 @@ export default function EntryList({
       } else if (selectedTag.title === 'Unread') {
         result = entries.filter((t) => !t.read)
       } else if (selectedTag.title === 'Bookmarked') {
+      } else if (selectedTag.title === 'Podcast') {
+        result = entries.filter((t) => t.entryType === FeedType.Podcast)
       } else {
         result = entries.filter((t) => {
           if (t.tags) {
@@ -189,7 +191,7 @@ export default function EntryList({
         return (
           <EntryItem
             item={item}
-            source={feeds.find((t) => t.url === item.sourceUrl)}
+            feed={feeds.find((t) => t.url === item.sourceUrl)}
             type={type}
           />
         )
@@ -214,10 +216,10 @@ export default function EntryList({
             <Text color="$color11" fontSize={18}>
               No feeds
             </Text>
-            {feeds.length === 0 && (
+            {feeds.filter((t) => !t.deleted).length === 0 && (
               <AddFeedButton
                 trigger={
-                  <Text color="$blue10" fontSize={18}>
+                  <Text color="$blue10" fontSize={18} fontFamily="Gilroy-Bold">
                     Add feeds
                   </Text>
                 }

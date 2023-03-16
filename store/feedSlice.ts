@@ -3,11 +3,13 @@ import _ from 'lodash'
 import { FeedEntry } from '../types'
 
 interface FeedSlice {
-  watchlist: FeedEntry[]
+  playing: FeedEntry | undefined
+  playlist: FeedEntry[]
 }
 
 const initialState: FeedSlice = {
-  watchlist: [],
+  playing: undefined,
+  playlist: [],
 }
 
 export const feedSlice = createSlice({

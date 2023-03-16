@@ -11,10 +11,10 @@ import Favicon from './Favicon'
 import { MAIN_COLOR } from 'lib/constants'
 
 export default function ReaderHeader({
-  source,
+  feed,
   entry,
 }: {
-  source?: Feed
+  feed?: Feed
   entry?: FeedEntry
 }) {
   const insets = useSafeAreaInsets()
@@ -36,21 +36,21 @@ export default function ReaderHeader({
         jc="space-between"
         w={width}
       >
-        {source ? (
+        {feed ? (
           <Pressable
             onPress={() =>
               router.push({
                 pathname: 'shared/feed',
                 params: {
-                  url: encodeURIComponent(source.url),
+                  url: encodeURIComponent(feed.url),
                 },
               })
             }
           >
             <XStack space={8} alignItems="center">
-              <Favicon favicon={source.favicon} />
+              <Favicon favicon={feed.favicon} />
               <Text fontWeight="bold" fontSize={20} color={MAIN_COLOR}>
-                {source.title}
+                {feed.title}
               </Text>
             </XStack>
           </Pressable>

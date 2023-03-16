@@ -1,27 +1,27 @@
 import dayjs from 'dayjs'
 import { YStack, Text, XStack, useWindowDimensions } from 'tamagui'
-import { Feed, FeedEntry, FeedListType } from 'types'
+import { Feed, FeedEntry, FeedListType, FeedType } from 'types'
 import relativeTime from 'dayjs/plugin/relativeTime'
-import { Pressable, StyleSheet, Image } from 'react-native'
+import { Pressable, StyleSheet, Image, ImageBackground } from 'react-native'
 import { useRouter } from 'expo-router'
-import { extractImages } from 'lib/helper'
 import Favicon from './Favicon'
+import { MAIN_COLOR } from 'lib/constants'
+import { Play } from 'iconoir-react-native'
 
 dayjs.extend(relativeTime)
 
 export default function FeedItem({
   item,
-  source,
+  feed,
   type,
 }: {
   item: FeedEntry
-  source?: Feed
+  feed?: Feed
   type?: FeedListType
 }) {
   const router = useRouter()
-  const images = extractImages(item.description)
   const { width } = useWindowDimensions()
-  const withImage = images.length > 0
+  const withImage = item.cover
   let opacity = 1
   let fontWeight = '600'
   if (['flow', 'tags'].includes(type || '')) {
@@ -35,6 +35,7 @@ export default function FeedItem({
 
   return (
     <Pressable
+      style={{ paddingHorizontal: 8 }}
       onPress={() => {
         router.push({
           pathname: 'shared/reader',
@@ -46,24 +47,31 @@ export default function FeedItem({
         })
       }}
     >
-      <XStack space={8} ai="center" jc="center" w={width} py={8} o={opacity}>
+      <XStack
+        space={8}
+        ai="center"
+        jc="center"
+        w={width - 16}
+        py={8}
+        o={opacity}
+        borderBottomWidth={StyleSheet.hairlineWidth}
+        borderBottomColor="$borderColor"
+      >
         <YStack
           paddingVertical={10}
           space={4}
-          borderBottomWidth={StyleSheet.hairlineWidth}
-          borderBottomColor="$borderColor"
           w={withImage ? width - 120 : width - 32}
         >
-          {source && (
+          {feed && (
             <XStack space={4} alignItems="center">
-              <Favicon favicon={source.favicon} size={20} />
+              <Favicon favicon={feed.favicon} size={20} />
               <Text
                 color="$color11"
                 maxWidth={120}
                 numberOfLines={1}
                 ellipsizeMode="tail"
               >
-                {source.title}
+                {feed.title}
               </Text>
               <Text fontSize={12} color="$gray10" marginLeft={10}>
                 {dayjs(item.published).fromNow()}
@@ -79,14 +87,41 @@ export default function FeedItem({
             {item.title || 'Untitled'}
           </Text>
         </YStack>
-        {images.length > 0 && (
-          <Image
-            source={{ uri: images[0] }}
-            style={{ height: 80, width: 80, borderRadius: 4 }}
-            resizeMode="cover"
-          />
-        )}
+        <Cover item={item} feed={feed} />
       </XStack>
+    </Pressable>
+  )
+}
+
+function Cover({ item, feed }: { item: FeedEntry; feed?: Feed }) {
+  if (item.entryType === FeedType.RSS) {
+    return item.cover ? (
+      <Image
+        source={{ uri: item.cover }}
+        style={{ height: 80, width: 80 }}
+        resizeMode="cover"
+      />
+    ) : null
+  }
+
+  const cover = item.cover || feed?.favicon
+
+  return (
+    <Pressable>
+      <ImageBackground
+        source={{ uri: cover }}
+        borderRadius={8}
+        style={{
+          height: 80,
+          width: 80,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <XStack bc={MAIN_COLOR} w={50} h={50} ai="center" jc="center" br={25}>
+          <Play width={28} height={28} color="white" />
+        </XStack>
+      </ImageBackground>
     </Pressable>
   )
 }

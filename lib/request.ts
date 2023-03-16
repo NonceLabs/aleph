@@ -1,10 +1,3 @@
-import { Platform } from 'react-native'
-import Constants from 'expo-constants'
-
-export const getBuildVersion = () => {
-  return Constants.expoConfig?.version || 'Unknown'
-}
-
 export const post = async (url: string, json: object) => {
   const body = JSON.stringify(json)
   try {

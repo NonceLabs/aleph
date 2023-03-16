@@ -164,13 +164,14 @@ export async function createEntries(entries: FeedEntry[]) {
     (tx) => {
       for (const entry of entries) {
         tx.executeSql(
-          'INSERT OR IGNORE INTO entries (id, link, title, description, sourceUrl, media, cover, read, bookmarked, published, tags) VALUES (?,?,?,?,?,?,?,?,?,?,?)',
+          'INSERT OR IGNORE INTO entries (id, link, title, description, sourceUrl, entryType, media, cover, read, bookmarked, published, tags) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)',
           [
             entry.id,
             entry.link || '',
             entry.title || '',
             entry.description || '',
             entry.sourceUrl || '',
+            entry.entryType === FeedType.Podcast ? 1 : 0,
             entry.media || '',
             entry.cover || '',
             0,
