@@ -103,11 +103,7 @@ export default function TagsHeader({
                 borderRadius="50%"
                 space={4}
                 mx={4}
-                icon={
-                  Icon ? (
-                    <Icon width={24} height={24} color={contentColor} />
-                  ) : null
-                }
+                icon={Icon ? <Icon size={24} color={contentColor} /> : null}
                 onPress={() => onSelectTag(item)}
                 themeInverse={active}
                 bc={active ? '#f0353c' : '$blue5'}

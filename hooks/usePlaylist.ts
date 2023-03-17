@@ -44,12 +44,16 @@ export default function usePlaylist() {
             positionMillis: playing.position || 0,
           }
         )
-        if (status.isLoaded) {
-          playerStore.set({
-            sound,
-            playing,
-            status,
-          })
+        if (isPlaying) {
+          if (status.isLoaded) {
+            playerStore.set({
+              sound,
+              playing,
+              status,
+            })
+          }
+        } else {
+          sound.stopAsync()
         }
       } catch (error) {
         console.log('error', error)

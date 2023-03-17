@@ -6,6 +6,7 @@ import {
   BookmarkEmpty,
   Home,
   Label,
+  Planet,
   RssFeedTag,
   Settings,
 } from 'iconoir-react-native'
@@ -26,26 +27,26 @@ const routes = [
     title: 'Feeds',
     Icon: RssFeedTag,
   },
-  {
-    href: '/tags',
-    title: 'Tags',
-    Icon: Label,
-  },
   // {
-  //   href: '/explore',
-  //   title: 'Explore',
-  //   Icon: Planet,
+  //   href: '/tags',
+  //   title: 'Tags',
+  //   Icon: Label,
   // },
+  {
+    href: '/explore',
+    title: 'Explore',
+    Icon: Planet,
+  },
   {
     href: '/bookmarks',
     title: 'Bookmarks',
     Icon: BookmarkEmpty,
   },
-  // {
-  //   href: '/settings',
-  //   title: 'Settings',
-  //   Icon: Settings,
-  // },
+  {
+    href: '/settings',
+    title: 'Settings',
+    Icon: Settings,
+  },
 ]
 
 export default function DrawerPanel() {
@@ -69,7 +70,7 @@ export default function DrawerPanel() {
       space
       px={8}
       jc="space-between"
-      pb={insets.bottom + 80}
+      pb={insets.bottom + 40}
       bc={theme === 'light' ? '#f6eee3' : '$background'}
     >
       <XStack jc="flex-end">

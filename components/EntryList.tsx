@@ -5,13 +5,7 @@ import { Text, YStack } from 'tamagui'
 import EntryItem from './EntryItem'
 import { Animated, useAnimatedValue } from 'react-native'
 import _ from 'lodash'
-import {
-  BookmarkEmpty,
-  EmojiSingRightNote,
-  EyeEmpty,
-  SeaAndSun,
-  Podcast,
-} from 'iconoir-react-native'
+import { EmojiSingRightNote } from 'iconoir-react-native'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { PAGE_SIZE } from 'lib/constants'
 import TagsHeader from './TagsHeader'
@@ -19,17 +13,18 @@ import EntryListHeader from './EntryListHeader'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import AddFeedButton from './AddFeedButton'
 import useFeeds from 'hooks/useFeeds'
+import { Bookmark, Eye, Haze, Podcast } from '@tamagui/lucide-icons'
 
 const CUSTOM_TAGS = {
   flow: [
     {
       title: 'Today',
-      icon: SeaAndSun,
+      icon: Haze,
       count: 0,
     },
     {
       title: 'Unread',
-      icon: EyeEmpty,
+      icon: Eye,
       count: 0,
     },
     {
@@ -41,7 +36,7 @@ const CUSTOM_TAGS = {
   bookmarks: [
     {
       title: 'Bookmarked',
-      icon: BookmarkEmpty,
+      icon: Bookmark,
       count: 0,
     },
   ],
