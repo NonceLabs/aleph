@@ -12,23 +12,24 @@ import useFeed from 'hooks/useFeed'
 import useEntry from 'hooks/useEntry'
 import {
   Bookmark,
-  ChevronFirst,
   ChevronLast,
   Info,
   ListMusic,
   PauseCircle,
-  Play,
   PlayCircle,
 } from '@tamagui/lucide-icons'
 import { useAppDispatch } from 'store/hooks'
 import { PubEvent } from 'types'
+import { AVPlaybackStatus } from 'expo-av'
+import { formatStatusTime } from 'lib/helper'
 
 export default function PlayerPortal() {
   const [position, setPosition] = useState(0)
+  const [playStatus, setPlayStatus] = useState<AVPlaybackStatus>()
   const [open, setOpen] = useState(false)
   const theme = useTheme()
   const dispatch = useAppDispatch()
-  const { playing, isPlaying } = usePlaylist()
+  const { playing, isPlaying, sound } = usePlaylist()
   const { entry, onToggleBookmark } = useEntry(playing?.id)
   const feed = useFeed(playing?.feedUrl)
   const iconSize = 32
@@ -43,11 +44,29 @@ export default function PlayerPortal() {
     }
   }, [])
 
+  useEffect(() => {
+    if (sound) {
+      sound.setProgressUpdateIntervalAsync(1000)
+      sound.setOnPlaybackStatusUpdate((status) => {
+        setPlayStatus(status)
+        // console.log('status', status)
+
+        if (status.isLoaded && status.isPlaying) {
+          dispatch({
+            type: 'feed/updatePlayingPosition',
+            payload: status.positionMillis,
+          })
+        }
+      })
+    }
+  }, [sound])
+
   if (!entry) {
     return null
   }
 
   const cover = entry?.cover || feed?.favicon
+
   return (
     <>
       {playing && (
@@ -120,19 +139,55 @@ export default function PlayerPortal() {
             </YStack>
 
             <YStack w="90%" ai="center" space={20}>
-              <Slider
-                defaultValue={[50]}
-                max={100}
-                step={1}
-                mb={16}
-                width="100%"
-                orientation="horizontal"
-              >
-                <Slider.Track bc="$color8">
-                  <Slider.TrackActive bc={MAIN_COLOR} />
-                </Slider.Track>
-                <Slider.Thumb index={0} circular elevate />
-              </Slider>
+              {playStatus?.isLoaded && (
+                <XStack w="100%" jc="space-between">
+                  <Text color="$color11" fontSize={12}>
+                    {formatStatusTime(
+                      playStatus.isPlaying
+                        ? playStatus.positionMillis
+                        : playing?.position
+                    )}
+                  </Text>
+                  <Text color="$color11">
+                    -
+                    {formatStatusTime(
+                      (playStatus?.durationMillis || 0) -
+                        playStatus?.positionMillis
+                    )}
+                  </Text>
+                </XStack>
+              )}
+              {playStatus?.isLoaded && (
+                <Slider
+                  defaultValue={[0]}
+                  max={playStatus.durationMillis || 1000 * 60 * 60}
+                  step={1000}
+                  mb={16}
+                  value={[
+                    playStatus.isPlaying
+                      ? playStatus.positionMillis
+                      : playing?.position || 0,
+                  ]}
+                  width="100%"
+                  orientation="horizontal"
+                  onValueChange={(value) => {
+                    try {
+                      if (value.length > 0) {
+                        setPlayStatus({
+                          ...playStatus,
+                          positionMillis: value[0],
+                        })
+                        sound?.playFromPositionAsync(value[0])
+                      }
+                    } catch (error) {}
+                  }}
+                >
+                  <Slider.Track bc="$color8">
+                    <Slider.TrackActive bc={MAIN_COLOR} />
+                  </Slider.Track>
+                  <Slider.Thumb index={0} circular elevate />
+                </Slider>
+              )}
 
               <XStack ai="center" jc="center" space={32}>
                 <Pressable

@@ -1,11 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit'
 import _ from 'lodash'
-import { FeedEntry } from '../types'
+import { FeedEntry, PlayingFeedEntry } from '../types'
 
 interface FeedSlice {
-  playing: FeedEntry | undefined
+  playing: PlayingFeedEntry | undefined
   isPlaying: boolean
-  playlist: FeedEntry[]
+  playlist: PlayingFeedEntry[]
 }
 
 const initialState: FeedSlice = {
@@ -25,10 +25,17 @@ export const feedSlice = createSlice({
         state.isPlaying = state.playing?.id !== action.payload.id
       }
       state.playing = action.payload
-      state.playlist = _.uniqBy(
-        [action.payload, ...(state.playlist || [])],
-        'id'
-      )
+      if (state.playing) {
+        state.playlist = _.uniqBy(
+          [action.payload, state.playing, ...(state.playlist || [])],
+          'id'
+        )
+      } else {
+        state.playlist = _.uniqBy(
+          [action.payload, ...(state.playlist || [])],
+          'id'
+        )
+      }
     },
     playNext: (state, action) => {
       state.isPlaying = true
@@ -45,6 +52,11 @@ export const feedSlice = createSlice({
       if (!state.isPlaying) {
         state.isPlaying = true
         state.playing = action.payload
+      }
+    },
+    updatePlayingPosition: (state, action) => {
+      if (state.playing) {
+        state.playing.position = action.payload
       }
     },
   },

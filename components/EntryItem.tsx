@@ -9,7 +9,6 @@ import { useAppDispatch, useAppSelector } from 'store/hooks'
 import PlayingEntry from './PlayingEntry'
 import { PlayCircle } from '@tamagui/lucide-icons'
 import { Image } from 'expo-image'
-import { BlurView } from 'expo-blur'
 import useTheme from 'hooks/useTheme'
 
 dayjs.extend(relativeTime)
@@ -108,7 +107,7 @@ function Cover({ item, feed }: { item: FeedEntry; feed?: Feed }) {
         source={item.cover}
         placeholder={require('../assets/images/cover.png')}
         style={{ height: 80, width: 80 }}
-        resizeMode="cover"
+        contentFit="cover"
       />
     ) : null
   }

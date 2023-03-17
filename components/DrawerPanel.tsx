@@ -1,30 +1,19 @@
-import { BlurView } from 'expo-blur'
 import { Image } from 'expo-image'
-import { Link, useNavigation } from 'expo-router'
+import { Link } from 'expo-router'
 import useFeed from 'hooks/useFeed'
-import useFeeds from 'hooks/useFeeds'
-import usePlaylist from 'hooks/usePlaylist'
 import useTheme from 'hooks/useTheme'
 import {
   BookmarkEmpty,
   Home,
   Label,
-  Pause,
-  Planet,
-  Play,
-  Playlist,
   RssFeedTag,
   Settings,
 } from 'iconoir-react-native'
 import { MAIN_COLOR } from 'lib/constants'
-import { useEffect, useRef } from 'react'
-import { Animated, Easing, ImageBackground } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useAppSelector } from 'store/hooks'
 import { Text, XStack, YStack } from 'tamagui'
 import { PubEvent } from 'types'
-import Favicon from './Favicon'
-import PlayingEntry from './PlayingEntry'
 
 const routes = [
   {
@@ -89,7 +78,7 @@ export default function DrawerPanel() {
             source={require('../assets/images/icon.png')}
             style={{ width: 80, height: 80 }}
           />
-          <Text fontFamily={'Poppins'} color="#f0353c">
+          <Text fontFamily={'Poppins'} color={MAIN_COLOR}>
             Aleph Reader
           </Text>
         </YStack>
@@ -142,11 +131,11 @@ export default function DrawerPanel() {
                   fontSize={fontSize}
                   fontFamily="Gilroy-Bold"
                   width={200}
-                  color="#f0353c"
+                  color={MAIN_COLOR}
                 >
                   {title}
                 </Text>
-                <Icon width={30} height={30} color="#f0353c" />
+                <Icon width={30} height={30} color={MAIN_COLOR} />
               </XStack>
             </Link>
           )

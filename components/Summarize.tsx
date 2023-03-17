@@ -74,7 +74,7 @@ export default function Summarize({ entry }: { entry?: FeedEntry }) {
               <Text
                 fontSize={18}
                 color="$color12"
-                ta="center"
+                ta="left"
                 fontFamily={fontFamily}
               >
                 {summary.trim()}

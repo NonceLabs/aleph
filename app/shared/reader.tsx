@@ -40,6 +40,10 @@ export default function Reader() {
     }
   }, [entry?.read])
 
+  const source = useMemo(() => {
+    return { html: entry?.description || '' }
+  }, [entry?.description])
+
   const tagsStyle = useMemo(() => {
     return {
       body: {
@@ -111,7 +115,7 @@ export default function Reader() {
           ) : null}
           <YStack flex={1}>
             <RenderHtml
-              source={{ html: entry?.description || '' }}
+              source={source}
               enableExperimentalMarginCollapsing
               contentWidth={width}
               systemFonts={[fontFamily, 'Vollkorn', 'Gilroy-Bold']}

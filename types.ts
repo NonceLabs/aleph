@@ -28,6 +28,10 @@ export interface FeedEntry {
   cover?: string
 }
 
+export interface PlayingFeedEntry extends FeedEntry {
+  position?: number
+}
+
 export interface FeedData {
   feed: Feed
   entries: FeedEntry[]
