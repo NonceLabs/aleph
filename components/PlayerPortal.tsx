@@ -57,6 +57,11 @@ export default function PlayerPortal() {
             payload: status.positionMillis,
           })
         }
+        if (status.isLoaded && status.didJustFinish) {
+          dispatch({
+            type: 'feed/playNext',
+          })
+        }
       })
     }
   }, [sound])

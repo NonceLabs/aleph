@@ -42,6 +42,10 @@ export const feedSlice = createSlice({
       if (state.playlist.length > 1) {
         state.playing = state.playlist[1]
         state.playlist = state.playlist.slice(1)
+      } else {
+        state.playing = undefined
+        state.playlist = []
+        state.isPlaying = false
       }
     },
     addToList: (state, action) => {

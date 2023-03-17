@@ -4,7 +4,7 @@ import { Audio, AVPlaybackStatusSuccess } from 'expo-av'
 import { Observable } from 'lib/obserable'
 import { FeedEntry } from 'types'
 
-const soundStore = new Observable<{
+const playerStore = new Observable<{
   sound: Audio.Sound | null
   playing?: FeedEntry
   status?: AVPlaybackStatusSuccess
@@ -13,41 +13,52 @@ const soundStore = new Observable<{
   playing: undefined,
   status: undefined,
 })
+
+// TODO
+// - [ ] FIX playing queue
+
 export default function usePlaylist() {
-  const [sound, setSound] = useState(soundStore.get())
+  const [player, setPlayer] = useState(playerStore.get())
   const { isPlaying, playing, playlist } = useAppSelector((state) => state.feed)
 
   useEffect(() => {
-    return soundStore.subscribe(setSound)
+    return playerStore.subscribe(setPlayer)
   }, [])
 
   useEffect(() => {
-    if (isPlaying && playing) {
-      if (playing.id !== sound.playing?.id) {
-        sound.sound?.stopAsync()
+    async function handlePlay() {
+      if (!playing) {
+        return
       }
-      Audio.Sound.createAsync(
-        {
-          uri: playing.media!,
-        },
-        {
-          shouldPlay: true,
-          positionMillis: playing.position || 0,
+      try {
+        if (playing.id !== player.playing?.id) {
+          await player.sound?.stopAsync()
+          await player.sound?.unloadAsync()
         }
-      )
-        .then(({ sound, status }) => {
-          if (status.isLoaded) {
-            soundStore.set({
-              sound,
-              playing,
-              status,
-            })
-            // sound.playFromPositionAsync()
+        const { sound, status } = await Audio.Sound.createAsync(
+          {
+            uri: playing.media!,
+          },
+          {
+            shouldPlay: true,
+            positionMillis: playing.position || 0,
           }
-        })
-        .catch((error) => {})
-    } else if (!isPlaying && sound) {
-      sound.sound?.stopAsync()
+        )
+        if (status.isLoaded) {
+          playerStore.set({
+            sound,
+            playing,
+            status,
+          })
+        }
+      } catch (error) {
+        console.log('error', error)
+      }
+    }
+    if (isPlaying && playing) {
+      handlePlay()
+    } else if (!isPlaying && player) {
+      player.sound?.stopAsync()
     }
   }, [playing?.id, isPlaying])
 
@@ -55,7 +66,7 @@ export default function usePlaylist() {
     playlist,
     isPlaying,
     playing,
-    status: sound.status,
-    sound: sound.sound,
+    status: player.status,
+    sound: player.sound,
   }
 }
