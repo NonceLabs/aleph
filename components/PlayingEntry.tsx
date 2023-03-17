@@ -1,4 +1,6 @@
-import { Pause, Play } from '@tamagui/lucide-icons'
+import { PauseCircle, PlayCircle } from '@tamagui/lucide-icons'
+import { Image } from 'expo-image'
+import useFeed from 'hooks/useFeed'
 import { MAIN_COLOR } from 'lib/constants'
 import { useEffect, useRef } from 'react'
 import { Animated, Easing, ImageBackground, Pressable } from 'react-native'
@@ -24,6 +26,7 @@ export default function PlayingEntry({
   onPress?: () => void
 }) {
   const dispatch = useAppDispatch()
+  const feed = useFeed(entry.feedUrl)
   const spinValue = useRef(new Animated.Value(0)).current
   const anim = useRef(
     Animated.loop(
@@ -58,15 +61,8 @@ export default function PlayingEntry({
         }
       }}
     >
-      <AnimetedImage
-        source={{
-          uri: entry.cover,
-        }}
+      <Animated.View
         style={{
-          width: size,
-          height: size,
-          alignItems: 'center',
-          justifyContent: 'center',
           transform: [
             {
               rotate: spinValue.interpolate({
@@ -76,26 +72,23 @@ export default function PlayingEntry({
             },
           ],
         }}
-        borderRadius={size / 2}
       >
+        <Image
+          source={entry.cover || feed?.favicon}
+          placeholder={require('../assets/images/cover.png')}
+          style={{ height: size, width: size, borderRadius: size / 2 }}
+          blurRadius={isPlaying ? 10 : 5}
+        />
         {withControl && (
-          <XStack
-            bc={MAIN_COLOR}
-            w={50}
-            h={50}
-            ai="center"
-            jc="center"
-            br={25}
-            o={0.7}
-          >
+          <XStack position="absolute" top={size / 2 - 20} left={size / 2 - 20}>
             {isPlaying ? (
-              <Pause width={28} height={28} color="white" />
+              <PauseCircle width={40} height={40} color="white" />
             ) : (
-              <Play width={28} height={28} color="white" />
+              <PlayCircle width={40} height={40} color="white" />
             )}
           </XStack>
         )}
-      </AnimetedImage>
+      </Animated.View>
     </Pressable>
   )
 }

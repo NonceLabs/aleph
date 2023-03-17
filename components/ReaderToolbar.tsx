@@ -3,7 +3,9 @@ import {
   ChevronLeft,
   ListPlus,
   Pause,
+  PauseCircle,
   Play,
+  PlayCircle,
 } from '@tamagui/lucide-icons'
 import { BlurView } from 'expo-blur'
 import { useNavigation } from 'expo-router'
@@ -88,9 +90,9 @@ export default function ReaderToolbar({
           {entry?.entryType === FeedType.Podcast && (
             <Pressable onPress={onPlay}>
               {isPlaying && entry.id === playing?.id ? (
-                <Pause width={28} height={28} color="$color11" />
+                <PauseCircle width={28} height={28} color="$color11" />
               ) : (
-                <Play width={28} height={28} color="$color11" />
+                <PlayCircle width={28} height={28} color="$color11" />
               )}
             </Pressable>
           )}

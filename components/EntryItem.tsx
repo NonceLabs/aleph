@@ -2,12 +2,15 @@ import dayjs from 'dayjs'
 import { YStack, Text, XStack, useWindowDimensions } from 'tamagui'
 import { Feed, FeedEntry, FeedListType, FeedType } from 'types'
 import relativeTime from 'dayjs/plugin/relativeTime'
-import { Pressable, StyleSheet, Image, ImageBackground } from 'react-native'
+import { Pressable, StyleSheet } from 'react-native'
 import { useRouter } from 'expo-router'
 import Favicon from './Favicon'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import PlayingEntry from './PlayingEntry'
 import { PlayCircle } from '@tamagui/lucide-icons'
+import { Image } from 'expo-image'
+import { BlurView } from 'expo-blur'
+import useTheme from 'hooks/useTheme'
 
 dayjs.extend(relativeTime)
 
@@ -22,7 +25,7 @@ export default function FeedItem({
 }) {
   const router = useRouter()
   const { width } = useWindowDimensions()
-  const withImage = item.cover
+  const withImage = item.cover || item.entryType === FeedType.Podcast
   let opacity = 1
   let fontWeight = '600'
   if (['flow', 'tags'].includes(type || '')) {
@@ -61,7 +64,7 @@ export default function FeedItem({
         <YStack
           paddingVertical={10}
           space={4}
-          w={withImage ? width - 120 : width - 32}
+          w={withImage ? width - 110 : width - 32}
         >
           {feed && (
             <XStack space={4} alignItems="center">
@@ -97,11 +100,13 @@ export default function FeedItem({
 function Cover({ item, feed }: { item: FeedEntry; feed?: Feed }) {
   const { playing, isPlaying } = useAppSelector((state) => state.feed)
   const dispatch = useAppDispatch()
+  const theme = useTheme()
 
   if (item.entryType === FeedType.RSS) {
     return item.cover ? (
       <Image
-        source={{ uri: item.cover }}
+        source={item.cover}
+        placeholder={require('../assets/images/cover.png')}
         style={{ height: 80, width: 80 }}
         resizeMode="cover"
       />
@@ -119,21 +124,20 @@ function Cover({ item, feed }: { item: FeedEntry; feed?: Feed }) {
         })
       }}
     >
-      {playing?.id === item.id && isPlaying ? (
+      {playing?.id === item.id ? (
         <PlayingEntry isPlaying={isPlaying} entry={playing} animate />
       ) : (
-        <ImageBackground
-          source={{ uri: cover }}
-          borderRadius={8}
-          style={{
-            height: 80,
-            width: 80,
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <PlayCircle size={32} color="white" />
-        </ImageBackground>
+        <XStack>
+          <Image
+            source={{ uri: cover }}
+            placeholder={require('../assets/images/cover.png')}
+            style={{ height: 80, width: 80, borderRadius: 8 }}
+            blurRadius={15}
+          />
+          <XStack position="absolute" top={20} left={20}>
+            <PlayCircle size={40} color="white" />
+          </XStack>
+        </XStack>
       )}
     </Pressable>
   )

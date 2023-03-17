@@ -46,6 +46,8 @@ export default function PlayerPortal() {
   if (!entry) {
     return null
   }
+
+  const cover = entry?.cover || feed?.favicon
   return (
     <>
       {playing && (
@@ -74,9 +76,8 @@ export default function PlayerPortal() {
         <Sheet.Frame f={1} p="$4" space="$3">
           <View style={StyleSheet.absoluteFill}>
             <Image
-              source={{
-                uri: playing?.cover,
-              }}
+              source={cover}
+              placeholder={require('../assets/images/cover.png')}
               contentFit="cover"
               style={{ width: '100%', height: '100%' }}
             />
@@ -87,9 +88,10 @@ export default function PlayerPortal() {
             style={StyleSheet.absoluteFill}
           ></BlurView>
           <YStack ai="center" jc="center" space={32}>
-            <YStack space={16} ai="center" jc="center" w="90%">
+            <YStack space={16} ai="center" jc="center" w="92%">
               <Image
-                source={{ uri: playing?.cover }}
+                source={cover}
+                placeholder={require('../assets/images/cover.png')}
                 style={{ width: 200, height: 200, borderRadius: 8 }}
               />
               <Text
@@ -103,6 +105,7 @@ export default function PlayerPortal() {
               </Text>
               <Link
                 href={`shared/feed?url=${encodeURIComponent(entry?.feedUrl)}`}
+                onPress={() => setOpen(false)}
               >
                 <Text
                   fontFamily="Gilroy-Bold"
@@ -132,8 +135,18 @@ export default function PlayerPortal() {
               </Slider>
 
               <XStack ai="center" jc="center" space={32}>
-                <Pressable>
-                  <ChevronFirst size={30} color="$color11" />
+                <Pressable
+                  onPress={() => {
+                    onToggleBookmark({
+                      ...entry,
+                      bookmarked: !entry.bookmarked,
+                    })
+                  }}
+                >
+                  <Bookmark
+                    size={30}
+                    color={entry.bookmarked ? MAIN_COLOR : '$color11'}
+                  />
                 </Pressable>
                 <Pressable
                   onPress={() => {
@@ -149,37 +162,29 @@ export default function PlayerPortal() {
                     <PlayCircle size={50} color="$color12" />
                   )}
                 </Pressable>
-                <Pressable>
+                <Pressable
+                  onPress={() => {
+                    dispatch({
+                      type: 'feed/playNext',
+                      payload: playing,
+                    })
+                  }}
+                >
                   <ChevronLast size={30} color="$color11" />
                 </Pressable>
               </XStack>
             </YStack>
 
-            <XStack w="100%" ai="center" jc="space-around">
+            <XStack w="90%" ai="center" jc="space-between">
               <Link
                 href={`shared/reader?id=${encodeURIComponent(entry.id)}`}
                 onPress={() => setOpen(false)}
               >
-                <Info width={iconSize} height={iconSize} color="$color11" />
+                <Info size={iconSize} color="$color11" />
               </Link>
               <Link href={`shared/playlist`} onPress={() => setOpen(false)}>
-                <ListMusic
-                  width={iconSize}
-                  height={iconSize}
-                  color="$color11"
-                />
+                <ListMusic size={iconSize} color="$color11" />
               </Link>
-              <Pressable
-                onPress={() => {
-                  onToggleBookmark({ ...entry, bookmarked: !entry.bookmarked })
-                }}
-              >
-                <Bookmark
-                  width={iconSize}
-                  height={iconSize}
-                  color={entry.bookmarked ? MAIN_COLOR : '$color11'}
-                />
-              </Pressable>
             </XStack>
           </YStack>
         </Sheet.Frame>

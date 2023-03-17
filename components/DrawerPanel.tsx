@@ -1,6 +1,7 @@
 import { BlurView } from 'expo-blur'
 import { Image } from 'expo-image'
 import { Link, useNavigation } from 'expo-router'
+import useFeed from 'hooks/useFeed'
 import useFeeds from 'hooks/useFeeds'
 import usePlaylist from 'hooks/usePlaylist'
 import useTheme from 'hooks/useTheme'
@@ -64,12 +65,13 @@ export default function DrawerPanel() {
   const fontSize = 32
 
   const { playing } = useAppSelector((state) => state.feed)
-  const { feeds } = useFeeds()
-  const feed = feeds.find((t) => t.url === playing?.feedUrl)
+  const feed = useFeed(playing?.feedUrl)
 
   const onPlayInfo = () => {
     PubSub.publish(PubEvent.ON_PODCAST_PORTAL)
   }
+
+  const cover = playing?.cover || feed?.favicon
 
   return (
     <YStack
@@ -98,7 +100,6 @@ export default function DrawerPanel() {
             <YStack flex={1} ai="flex-end" jc="flex-end" space={8}>
               {feed && (
                 <XStack ai="center" jc="flex-end" space={8}>
-                  <Favicon favicon={feed?.favicon} />
                   <Text
                     color="$color12"
                     fontFamily="Gilroy-Bold"
@@ -122,12 +123,11 @@ export default function DrawerPanel() {
                 {playing.title}
               </Text>
             </YStack>
-            {playing.cover && (
-              <Image
-                source={{ uri: playing.cover }}
-                style={{ width: 60, height: 60, borderRadius: 8 }}
-              />
-            )}
+            <Image
+              source={cover}
+              placeholder={require('../assets/images/cover.png')}
+              style={{ width: 60, height: 60, borderRadius: 8 }}
+            />
           </XStack>
         </Link>
       )}

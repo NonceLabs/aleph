@@ -30,6 +30,13 @@ export const feedSlice = createSlice({
         'id'
       )
     },
+    playNext: (state, action) => {
+      state.isPlaying = true
+      if (state.playlist.length > 1) {
+        state.playing = state.playlist[1]
+        state.playlist = state.playlist.slice(1)
+      }
+    },
     addToList: (state, action) => {
       state.playlist = _.uniqBy(
         [...(state.playlist || []), action.payload],

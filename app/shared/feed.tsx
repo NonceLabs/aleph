@@ -15,14 +15,14 @@ import useEntryFlow from 'hooks/useEntryFlow'
 import { MAIN_COLOR } from 'lib/constants'
 import { extract } from 'lib/task'
 import { Info } from '@tamagui/lucide-icons'
+import useFeed from 'hooks/useFeed'
 
 export default function FeedProfile() {
   const [feedData, setFeedData] = useState<FeedData>()
   const [error, setError] = useState()
   const [loading, setLoading] = useState(false)
   const { url, title, from } = useSearchParams()
-  const { feeds } = useFeeds()
-  const feed = feeds.find((f) => f.url === url)
+  const feed = useFeed(url as string)
   const { entries } = useEntryFlow()
 
   useEffect(() => {
