@@ -1,5 +1,6 @@
 import { ChevronLeft } from '@tamagui/lucide-icons'
 import EntryList from 'components/EntryList'
+import SimpleEntryList from 'components/SimpleEntryList'
 import { useNavigation, useRouter, useSearchParams } from 'expo-router'
 import useEntryFlow from 'hooks/useEntryFlow'
 import _ from 'lodash'
@@ -52,7 +53,7 @@ export default function EntryByTag() {
           article{entries.length > 1 ? 's' : ''} found
         </Text>
       </XStack>
-      <EntryList entries={entries} type="tags" withHeader={false} />
+      <SimpleEntryList entries={entries} type="tags" onRefresh={() => {}} />
     </YStack>
   )
 }

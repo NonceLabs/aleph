@@ -1,6 +1,11 @@
 import { useEffect, useState } from 'react'
-import { useAppSelector } from 'store/hooks'
-import { Audio, AVPlaybackStatusSuccess } from 'expo-av'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
+import {
+  Audio,
+  AVPlaybackStatusSuccess,
+  InterruptionModeAndroid,
+  InterruptionModeIOS,
+} from 'expo-av'
 import { Observable } from 'lib/obserable'
 import { FeedEntry } from 'types'
 
@@ -20,6 +25,7 @@ const playerStore = new Observable<{
 export default function usePlaylist() {
   const [player, setPlayer] = useState(playerStore.get())
   const { isPlaying, playing, playlist } = useAppSelector((state) => state.feed)
+  const dispatch = useAppDispatch()
 
   useEffect(() => {
     return playerStore.subscribe(setPlayer)
@@ -35,6 +41,11 @@ export default function usePlaylist() {
           await player.sound?.stopAsync()
           await player.sound?.unloadAsync()
         }
+        await Audio.setAudioModeAsync({
+          staysActiveInBackground: true,
+          interruptionModeAndroid: InterruptionModeAndroid.DoNotMix,
+          interruptionModeIOS: InterruptionModeIOS.DoNotMix,
+        })
         const { sound, status } = await Audio.Sound.createAsync(
           {
             uri: playing.media!,
@@ -44,6 +55,8 @@ export default function usePlaylist() {
             positionMillis: playing.position || 0,
           }
         )
+        console.log('playing', isPlaying, status.isLoaded, sound)
+
         if (isPlaying) {
           if (status.isLoaded) {
             playerStore.set({
@@ -51,12 +64,16 @@ export default function usePlaylist() {
               playing,
               status,
             })
+            dispatch({
+              type: 'feed/updatePlayingDuration',
+              payload: status.durationMillis,
+            })
           }
         } else {
           sound.stopAsync()
         }
       } catch (error) {
-        console.log('error', error)
+        console.log('error', (error as any).code)
       }
     }
     if (isPlaying && playing) {

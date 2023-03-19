@@ -63,6 +63,11 @@ export const feedSlice = createSlice({
         state.playing.position = action.payload
       }
     },
+    updatePlayingDuration: (state, action) => {
+      if (state.playing) {
+        state.playing.duration = action.payload
+      }
+    },
   },
 })
 

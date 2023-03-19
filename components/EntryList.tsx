@@ -13,55 +13,38 @@ import EntryListHeader from './EntryListHeader'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import AddFeedButton from './AddFeedButton'
 import useFeeds from 'hooks/useFeeds'
-import { Bookmark, Eye, Haze, Podcast } from '@tamagui/lucide-icons'
+import { Eye, Haze, Podcast } from '@tamagui/lucide-icons'
 
-const CUSTOM_TAGS = {
-  flow: [
-    {
-      title: 'Today',
-      icon: Haze,
-      count: 0,
-    },
-    {
-      title: 'Unread',
-      icon: Eye,
-      count: 0,
-    },
-    {
-      title: 'Podcast',
-      icon: Podcast,
-      count: 0,
-    },
-  ],
-  bookmarks: [
-    {
-      title: 'Bookmarked',
-      icon: Bookmark,
-      count: 0,
-    },
-  ],
-  tags: [],
-  feeds: [],
-}
+const customTags = [
+  {
+    title: 'Today',
+    icon: Haze,
+    count: 0,
+  },
+  {
+    title: 'Unread',
+    icon: Eye,
+    count: 0,
+  },
+  {
+    title: 'Podcast',
+    icon: Podcast,
+    count: 0,
+  },
+]
 
 export default function EntryList({
   entries,
-  type = 'flow',
-  withHeader = true,
+  refreshing,
   onRefresh = () => {},
 }: {
   entries: FeedEntry[]
-  type?: FeedListType
-  withHeader?: boolean
+  refreshing: boolean
   onRefresh?: () => void
 }) {
-  const customTag = CUSTOM_TAGS[type]
-
   const [page, setPage] = useState(1)
   const listRef = useRef<FlashList<any>>(null)
-  const [selectedTag, setSelectedTag] = useState<Tag | undefined>(
-    type === 'bookmarks' ? customTag[0] : undefined
-  )
+  const [selectedTag, setSelectedTag] = useState<Tag | undefined>()
   const [keyword, setKeyword] = useState('')
   const { feeds } = useFeeds()
   const hideRead = useAppSelector((state) => state.setting.flow.hideRead)
@@ -124,13 +107,10 @@ export default function EntryList({
           return false
         })
       }
-    } else if (hideRead && type === 'flow') {
+    } else if (hideRead) {
       result = entries.filter((t) => !t.read)
     }
-    if (type === 'flow') {
-      return ['Header', ...result]
-    }
-    return result
+    return ['Header', ...result]
   }, [entries, keyword, hideRead, selectedTag])
 
   useEffect(() => {
@@ -148,12 +128,10 @@ export default function EntryList({
     <FlashList
       ref={listRef}
       ListHeaderComponent={
-        withHeader ? (
-          <EntryListHeader keyword={keyword} setKeyword={setKeyword} />
-        ) : null
+        <EntryListHeader keyword={keyword} setKeyword={setKeyword} />
       }
       scrollEventThrottle={16}
-      stickyHeaderIndices={withHeader ? [0] : []}
+      stickyHeaderIndices={[0]}
       removeClippedSubviews={false}
       extraData={{
         keyword,
@@ -175,11 +153,11 @@ export default function EntryList({
         if (typeof item === 'string') {
           return (
             <TagsHeader
-              tags={[...customTag, ...topTags]}
+              tags={[...customTags, ...topTags]}
               selectedTag={selectedTag}
               scrollY={scrollY}
               setSelectedTag={setSelectedTag}
-              type={type}
+              type="flow"
             />
           )
         }
@@ -187,7 +165,7 @@ export default function EntryList({
           <EntryItem
             item={item}
             feed={feeds.find((t) => t.url === item.feedUrl)}
-            type={type}
+            type="flow"
           />
         )
       }}
@@ -198,7 +176,7 @@ export default function EntryList({
         }
       }}
       onRefresh={onRefresh}
-      refreshing={false}
+      refreshing={refreshing}
       ListFooterComponent={
         isEmpty ? (
           <YStack flex={1} ai="center" jc="center" space pt={100}>

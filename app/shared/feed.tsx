@@ -3,19 +3,18 @@ import { Link, useSearchParams } from 'expo-router'
 import { useEffect, useState } from 'react'
 import { Pressable } from 'react-native'
 import { YStack, Text, XStack, Spinner } from 'tamagui'
-import { FeedData, FeedListType } from 'types'
+import { FeedData } from 'types'
 import Favicon from 'components/Favicon'
 import _ from 'lodash'
 import { EmojiLookUp } from 'iconoir-react-native'
 import AddFeedButton from 'components/AddFeedButton'
-import EntryList from 'components/EntryList'
-import useFeeds from 'hooks/useFeeds'
 import { createEntries, resubFeed, subFeed } from 'lib/db'
 import useEntryFlow from 'hooks/useEntryFlow'
 import { MAIN_COLOR } from 'lib/constants'
 import { extract } from 'lib/task'
 import { Info } from '@tamagui/lucide-icons'
 import useFeed from 'hooks/useFeed'
+import SimpleEntryList from 'components/SimpleEntryList'
 
 export default function FeedProfile() {
   const [feedData, setFeedData] = useState<FeedData>()
@@ -130,10 +129,10 @@ export default function FeedProfile() {
             <Text color="$color10">Loading</Text>
           </YStack>
         ) : error ? null : (
-          <EntryList
+          <SimpleEntryList
             entries={feedEntries}
-            type={(from as FeedListType) || 'tags'}
-            withHeader={false}
+            type="feed"
+            onRefresh={() => {}}
           />
         )}
       </YStack>

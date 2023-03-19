@@ -1,11 +1,12 @@
 import DrawerHeader from 'components/DrawerHeader'
-import EntryList from 'components/EntryList'
+import SimpleEntryList from 'components/SimpleEntryList'
 import useBookmarks from 'hooks/useBookmarks'
 import { getBookmarkedEntries } from 'lib/db'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { YStack } from 'tamagui'
 
 export default function Bookmarks() {
+  const [refreshing, setRefreshing] = useState(false)
   const { entries } = useBookmarks()
 
   useEffect(() => {
@@ -15,11 +16,19 @@ export default function Bookmarks() {
   return (
     <YStack flex={1}>
       <DrawerHeader title="Bookmarks" />
-      <EntryList
+      <SimpleEntryList
         entries={entries}
+        refreshing={refreshing}
+        onRefresh={async () => {
+          try {
+            setRefreshing(true)
+            await getBookmarkedEntries()
+            setRefreshing(false)
+          } catch (error) {
+            setRefreshing(false)
+          }
+        }}
         type="bookmarks"
-        withHeader={false}
-        onRefresh={getBookmarkedEntries}
       />
     </YStack>
   )

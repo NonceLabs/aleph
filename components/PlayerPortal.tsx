@@ -32,20 +32,23 @@ import { formatStatusTime } from 'lib/helper'
 import EntryList from './EntryList'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { ClosedCaptions } from 'iconoir-react-native'
+import SimpleEntryList from './SimpleEntryList'
+import PlayerStatus from './PlayerStatus'
+
+type ActiveButton = 'info' | 'caption' | 'list'
 
 export default function PlayerPortal() {
   const [open, setOpen] = useState(false)
   const [position, setPosition] = useState(0)
   const [playStatus, setPlayStatus] = useState<AVPlaybackStatus>()
-  const [showList, setShowList] = useState(false)
+  const [active, setActive] = useState('info')
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const { playing, isPlaying, sound, playlist } = usePlaylist()
   const { entry, onToggleBookmark } = useEntry(playing?.id)
   const feed = useFeed(playing?.feedUrl)
-  const iconSize = 32
+  const iconSize = 24
 
-  const router = useRouter()
   const insets = useSafeAreaInsets()
   const { height } = useWindowDimensions()
 
@@ -64,7 +67,6 @@ export default function PlayerPortal() {
       sound.setProgressUpdateIntervalAsync(1000)
       sound.setOnPlaybackStatusUpdate((status) => {
         setPlayStatus(status)
-        // console.log('status', status)
 
         if (status.isLoaded && status.isPlaying) {
           dispatch({
@@ -134,20 +136,16 @@ export default function PlayerPortal() {
             style={StyleSheet.absoluteFill}
           ></BlurView>
           <YStack flex={1} ai="center" jc="center">
-            {showList ? (
+            {active === 'list' ? (
               <View style={{ height: '100%', width: '100%' }}>
-                <EntryList
-                  entries={playlist}
-                  type="bookmarks"
-                  withHeader={false}
-                />
+                <SimpleEntryList entries={playlist} type="playlist" />
               </View>
             ) : (
               <YStack px={8} space={16} ai="center" jc="center" w="100%">
                 <Image
                   source={cover}
                   placeholder={require('../assets/images/cover.png')}
-                  style={{ width: 200, height: 200, borderRadius: 8 }}
+                  style={{ width: 300, height: 300, borderRadius: 8 }}
                 />
                 <Text
                   fontFamily="Gilroy-Bold"
@@ -177,57 +175,12 @@ export default function PlayerPortal() {
           </YStack>
           <YStack ai="center" jc="flex-end" space={16} px={8}>
             <YStack w="90%" ai="center" space={20}>
-              {playStatus?.isLoaded && (
-                <XStack w="100%" jc="space-between">
-                  <Text color="$color11" fontSize={12}>
-                    {formatStatusTime(
-                      playStatus.isPlaying
-                        ? playStatus.positionMillis
-                        : playing?.position
-                    )}
-                  </Text>
-                  <Text color="$color11">
-                    -
-                    {formatStatusTime(
-                      (playStatus?.durationMillis || 0) -
-                        (playStatus.isPlaying
-                          ? playStatus.positionMillis
-                          : playing?.position || 0)
-                    )}
-                  </Text>
-                </XStack>
-              )}
-              {playStatus?.isLoaded && (
-                <Slider
-                  defaultValue={[0]}
-                  max={playStatus.durationMillis || 1000 * 60 * 60}
-                  step={1000}
-                  mb={16}
-                  value={[
-                    playStatus.isPlaying
-                      ? playStatus.positionMillis
-                      : playing?.position || 0,
-                  ]}
-                  width="100%"
-                  orientation="horizontal"
-                  onValueChange={(value) => {
-                    try {
-                      if (value.length > 0) {
-                        setPlayStatus({
-                          ...playStatus,
-                          positionMillis: value[0],
-                        })
-                        sound?.playFromPositionAsync(value[0])
-                      }
-                    } catch (error) {}
-                  }}
-                >
-                  <Slider.Track bc="$color8">
-                    <Slider.TrackActive bc={MAIN_COLOR} />
-                  </Slider.Track>
-                  <Slider.Thumb index={0} circular elevate />
-                </Slider>
-              )}
+              <PlayerStatus
+                status={playStatus}
+                playing={playing}
+                setPlayStatus={setPlayStatus}
+                sound={sound}
+              />
 
               <XStack ai="center" jc="center" space={32}>
                 <Pressable
@@ -271,28 +224,39 @@ export default function PlayerPortal() {
             </YStack>
 
             <XStack w="90%" ai="center" jc="space-between">
-              <Link
-                href={`shared/reader?id=${encodeURIComponent(entry.id)}`}
-                onPress={() => setOpen(false)}
-                style={{ padding: 4 }}
-              >
-                <Info size={iconSize} color="$color11" />
-              </Link>
-              <ClosedCaptions width={iconSize} height={iconSize} />
-              <Pressable
-                onPress={() => setShowList(!showList)}
-                style={
-                  showList
-                    ? {
-                        backgroundColor: 'rgba(0,0,0,0.1)',
-                        borderRadius: 4,
-                        padding: 4,
-                      }
-                    : { padding: 4 }
-                }
-              >
-                <ListMusic size={iconSize} color="$color11" />
-              </Pressable>
+              {[
+                {
+                  icon: Info,
+                  type: 'info',
+                },
+                // {
+                //   icon: ClosedCaptions,
+                //   type: 'caption',
+                // },
+                {
+                  icon: ListMusic,
+                  type: 'list',
+                },
+              ].map((t) => {
+                const Icon = t.icon
+                return (
+                  <Pressable
+                    key={t.type}
+                    onPress={() => setActive(t.type)}
+                    style={
+                      active === t.type
+                        ? {
+                            backgroundColor: 'rgba(0,0,0,0.1)',
+                            borderRadius: 4,
+                            padding: 8,
+                          }
+                        : { padding: 8 }
+                    }
+                  >
+                    <Icon size={iconSize} color="$color11" />
+                  </Pressable>
+                )
+              })}
             </XStack>
           </YStack>
         </Sheet.Frame>

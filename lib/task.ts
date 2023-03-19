@@ -11,6 +11,7 @@ const DAYS_LIMIT = {
   Week: 7,
   Month: 30,
   Year: 365,
+  Ever: -1,
 }
 
 export async function extract(url: string): Promise<FeedData> {
@@ -24,13 +25,17 @@ export async function fetchFeedFlow(feeds: Feed[]) {
       feeds.map(async (feed) => {
         try {
           const result = await extract(feed.url)
-          const entries = result.entries || []
-          // .filter((entry: FeedEntry) => {
-          //   return (
-          //     dayjs().diff(dayjs(entry.published), 'day') <=
-          //     DAYS_LIMIT[publishLimit]
-          //   )
-          // })
+          const entries =
+            result.entries ||
+            [].filter((entry: FeedEntry) => {
+              if (publishLimit === 'Ever') {
+                return true
+              }
+              return (
+                dayjs().diff(dayjs(entry.published), 'day') <=
+                DAYS_LIMIT[publishLimit]
+              )
+            })
           createEntries(entries)
         } catch (error) {
           return null

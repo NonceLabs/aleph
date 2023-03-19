@@ -30,6 +30,7 @@ export interface FeedEntry {
 
 export interface PlayingFeedEntry extends FeedEntry {
   position?: number
+  duration?: number
 }
 
 export interface FeedData {
@@ -48,12 +49,19 @@ export interface CustomTag {
   createdAt: Date
 }
 
-export type FeedListType = 'flow' | 'bookmarks' | 'tags' | 'feeds'
+export type FeedListType =
+  | 'flow'
+  | 'bookmarks'
+  | 'tags'
+  | 'feeds'
+  | 'feed'
+  | 'playlist'
 
 export enum FeedPublishLimit {
   Week = 'Week',
   Month = 'Month',
   Year = 'Year',
+  Ever = 'Ever',
 }
 
 export enum PubEvent {

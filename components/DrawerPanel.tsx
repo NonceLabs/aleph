@@ -32,11 +32,11 @@ const routes = [
   //   title: 'Tags',
   //   Icon: Label,
   // },
-  {
-    href: '/explore',
-    title: 'Explore',
-    Icon: Planet,
-  },
+  // {
+  //   href: '/explore',
+  //   title: 'Explore',
+  //   Icon: Planet,
+  // },
   {
     href: '/bookmarks',
     title: 'Bookmarks',
