@@ -33,8 +33,6 @@ export default function PlayerStatus({
     position = playing.position || status.positionMillis || 0
   }
 
-  console.log('status', duration, position)
-
   return (
     <YStack id="player-status" width="100%" space={20}>
       <XStack w="100%" jc="space-between">

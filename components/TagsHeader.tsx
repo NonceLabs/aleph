@@ -100,7 +100,7 @@ export default function TagsHeader({
               <Button
                 key={item.title}
                 height={40}
-                borderRadius="50%"
+                borderRadius={20}
                 space={4}
                 mx={4}
                 icon={Icon ? <Icon size={24} color={contentColor} /> : null}

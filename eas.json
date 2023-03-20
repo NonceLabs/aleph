@@ -7,20 +7,20 @@
       "developmentClient": true,
       "distribution": "internal",
       "ios": {
-        "resourceClass": "m1-medium",
+        "resourceClass": "m-medium",
         "autoIncrement": true
       }
     },
     "preview": {
       "distribution": "internal",
       "ios": {
-        "resourceClass": "m1-medium",
+        "resourceClass": "m-medium",
         "autoIncrement": true
       }
     },
     "production": {
       "ios": {
-        "resourceClass": "m1-medium",
+        "resourceClass": "m-medium",
         "autoIncrement": true
       }
     }

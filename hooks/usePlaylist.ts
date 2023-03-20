@@ -41,11 +41,18 @@ export default function usePlaylist() {
           await player.sound?.stopAsync()
           await player.sound?.unloadAsync()
         }
-        await Audio.setAudioModeAsync({
+        Audio.setAudioModeAsync({
           staysActiveInBackground: true,
           interruptionModeAndroid: InterruptionModeAndroid.DoNotMix,
           interruptionModeIOS: InterruptionModeIOS.DoNotMix,
+          playsInSilentModeIOS: true,
         })
+          .then(() => {
+            console.log('setAudioModeAsync')
+          })
+          .catch((e) => {
+            console.log('setAudioModeAsync error', e.code)
+          })
         const { sound, status } = await Audio.Sound.createAsync(
           {
             uri: playing.media!,
@@ -53,9 +60,9 @@ export default function usePlaylist() {
           {
             shouldPlay: true,
             positionMillis: playing.position || 0,
+            volume: 1,
           }
         )
-        console.log('playing', isPlaying, status.isLoaded, sound)
 
         if (isPlaying) {
           if (status.isLoaded) {

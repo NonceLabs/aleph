@@ -1,3 +1,5 @@
+import { ImageSourcePropType } from 'react-native'
+
 export enum FeedType {
   RSS = 'RSS',
   Podcast = 'Podcast',
@@ -71,4 +73,15 @@ export enum PubEvent {
   TAGS_UPDATE = 'TAGS_UPDATE',
   ENTRIES_UPDATE = 'ENTRIES_UPDATE',
   ON_PODCAST_PORTAL = 'ON_PODCAST_PORTAL',
+  TOAST_MESSAGE = 'TOAST_MESSAGE',
+  TOAST_HIDE = 'TOAST_HIDE',
+}
+
+export type ToastType = 'success' | 'error' | 'info' | 'warning'
+
+export interface ToastPayload {
+  type: ToastType
+  message: string
+  icon?: ImageSourcePropType
+  duration: number
 }

@@ -18,6 +18,8 @@ import { store } from 'store'
 import { Drawer } from './Drawer'
 import DrawerPanel from 'components/DrawerPanel'
 import useTheme from 'hooks/useTheme'
+import ToastContainer from 'components/ToastContainer'
+import { Host } from 'react-native-portalize'
 
 LogBox.ignoreAllLogs()
 
@@ -66,46 +68,49 @@ function RootLayoutNav() {
         <Provider store={store}>
           <TamaguiProvider config={config} defaultTheme={theme}>
             <ThemeProvider value={theme === 'dark' ? DarkTheme : DefaultTheme}>
-              <Drawer
-                initialRouteName="index"
-                drawerContent={DrawerPanel}
-                screenOptions={{
-                  headerShown: false,
-                  drawerStyle: {
-                    width: 250,
-                  },
-                }}
-              >
-                <Drawer.Screen
-                  name="index"
-                  options={{
+              <Host>
+                <Drawer
+                  initialRouteName="index"
+                  drawerContent={DrawerPanel}
+                  screenOptions={{
                     headerShown: false,
-                    header: () => null,
+                    drawerStyle: {
+                      width: 250,
+                    },
                   }}
-                />
-                <Drawer.Screen
-                  name="settings"
-                  options={{
-                    headerShown: false,
-                    header: () => null,
-                  }}
-                />
-                <Drawer.Screen
-                  name="feeds"
-                  options={{
-                    headerShown: false,
-                    header: () => null,
-                  }}
-                />
-                <Drawer.Screen
-                  name="bookmarks"
-                  options={{ headerShown: false, header: () => null }}
-                />
-                <Drawer.Screen
-                  name="explore"
-                  options={{ headerShown: false, header: () => null }}
-                />
-              </Drawer>
+                >
+                  <Drawer.Screen
+                    name="index"
+                    options={{
+                      headerShown: false,
+                      header: () => null,
+                    }}
+                  />
+                  <Drawer.Screen
+                    name="settings"
+                    options={{
+                      headerShown: false,
+                      header: () => null,
+                    }}
+                  />
+                  <Drawer.Screen
+                    name="feeds"
+                    options={{
+                      headerShown: false,
+                      header: () => null,
+                    }}
+                  />
+                  <Drawer.Screen
+                    name="bookmarks"
+                    options={{ headerShown: false, header: () => null }}
+                  />
+                  <Drawer.Screen
+                    name="explore"
+                    options={{ headerShown: false, header: () => null }}
+                  />
+                </Drawer>
+                <ToastContainer />
+              </Host>
             </ThemeProvider>
           </TamaguiProvider>
         </Provider>

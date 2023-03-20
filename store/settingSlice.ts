@@ -21,7 +21,7 @@ const initialState: SettingSlice = {
   },
   flow: {
     hideRead: false,
-    publishLimit: FeedPublishLimit.Month,
+    publishLimit: FeedPublishLimit.Ever,
   },
 }
 
