@@ -6,11 +6,10 @@ export function formatStatusTime(millis: number | undefined) {
   if (!millis) {
     return '00:00'
   }
-  const seconds = Math.floor(millis / 1000)
-  const minutes = Math.floor(seconds / 60)
+  const minutes = Math.floor(millis / 60)
   const hours = Math.floor(minutes / 60)
 
-  let s: number | string = seconds % 60
+  let s: number | string = Math.floor(millis % 60)
   s = s < 10 ? '0' + s : s
 
   let m: number | string = minutes % 60

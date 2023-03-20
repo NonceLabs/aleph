@@ -20,6 +20,7 @@ import DrawerPanel from 'components/DrawerPanel'
 import useTheme from 'hooks/useTheme'
 import ToastContainer from 'components/ToastContainer'
 import { Host } from 'react-native-portalize'
+import { setupPlayerService } from 'lib/setupPlayer'
 
 LogBox.ignoreAllLogs()
 
@@ -61,6 +62,14 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   const theme = useTheme()
+
+  useEffect(() => {
+    setupPlayerService()
+      .then((isReady) => {
+        console.log('player service setup', isReady)
+      })
+      .catch(console.error)
+  }, [])
 
   return (
     <>

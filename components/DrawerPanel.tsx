@@ -1,18 +1,11 @@
 import { Image } from 'expo-image'
 import { Link } from 'expo-router'
-import useFeed from 'hooks/useFeed'
+import { useActiveTrack } from 'hooks/useActiveTrack'
 import useTheme from 'hooks/useTheme'
-import {
-  BookmarkEmpty,
-  Home,
-  Label,
-  Planet,
-  RssFeedTag,
-  Settings,
-} from 'iconoir-react-native'
+import { BookmarkEmpty, Home, RssFeedTag, Settings } from 'iconoir-react-native'
 import { MAIN_COLOR } from 'lib/constants'
+import icons from 'lib/icons'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { useAppSelector } from 'store/hooks'
 import { Text, XStack, YStack } from 'tamagui'
 import { PubEvent } from 'types'
 
@@ -54,14 +47,11 @@ export default function DrawerPanel() {
   const theme = useTheme()
   const fontSize = 32
 
-  const { playing } = useAppSelector((state) => state.feed)
-  const feed = useFeed(playing?.feedUrl)
-
   const onPlayInfo = () => {
     PubSub.publish(PubEvent.ON_PODCAST_PORTAL)
   }
 
-  const cover = playing?.cover || feed?.favicon
+  const track = useActiveTrack()
 
   return (
     <YStack
@@ -84,24 +74,22 @@ export default function DrawerPanel() {
           </Text>
         </YStack>
       </XStack>
-      {playing && (
+      {track && (
         <Link href="/" onPress={onPlayInfo}>
           <XStack space={8} w={234} ai="center" jc="flex-end" pr={8}>
             <YStack flex={1} ai="flex-end" jc="flex-end" space={8}>
-              {feed && (
-                <XStack ai="center" jc="flex-end" space={8}>
-                  <Text
-                    color="$color12"
-                    fontFamily="Gilroy-Bold"
-                    fontWeight="bold"
-                    fontSize={14}
-                    numberOfLines={1}
-                    ta="right"
-                  >
-                    {feed?.title}
-                  </Text>
-                </XStack>
-              )}
+              <XStack ai="center" jc="flex-end" space={8}>
+                <Text
+                  color="$color12"
+                  fontFamily="Gilroy-Bold"
+                  fontWeight="bold"
+                  fontSize={14}
+                  numberOfLines={1}
+                  ta="right"
+                >
+                  {track.artist}
+                </Text>
+              </XStack>
               <Text
                 fontFamily="Gilroy-Bold"
                 fontWeight="bold"
@@ -110,12 +98,12 @@ export default function DrawerPanel() {
                 color="$color11"
                 ellipsizeMode="tail"
               >
-                {playing.title}
+                {track.title}
               </Text>
             </YStack>
             <Image
-              source={cover}
-              placeholder={require('../assets/images/cover.png')}
+              source={track.artwork}
+              placeholder={icons.DEFAULT_COVER}
               style={{ width: 60, height: 60, borderRadius: 8 }}
             />
           </XStack>

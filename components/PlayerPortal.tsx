@@ -1,21 +1,12 @@
 import { Image } from 'expo-image'
-import usePlaylist from 'hooks/usePlaylist'
 import { MAIN_COLOR } from 'lib/constants'
 import { useEffect, useState } from 'react'
 import { Pressable, StyleSheet, View } from 'react-native'
-import {
-  XStack,
-  Text,
-  Sheet,
-  YStack,
-  Slider,
-  useWindowDimensions,
-} from 'tamagui'
-import PlayingEntry from './PlayingEntry'
+import { XStack, Text, Sheet, YStack, useWindowDimensions } from 'tamagui'
+import PlayingTrack from './PlayingTrack'
 import { BlurView } from 'expo-blur'
 import useTheme from 'hooks/useTheme'
-import { Link, useRouter } from 'expo-router'
-import useFeed from 'hooks/useFeed'
+import { useRouter } from 'expo-router'
 import useEntry from 'hooks/useEntry'
 import {
   Bookmark,
@@ -25,32 +16,33 @@ import {
   PauseCircle,
   PlayCircle,
 } from '@tamagui/lucide-icons'
-import { useAppDispatch } from 'store/hooks'
 import { PubEvent } from 'types'
-import { AVPlaybackStatus } from 'expo-av'
-import { formatStatusTime } from 'lib/helper'
-import EntryList from './EntryList'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { ClosedCaptions } from 'iconoir-react-native'
-import SimpleEntryList from './SimpleEntryList'
 import PlayerStatus from './PlayerStatus'
+import PlayList from './PlayList'
+import TrackPlayer, { State, usePlaybackState } from 'react-native-track-player'
+import icons from 'lib/icons'
+import { useActiveTrack } from 'hooks/useActiveTrack'
+import Toast from 'lib/toast'
 
 type ActiveButton = 'info' | 'caption' | 'list'
 
 export default function PlayerPortal() {
   const [open, setOpen] = useState(false)
   const [position, setPosition] = useState(0)
-  const [playStatus, setPlayStatus] = useState<AVPlaybackStatus>()
   const [active, setActive] = useState('info')
   const theme = useTheme()
-  const dispatch = useAppDispatch()
-  const { playing, isPlaying, sound, playlist } = usePlaylist()
-  const { entry, onToggleBookmark } = useEntry(playing?.id)
-  const feed = useFeed(playing?.feedUrl)
+
   const iconSize = 24
 
+  const router = useRouter()
   const insets = useSafeAreaInsets()
   const { height } = useWindowDimensions()
+  const playerState = usePlaybackState()
+  const track = useActiveTrack()
+  const { entry, onToggleBookmark } = useEntry(track?.id)
+
+  const isPlaying = playerState === State.Playing
 
   useEffect(() => {
     const listener = PubSub.subscribe(PubEvent.ON_PODCAST_PORTAL, () => {
@@ -62,38 +54,17 @@ export default function PlayerPortal() {
     }
   }, [])
 
-  useEffect(() => {
-    if (sound) {
-      sound.setProgressUpdateIntervalAsync(1000)
-      sound.setOnPlaybackStatusUpdate((status) => {
-        setPlayStatus(status)
-
-        if (status.isLoaded && status.isPlaying) {
-          dispatch({
-            type: 'feed/updatePlayingPosition',
-            payload: status.positionMillis,
-          })
-        }
-        if (status.isLoaded && status.didJustFinish) {
-          dispatch({
-            type: 'feed/playNext',
-          })
-        }
-      })
-    }
-  }, [sound])
-
-  if (!entry) {
+  if (!entry || !track) {
     return null
   }
 
-  const cover = entry?.cover || feed?.favicon
+  console.log('track', track, entry)
 
   return (
     <>
-      {playing && (
-        <PlayingEntry
-          entry={playing}
+      {track && (
+        <PlayingTrack
+          track={track}
           isPlaying={isPlaying}
           animate
           withControl={false}
@@ -124,8 +95,8 @@ export default function PlayerPortal() {
         >
           <View style={StyleSheet.absoluteFill}>
             <Image
-              source={cover}
-              placeholder={require('../assets/images/cover.png')}
+              source={track?.artwork}
+              placeholder={icons.DEFAULT_COVER}
               contentFit="cover"
               style={{ width: '100%', height: '100%' }}
             />
@@ -138,13 +109,13 @@ export default function PlayerPortal() {
           <YStack flex={1} ai="center" jc="center">
             {active === 'list' ? (
               <View style={{ height: '100%', width: '100%' }}>
-                <SimpleEntryList entries={playlist} type="playlist" />
+                <PlayList />
               </View>
             ) : (
               <YStack px={8} space={16} ai="center" jc="center" w="100%">
                 <Image
-                  source={cover}
-                  placeholder={require('../assets/images/cover.png')}
+                  source={track?.artwork}
+                  placeholder={icons.DEFAULT_COVER}
                   style={{ width: 300, height: 300, borderRadius: 8 }}
                 />
                 <Text
@@ -153,34 +124,35 @@ export default function PlayerPortal() {
                   fontWeight="bold"
                   color="$color12"
                   ta="center"
+                  onPress={() => {
+                    router.push({
+                      pathname: 'shared/reader',
+                      params: {
+                        id: encodeURIComponent(entry.id),
+                        type: 'podcast',
+                        feedUrl: encodeURIComponent(entry.feedUrl || ''),
+                      },
+                    })
+                    setOpen(false)
+                  }}
                 >
-                  {playing?.title}
+                  {track?.title}
                 </Text>
-                <Link
-                  href={`shared/feed?url=${encodeURIComponent(entry?.feedUrl)}`}
-                  onPress={() => setOpen(false)}
+                <Text
+                  fontFamily="Gilroy-Bold"
+                  fontSize={18}
+                  fontWeight="bold"
+                  color={MAIN_COLOR}
+                  ta="center"
                 >
-                  <Text
-                    fontFamily="Gilroy-Bold"
-                    fontSize={18}
-                    fontWeight="bold"
-                    color={MAIN_COLOR}
-                    ta="center"
-                  >
-                    {feed?.title}
-                  </Text>
-                </Link>
+                  {track?.artist}
+                </Text>
               </YStack>
             )}
           </YStack>
           <YStack ai="center" jc="flex-end" space={16} px={8}>
             <YStack w="90%" ai="center" space={20}>
-              <PlayerStatus
-                status={playStatus}
-                playing={playing}
-                setPlayStatus={setPlayStatus}
-                sound={sound}
-              />
+              <PlayerStatus />
 
               <XStack ai="center" jc="center" space={32}>
                 <Pressable
@@ -197,11 +169,20 @@ export default function PlayerPortal() {
                   />
                 </Pressable>
                 <Pressable
-                  onPress={() => {
-                    dispatch({
-                      type: 'feed/play',
-                      payload: playing,
-                    })
+                  onPress={async () => {
+                    try {
+                      console.log('isPlaying', isPlaying)
+
+                      if (isPlaying) {
+                        await TrackPlayer.pause()
+                      } else {
+                        await TrackPlayer.play()
+                      }
+                    } catch (error) {
+                      console.log('error', error)
+
+                      Toast.error(error)
+                    }
                   }}
                 >
                   {isPlaying ? (
@@ -212,10 +193,7 @@ export default function PlayerPortal() {
                 </Pressable>
                 <Pressable
                   onPress={() => {
-                    dispatch({
-                      type: 'feed/playNext',
-                      payload: playing,
-                    })
+                    TrackPlayer.skipToNext()
                   }}
                 >
                   <ChevronLast size={30} color="$color11" />

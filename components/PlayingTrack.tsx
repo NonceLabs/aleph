@@ -1,32 +1,26 @@
 import { PauseCircle, PlayCircle } from '@tamagui/lucide-icons'
 import { Image } from 'expo-image'
-import useFeed from 'hooks/useFeed'
-import { MAIN_COLOR } from 'lib/constants'
+import icons from 'lib/icons'
 import { useEffect, useRef } from 'react'
-import { Animated, Easing, ImageBackground, Pressable } from 'react-native'
-import { useAppDispatch } from 'store/hooks'
+import { Animated, Easing, Pressable } from 'react-native'
+import { Track } from 'react-native-track-player'
 import { XStack } from 'tamagui'
-import { FeedEntry } from 'types'
 
-const AnimetedImage = Animated.createAnimatedComponent(ImageBackground)
-
-export default function PlayingEntry({
-  entry,
+export default function PlayingTrack({
+  track,
   animate = false,
   isPlaying,
   size = 80,
   withControl = true,
   onPress,
 }: {
-  entry: FeedEntry
+  track: Track
   isPlaying: boolean
   animate?: boolean
   size?: number
   withControl?: boolean
   onPress?: () => void
 }) {
-  const dispatch = useAppDispatch()
-  const feed = useFeed(entry.feedUrl)
   const spinValue = useRef(new Animated.Value(0)).current
   const anim = useRef(
     Animated.loop(
@@ -49,18 +43,7 @@ export default function PlayingEntry({
   }, [isPlaying, anim, animate])
 
   return (
-    <Pressable
-      onPress={() => {
-        if (onPress) {
-          onPress()
-        } else {
-          dispatch({
-            type: 'feed/play',
-            payload: entry,
-          })
-        }
-      }}
-    >
+    <Pressable onPress={onPress}>
       <Animated.View
         style={{
           transform: [
@@ -74,8 +57,8 @@ export default function PlayingEntry({
         }}
       >
         <Image
-          source={entry.cover || feed?.favicon}
-          placeholder={require('../assets/images/cover.png')}
+          source={track?.artwork}
+          placeholder={icons.DEFAULT_COVER}
           style={{ height: size, width: size, borderRadius: size / 2 }}
           blurRadius={isPlaying ? 10 : 5}
         />

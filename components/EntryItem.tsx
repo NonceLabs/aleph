@@ -5,11 +5,10 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 import { Pressable, StyleSheet } from 'react-native'
 import { useRouter } from 'expo-router'
 import Favicon from './Favicon'
-import { useAppDispatch, useAppSelector } from 'store/hooks'
-import PlayingEntry from './PlayingEntry'
 import { PlayCircle } from '@tamagui/lucide-icons'
 import { Image } from 'expo-image'
-import useTheme from 'hooks/useTheme'
+import TrackPlayer from 'react-native-track-player'
+import icons from 'lib/icons'
 
 dayjs.extend(relativeTime)
 
@@ -97,47 +96,57 @@ export default function FeedItem({
 }
 
 function Cover({ item, feed }: { item: FeedEntry; feed?: Feed }) {
-  const { playing, isPlaying } = useAppSelector((state) => state.feed)
-  const dispatch = useAppDispatch()
-  const theme = useTheme()
+  const placeholder = icons.DEFAULT_COVER
 
   if (item.entryType === FeedType.RSS) {
     return item.cover ? (
       <Image
         source={item.cover}
-        placeholder={require('../assets/images/cover.png')}
+        placeholder={placeholder}
         style={{ height: 80, width: 80 }}
         contentFit="cover"
       />
     ) : null
   }
 
-  const cover = item.cover || feed?.favicon
+  const cover = item.cover || feed?.favicon || placeholder
 
   return (
     <Pressable
-      onPress={() => {
-        dispatch({
-          type: 'feed/play',
-          payload: item,
-        })
+      onPress={async () => {
+        try {
+          const idx = await TrackPlayer.add(
+            {
+              id: item.id,
+              url: item.media!,
+              title: item.title,
+              artist: feed?.title,
+              artwork: cover,
+            },
+            0
+          )
+          console.log('idx', idx)
+
+          if (typeof idx === 'number') {
+            await TrackPlayer.skipToNext(idx)
+            await TrackPlayer.play()
+          }
+        } catch (error) {
+          console.log('error', error)
+        }
       }}
     >
-      {playing?.id === item.id ? (
-        <PlayingEntry isPlaying={isPlaying} entry={playing} animate />
-      ) : (
-        <XStack>
-          <Image
-            source={{ uri: cover }}
-            placeholder={require('../assets/images/cover.png')}
-            style={{ height: 80, width: 80, borderRadius: 8 }}
-            blurRadius={15}
-          />
-          <XStack position="absolute" top={20} left={20}>
-            <PlayCircle size={40} color="white" />
-          </XStack>
+      <XStack>
+        <Image
+          source={{ uri: cover }}
+          placeholder={placeholder}
+          style={{ height: 80, width: 80, borderRadius: 8 }}
+          blurRadius={15}
+        />
+        <XStack position="absolute" top={20} left={20}>
+          <PlayCircle size={40} color="white" />
         </XStack>
-      )}
+      </XStack>
     </Pressable>
   )
 }

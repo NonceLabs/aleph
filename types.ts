@@ -58,6 +58,7 @@ export type FeedListType =
   | 'feeds'
   | 'feed'
   | 'playlist'
+  | 'podcast'
 
 export enum FeedPublishLimit {
   Week = 'Week',

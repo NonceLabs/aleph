@@ -1,36 +1,12 @@
-import { Audio, AVPlaybackStatus } from 'expo-av'
 import { MAIN_COLOR } from 'lib/constants'
 import { formatStatusTime } from 'lib/helper'
+import TrackPlayer, { useProgress } from 'react-native-track-player'
 import { Slider, Text, XStack, YStack } from 'tamagui'
-import { PlayingFeedEntry } from 'types'
 
-export default function PlayerStatus({
-  status,
-  playing,
-  setPlayStatus,
-  sound,
-}: {
-  status?: AVPlaybackStatus
-  playing?: PlayingFeedEntry
-  setPlayStatus: (status: AVPlaybackStatus) => void
-  sound: Audio.Sound | null
-}) {
-  let duration = 0
-  let position = 0
-
-  if (!playing || !status || !sound) {
+export default function PlayerStatus() {
+  const { position, duration } = useProgress()
+  if (duration === 0) {
     return null
-  }
-  if (!status.isLoaded) {
-    if (!playing.duration) {
-      return null
-    } else {
-      duration = playing.duration || 0
-      position = playing.position || 0
-    }
-  } else {
-    duration = playing.duration || status.durationMillis || 0
-    position = playing.position || status.positionMillis || 0
   }
 
   return (
@@ -44,19 +20,15 @@ export default function PlayerStatus({
       <Slider
         defaultValue={[0]}
         max={duration}
-        step={1000}
+        step={1}
         mb={16}
         value={[position]}
         width="100%"
         orientation="horizontal"
         onValueChange={(value) => {
           try {
-            if (value.length > 0 && status.isLoaded) {
-              setPlayStatus({
-                ...status,
-                positionMillis: value[0],
-              })
-              sound?.playFromPositionAsync(value[0])
+            if (value.length) {
+              TrackPlayer.seekTo(value[0])
             }
           } catch (error) {}
         }}
