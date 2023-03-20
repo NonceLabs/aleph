@@ -5,6 +5,7 @@ import { MAIN_COLOR } from 'lib/constants'
 import Toast from 'lib/toast'
 import { useEffect, useState } from 'react'
 import { Pressable } from 'react-native'
+import TrackPlayer from 'react-native-track-player'
 import { Text, XStack, YStack, Separator, useWindowDimensions } from 'tamagui'
 
 export default function PlayList() {

@@ -2,7 +2,13 @@ import { Image } from 'expo-image'
 import { Link } from 'expo-router'
 import { useActiveTrack } from 'hooks/useActiveTrack'
 import useTheme from 'hooks/useTheme'
-import { BookmarkEmpty, Home, RssFeedTag, Settings } from 'iconoir-react-native'
+import {
+  BookmarkEmpty,
+  Home,
+  Planet,
+  RssFeedTag,
+  Settings,
+} from 'iconoir-react-native'
 import { MAIN_COLOR } from 'lib/constants'
 import icons from 'lib/icons'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -25,11 +31,11 @@ const routes = [
   //   title: 'Tags',
   //   Icon: Label,
   // },
-  // {
-  //   href: '/explore',
-  //   title: 'Explore',
-  //   Icon: Planet,
-  // },
+  {
+    href: '/explore',
+    title: 'Explore',
+    Icon: Planet,
+  },
   {
     href: '/bookmarks',
     title: 'Bookmarks',

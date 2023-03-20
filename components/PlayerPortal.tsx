@@ -58,8 +58,6 @@ export default function PlayerPortal() {
     return null
   }
 
-  console.log('track', track, entry)
-
   return (
     <>
       {track && (
