@@ -1,6 +1,7 @@
 import { FlashList } from '@shopify/flash-list'
 import { Image } from 'expo-image'
 import { MAIN_COLOR } from 'lib/constants'
+import { formatStatusTime } from 'lib/helper'
 import Toast from 'lib/toast'
 import { useEffect, useState } from 'react'
 import { Pressable } from 'react-native'
@@ -51,7 +52,12 @@ export default function PlayList() {
                 <Text fontSize={12} color={isActive ? MAIN_COLOR : '$color11'}>
                   {item.artist}
                 </Text>
-                <Text>{item.duration}</Text>
+                {item.position > 0 && item.duration > 0 && (
+                  <Text color="$color11" fontSize={12}>
+                    {formatStatusTime(item.position)}/
+                    {formatStatusTime(item.duration)}
+                  </Text>
+                )}
               </YStack>
             </XStack>
           </Pressable>

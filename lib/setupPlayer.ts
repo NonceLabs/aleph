@@ -1,8 +1,11 @@
+import _ from 'lodash'
 import TrackPlayer, {
   AppKilledPlaybackBehavior,
   Capability,
   RepeatMode,
+  Track,
 } from 'react-native-track-player'
+import { store } from 'store'
 import icons from './icons'
 
 export const setupPlayerService = async (): Promise<boolean> => {
@@ -43,4 +46,31 @@ export const setupPlayerService = async (): Promise<boolean> => {
   }
 }
 
-export const initQueue = async () => {}
+export const initQueue = async () => {
+  try {
+    const playlist: Track[] = _.uniqBy(
+      store.getState().feed.playlist || [],
+      'id'
+    ).map((t) => {
+      return {
+        ...t,
+        position: t.position || 0,
+        playing: t.playing || false,
+        duration: t.duration ? t.duration : undefined,
+      }
+    })
+
+    await TrackPlayer.add(playlist)
+    // let playingItem: Track
+    // let playingIdx = -1
+    await Promise.all(
+      playlist.map(async (t, idx) => {
+        await TrackPlayer.skip(idx, t.position)
+        if (t.playing) {
+          // playingItem = t
+          // playingIdx = idx
+        }
+      })
+    )
+  } catch (error) {}
+}
