@@ -97,7 +97,7 @@ export default function ToastContainer() {
             contentFit="cover"
           />
         )}
-        <Text fontSize={18} ta="center" color="white">
+        <Text fontSize={18} ta="center" color="white" fontFamily="Gilroy-Bold">
           {message}
         </Text>
       </XStack>

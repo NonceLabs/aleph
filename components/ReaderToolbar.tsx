@@ -64,15 +64,10 @@ export default function ReaderToolbar({
   useEffect(() => {
     async function handle() {
       try {
-        let isPlaying = false
-        let isQueued = false
         const queue = await TrackPlayer.getQueue()
-        const trackIndex = await TrackPlayer.getCurrentTrack()
-        if (trackIndex !== null) {
-          const track = await TrackPlayer.getTrack(trackIndex)
-          isPlaying = track?.id === entry?.id
-        }
-        isQueued = queue.some((item) => item.id === entry?.id)
+        const track = await TrackPlayer.getActiveTrack()
+        const isPlaying = track?.id === entry?.id
+        const isQueued = queue.some((item) => item.id === entry?.id)
         setPlayStatus({ isPlaying, isQueued })
       } catch (error) {
         // Toast.error(error)

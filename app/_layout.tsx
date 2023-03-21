@@ -20,7 +20,8 @@ import DrawerPanel from 'components/DrawerPanel'
 import useTheme from 'hooks/useTheme'
 import ToastContainer from 'components/ToastContainer'
 import { Host } from 'react-native-portalize'
-import { setupPlayerService } from 'lib/setupPlayer'
+import { initQueue, setupPlayerService } from 'lib/setupPlayer'
+import TrackPlayer from 'react-native-track-player'
 
 LogBox.ignoreAllLogs()
 
@@ -64,11 +65,19 @@ function RootLayoutNav() {
   const theme = useTheme()
 
   useEffect(() => {
-    setupPlayerService()
-      .then((isReady) => {
-        console.log('player service setup', isReady)
-      })
-      .catch(console.error)
+    let unmounted = false
+    ;(async () => {
+      const isSetup = await setupPlayerService()
+      if (unmounted) return
+      const queue = await TrackPlayer.getQueue()
+      if (unmounted) return
+      if (isSetup && queue.length <= 0) {
+        await initQueue()
+      }
+    })()
+    return () => {
+      unmounted = true
+    }
   }, [])
 
   return (

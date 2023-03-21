@@ -20,10 +20,13 @@ import { PubEvent } from 'types'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import PlayerStatus from './PlayerStatus'
 import PlayList from './PlayList'
-import TrackPlayer, { State, usePlaybackState } from 'react-native-track-player'
+import TrackPlayer, {
+  State,
+  useActiveTrack,
+  usePlaybackState,
+} from 'react-native-track-player'
 import icons from 'lib/icons'
 import Toast from 'lib/toast'
-import useTracks from 'hooks/useTracks'
 
 type ActiveButton = 'info' | 'caption' | 'list'
 
@@ -39,10 +42,10 @@ export default function PlayerPortal() {
   const insets = useSafeAreaInsets()
   const { height } = useWindowDimensions()
   const playerState = usePlaybackState()
-  const { currentTrack } = useTracks()
+  const currentTrack = useActiveTrack()
   const { entry, onToggleBookmark } = useEntry(currentTrack?.id)
 
-  const isPlaying = playerState === State.Playing
+  const isPlaying = playerState.state === State.Playing
 
   useEffect(() => {
     const listener = PubSub.subscribe(PubEvent.ON_PODCAST_PORTAL, () => {
