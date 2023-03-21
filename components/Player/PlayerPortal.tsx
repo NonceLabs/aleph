@@ -22,8 +22,8 @@ import PlayerStatus from './PlayerStatus'
 import PlayList from './PlayList'
 import TrackPlayer, { State, usePlaybackState } from 'react-native-track-player'
 import icons from 'lib/icons'
-import { useActiveTrack } from 'hooks/useActiveTrack'
 import Toast from 'lib/toast'
+import useTracks from 'hooks/useTracks'
 
 type ActiveButton = 'info' | 'caption' | 'list'
 
@@ -39,8 +39,8 @@ export default function PlayerPortal() {
   const insets = useSafeAreaInsets()
   const { height } = useWindowDimensions()
   const playerState = usePlaybackState()
-  const track = useActiveTrack()
-  const { entry, onToggleBookmark } = useEntry(track?.id)
+  const { currentTrack } = useTracks()
+  const { entry, onToggleBookmark } = useEntry(currentTrack?.id)
 
   const isPlaying = playerState === State.Playing
 
@@ -54,15 +54,15 @@ export default function PlayerPortal() {
     }
   }, [])
 
-  if (!entry || !track) {
+  if (!entry || !currentTrack) {
     return null
   }
 
   return (
     <>
-      {track && (
+      {currentTrack && (
         <PlayingTrack
-          track={track}
+          track={currentTrack}
           isPlaying={isPlaying}
           animate
           withControl={false}
@@ -93,7 +93,7 @@ export default function PlayerPortal() {
         >
           <View style={StyleSheet.absoluteFill}>
             <Image
-              source={track?.artwork}
+              source={currentTrack?.artwork}
               placeholder={icons.DEFAULT_COVER}
               contentFit="cover"
               style={{ width: '100%', height: '100%' }}
@@ -112,7 +112,7 @@ export default function PlayerPortal() {
             ) : (
               <YStack px={8} space={16} ai="center" jc="center" w="100%">
                 <Image
-                  source={track?.artwork}
+                  source={currentTrack?.artwork}
                   placeholder={icons.DEFAULT_COVER}
                   style={{ width: 300, height: 300, borderRadius: 8 }}
                 />
@@ -134,7 +134,7 @@ export default function PlayerPortal() {
                     setOpen(false)
                   }}
                 >
-                  {track?.title}
+                  {currentTrack?.title}
                 </Text>
                 <Text
                   fontFamily="Gilroy-Bold"
@@ -143,7 +143,7 @@ export default function PlayerPortal() {
                   color={MAIN_COLOR}
                   ta="center"
                 >
-                  {track?.artist}
+                  {currentTrack?.artist}
                 </Text>
               </YStack>
             )}

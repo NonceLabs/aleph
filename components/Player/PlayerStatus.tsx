@@ -1,12 +1,18 @@
 import { MAIN_COLOR } from 'lib/constants'
 import { formatStatusTime } from 'lib/helper'
 import TrackPlayer, { useProgress } from 'react-native-track-player'
-import { Slider, Text, XStack, YStack } from 'tamagui'
+import { Slider, Spinner, Text, XStack, YStack } from 'tamagui'
 
 export default function PlayerStatus() {
-  const { position, duration } = useProgress()
+  const { position, duration, buffered } = useProgress()
+
   if (duration === 0) {
-    return null
+    return (
+      <XStack id="player-status" ai="center" jc="center" width="100%" space={8}>
+        <Spinner />
+        <Text color="$color11">loading</Text>
+      </XStack>
+    )
   }
 
   return (

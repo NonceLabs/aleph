@@ -1,7 +1,7 @@
 import { Image } from 'expo-image'
 import { Link } from 'expo-router'
-import { useActiveTrack } from 'hooks/useActiveTrack'
 import useTheme from 'hooks/useTheme'
+import useTracks from 'hooks/useTracks'
 import {
   BookmarkEmpty,
   Home,
@@ -26,11 +26,6 @@ const routes = [
     title: 'Feeds',
     Icon: RssFeedTag,
   },
-  // {
-  //   href: '/tags',
-  //   title: 'Tags',
-  //   Icon: Label,
-  // },
   {
     href: '/explore',
     title: 'Explore',
@@ -57,7 +52,7 @@ export default function DrawerPanel() {
     PubSub.publish(PubEvent.ON_PODCAST_PORTAL)
   }
 
-  const track = useActiveTrack()
+  const { currentTrack } = useTracks()
 
   return (
     <YStack
@@ -80,7 +75,7 @@ export default function DrawerPanel() {
           </Text>
         </YStack>
       </XStack>
-      {track && (
+      {currentTrack && (
         <Link href="/" onPress={onPlayInfo}>
           <XStack space={8} w={234} ai="center" jc="flex-end" pr={8}>
             <YStack flex={1} ai="flex-end" jc="flex-end" space={8}>
@@ -93,7 +88,7 @@ export default function DrawerPanel() {
                   numberOfLines={1}
                   ta="right"
                 >
-                  {track.artist}
+                  {currentTrack.artist}
                 </Text>
               </XStack>
               <Text
@@ -104,11 +99,11 @@ export default function DrawerPanel() {
                 color="$color11"
                 ellipsizeMode="tail"
               >
-                {track.title}
+                {currentTrack.title}
               </Text>
             </YStack>
             <Image
-              source={track.artwork}
+              source={currentTrack.artwork}
               placeholder={icons.DEFAULT_COVER}
               style={{ width: 60, height: 60, borderRadius: 8 }}
             />

@@ -115,21 +115,24 @@ function Cover({ item, feed }: { item: FeedEntry; feed?: Feed }) {
     <Pressable
       onPress={async () => {
         try {
-          const idx = await TrackPlayer.add(
-            {
+          const queue = await TrackPlayer.getQueue()
+          const oldIdx = queue.findIndex((t) => t.id === item.id)
+          if (oldIdx !== -1) {
+            await TrackPlayer.skip(oldIdx)
+            await TrackPlayer.play()
+          } else {
+            const idx = await TrackPlayer.add({
               id: item.id,
               url: item.media!,
               title: item.title,
               artist: feed?.title,
               artwork: cover,
-            },
-            0
-          )
-          console.log('idx', idx)
+            })
 
-          if (typeof idx === 'number') {
-            await TrackPlayer.skipToNext(idx)
-            await TrackPlayer.play()
+            if (typeof idx === 'number') {
+              // await TrackPlayer.skip(idx)
+              await TrackPlayer.play()
+            }
           }
         } catch (error) {
           console.log('error', error)
