@@ -2,7 +2,7 @@
   "expo": {
     "name": "Aleph Reader",
     "slug": "aleph",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "aleph",
@@ -12,20 +12,16 @@
       "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "buildNumber": "9",
+      "buildNumber": "11",
       "config": {
         "usesNonExemptEncryption": false
       },
       "bundleIdentifier": "dev.chezhe.aleph",
       "infoPlist": {
-        "UIBackgroundModes": [
-          "audio"
-        ]
+        "UIBackgroundModes": ["audio"]
       }
     },
     "android": {
@@ -46,14 +42,7 @@
     "runtimeVersion": {
       "policy": "sdkVersion"
     },
-    "plugins": [
-      [
-        "expo-av",
-        {
-          "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone."
-        }
-      ]
-    ],
+    "plugins": [],
     "updates": {
       "url": "https://u.expo.dev/39c42834-f3f1-497e-87ab-415a17550054"
     }

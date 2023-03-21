@@ -130,7 +130,6 @@ function Cover({ item, feed }: { item: FeedEntry; feed?: Feed }) {
             })
 
             if (typeof idx === 'number') {
-              // await TrackPlayer.skip(idx)
               await TrackPlayer.play()
             }
           }

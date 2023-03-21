@@ -1,20 +1,25 @@
 import { FlashList } from '@shopify/flash-list'
 import { Image } from 'expo-image'
-import useTracks from 'hooks/useTracks'
 import { MAIN_COLOR } from 'lib/constants'
 import Toast from 'lib/toast'
+import { useEffect, useState } from 'react'
 import { Pressable } from 'react-native'
-import TrackPlayer from 'react-native-track-player'
+import TrackPlayer, { useActiveTrack } from 'react-native-track-player'
 import { Text, XStack, YStack, Separator, useWindowDimensions } from 'tamagui'
 
 export default function PlayList() {
+  const [tracks, setTracks] = useState<any[]>([])
   const { width } = useWindowDimensions()
 
-  const { currentTrack, queue } = useTracks()
+  const currentTrack = useActiveTrack()
+
+  useEffect(() => {
+    TrackPlayer.getQueue().then(setTracks)
+  }, [currentTrack?.id])
 
   return (
     <FlashList
-      data={queue}
+      data={tracks}
       contentContainerStyle={{ paddingHorizontal: 16 }}
       estimatedItemSize={83}
       renderItem={({ item, index }) => {

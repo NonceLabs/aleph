@@ -1,7 +1,6 @@
 import { Image } from 'expo-image'
 import { Link } from 'expo-router'
 import useTheme from 'hooks/useTheme'
-import useTracks from 'hooks/useTracks'
 import {
   BookmarkEmpty,
   Home,
@@ -12,6 +11,7 @@ import {
 import { MAIN_COLOR } from 'lib/constants'
 import icons from 'lib/icons'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { useActiveTrack } from 'react-native-track-player'
 import { Text, XStack, YStack } from 'tamagui'
 import { PubEvent } from 'types'
 
@@ -52,7 +52,7 @@ export default function DrawerPanel() {
     PubSub.publish(PubEvent.ON_PODCAST_PORTAL)
   }
 
-  const { currentTrack } = useTracks()
+  const currentTrack = useActiveTrack()
 
   return (
     <YStack

@@ -5069,11 +5069,6 @@ expo-asset@~8.9.1:
     path-browserify "^1.0.0"
     url-parse "^1.5.9"
 
-expo-av@~13.2.1:
-  version "13.2.1"
-  resolved "https://registry.npmjs.org/expo-av/-/expo-av-13.2.1.tgz#ce502a4c5d4a57962fd9f5f1a40c76c39c88f5ee"
-  integrity sha512-mC0mYSzaOaZgXjzhW2l4Ag325JjH6q5IbptfwD7gkMOFYy7VPOMxEMUnetadbs3DDzmgE6vUWrTjUIUbwq59qg==
-
 expo-background-fetch@~11.1.1:
   version "11.1.1"
   resolved "https://registry.npmjs.org/expo-background-fetch/-/expo-background-fetch-11.1.1.tgz#7cf88d7cd3d9dca9be4262f3489d79e370e9f970"
@@ -8670,10 +8665,10 @@ react-native-svg@13.4.0:
     css-select "^5.1.0"
     css-tree "^1.1.3"
 
-react-native-track-player@3.2.0:
-  version "3.2.0"
-  resolved "https://registry.npmjs.org/react-native-track-player/-/react-native-track-player-3.2.0.tgz#c7b7a53eaf4c248af2ac876ef349feaee2ef774a"
-  integrity sha512-svv6TOgU/quFV1aajG5PskVhgFG0wHQtO+aYs6cIH0D27ckzN8WVoC3jI94m1CVaSgLMw48P911csYuD2fIcqA==
+react-native-track-player@^3.2.0-f68ab52103b5439e51d4f1544638febc98d1f5a0:
+  version "3.2.0-f68ab52103b5439e51d4f1544638febc98d1f5a0"
+  resolved "https://registry.npmjs.org/react-native-track-player/-/react-native-track-player-3.2.0-f68ab52103b5439e51d4f1544638febc98d1f5a0.tgz#22d81f798bc390311e3e10ec665e9cc32a3875d7"
+  integrity sha512-K8eaVAqFMgZ5+i2YLVsSsfjb64rUcelpRKfszFgF7FomH93lNTNsMFSr8OZZxpm4K28yDLwTT4I0JKRJo+qHfQ==
 
 react-native-url-polyfill@^1.3.0:
   version "1.3.0"
