@@ -157,7 +157,7 @@ function Cover({ item, feed }: { item: FeedEntry; feed?: Feed }) {
           source={{ uri: cover }}
           placeholder={placeholder}
           style={{ height: 80, width: 80, borderRadius: 8 }}
-          blurRadius={15}
+          blurRadius={10}
         />
         <XStack position="absolute" top={20} left={20}>
           <TrackStatus

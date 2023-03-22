@@ -37,7 +37,6 @@ export default function ReaderToolbar({
   const theme = useTheme()
   const insets = useSafeAreaInsets()
   const navigation = useNavigation()
-  const dispatch = useAppDispatch()
   const feed = useFeed(entry?.feedUrl)
   const [playStatus, setPlayStatus] = useState({
     isPlaying: false,

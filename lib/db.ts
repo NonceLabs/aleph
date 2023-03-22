@@ -256,7 +256,7 @@ function onUpdated(tx: SQLite.SQLTransaction) {
   )
 
   tx.executeSql(
-    'SELECT * FROM entries ORDER BY published DESC LIMIT 300',
+    'SELECT * FROM entries ORDER BY published DESC LIMIT 3000',
     [],
     (_, { rows }) => {
       PubSub.publish(PubEvent.ENTRYFLOW_UPDATE, rows._array.map(formatEntry))

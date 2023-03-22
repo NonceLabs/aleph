@@ -59,7 +59,7 @@ export default function PlayerPortal() {
     }
   }, [])
 
-  if (!entry || !currentTrack) {
+  if (!currentTrack) {
     return null
   }
 
@@ -130,9 +130,9 @@ export default function PlayerPortal() {
                     router.push({
                       pathname: 'shared/reader',
                       params: {
-                        id: encodeURIComponent(entry.id),
+                        id: encodeURIComponent(currentTrack.url),
                         type: 'podcast',
-                        feedUrl: encodeURIComponent(entry.feedUrl || ''),
+                        feedUrl: encodeURIComponent(currentTrack.feedUrl || ''),
                       },
                     })
                     setOpen(false)
@@ -159,16 +159,21 @@ export default function PlayerPortal() {
               <XStack ai="center" jc="center" space={32}>
                 <Pressable
                   onPress={() => {
+                    if (!entry) {
+                      return Toast.error('Entry not found')
+                    }
                     onToggleBookmark({
                       ...entry,
                       bookmarked: !entry.bookmarked,
                     })
                   }}
                 >
-                  <Bookmark
-                    size={30}
-                    color={entry.bookmarked ? MAIN_COLOR : '$color11'}
-                  />
+                  {entry && (
+                    <Bookmark
+                      size={30}
+                      color={entry.bookmarked ? MAIN_COLOR : '$color11'}
+                    />
+                  )}
                 </Pressable>
                 <Pressable
                   onPress={async () => {

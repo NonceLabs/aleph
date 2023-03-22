@@ -1,5 +1,4 @@
 import { ChevronLeft } from '@tamagui/lucide-icons'
-import EntryList from 'components/EntryList'
 import SimpleEntryList from 'components/SimpleEntryList'
 import { useNavigation, useRouter, useSearchParams } from 'expo-router'
 import useEntryFlow from 'hooks/useEntryFlow'
@@ -35,7 +34,7 @@ export default function EntryByTag() {
 
   return (
     <YStack flex={1}>
-      <XStack pt={insets.top} space={4} ai="center" pr={16}>
+      <XStack paddingTop={insets.top} space={4} ai="center" pr={16}>
         <Pressable onPress={onBack}>
           <XStack alignItems="center">
             <ChevronLeft width={32} height={32} color="$blue10" />

@@ -1,14 +1,9 @@
 import { Podcast, Rss } from '@tamagui/lucide-icons'
 import DrawerHeader from 'components/DrawerHeader'
-import Favicon from 'components/Favicon'
+import FeedSheet from 'components/FeedSheet'
 import { Image } from 'expo-image'
-import { Link } from 'expo-router'
-import useFeeds from 'hooks/useFeeds'
-import { HOST, MAIN_COLOR } from 'lib/constants'
-import { resubFeed, subFeed, unsubFeed } from 'lib/db'
-import icons from 'lib/icons'
+import { HOST } from 'lib/constants'
 import { fetcher } from 'lib/request'
-import Toast from 'lib/toast'
 import _ from 'lodash'
 import { useEffect, useState } from 'react'
 import { ScrollView } from 'react-native'
@@ -20,10 +15,6 @@ export default function Explore() {
   const explore = useAppSelector((state) => state.feed.explore || [])
   const dispatch = useAppDispatch()
   const [feed, setFeed] = useState<Feed>()
-  const [position, setPosition] = useState(0)
-
-  const { feeds } = useFeeds()
-  const oldSub = feeds.find((f) => f.url === feed?.url)
 
   useEffect(() => {
     fetcher(`${HOST}/explore`).then((res) => {
@@ -37,27 +28,6 @@ export default function Explore() {
   const onOpenChange = (open: boolean) => {
     if (!open) {
       setFeed(undefined)
-    }
-  }
-
-  const onSub = async () => {
-    try {
-      if (!feed) {
-        throw new Error("Can't subscribe to undefined feed")
-      }
-      if (oldSub) {
-        if (oldSub.deleted) {
-          await resubFeed(feed)
-        } else {
-          await unsubFeed(feed)
-        }
-      } else {
-        await subFeed(feed)
-      }
-      setFeed(undefined)
-      Toast.success('Subscribed!')
-    } catch (error) {
-      Toast.error(error)
     }
   }
 
@@ -126,57 +96,7 @@ export default function Explore() {
           )
         })}
       </ScrollView>
-      <Sheet
-        forceRemoveScrollEnabled={!!feed}
-        modal
-        open={!!feed}
-        onOpenChange={onOpenChange}
-        snapPoints={[40]}
-        dismissOnSnapToBottom
-        position={position}
-        onPositionChange={setPosition}
-        zIndex={100_000}
-      >
-        <Sheet.Overlay />
-        <Sheet.Handle />
-        <Sheet.Frame f={1} p="$4">
-          {feed && (
-            <YStack ai="center" space={8} px={16}>
-              <Favicon favicon={feed.favicon} size={72} />
-              <Text
-                fontSize={20}
-                fontWeight="bold"
-                color="$color12"
-                ta="center"
-                numberOfLines={1}
-              >
-                {feed.title}
-              </Text>
-              <YStack space={0} ai="center">
-                <Text
-                  fontSize={16}
-                  color="$color11"
-                  numberOfLines={3}
-                  ta="center"
-                >
-                  {feed.description}
-                </Text>
-                <Anchor
-                  href={feed.url}
-                  color="$blue10"
-                  numberOfLines={1}
-                  ta="center"
-                >
-                  {feed.url}
-                </Anchor>
-              </YStack>
-              <Button bc={MAIN_COLOR} color="white" onPress={onSub}>
-                {oldSub && !oldSub.deleted ? 'Unsubscribe' : 'Subscribe'}
-              </Button>
-            </YStack>
-          )}
-        </Sheet.Frame>
-      </Sheet>
+      <FeedSheet feed={feed} onOpenChange={onOpenChange} />
     </YStack>
   )
 }

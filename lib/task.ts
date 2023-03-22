@@ -21,6 +21,7 @@ export async function extract(url: string): Promise<FeedData> {
 export async function fetchFeedFlow(feeds: Feed[]) {
   try {
     const publishLimit = store.getState().setting.flow.publishLimit || 'Month'
+
     await Promise.all(
       feeds.map(async (feed) => {
         try {

@@ -1,4 +1,3 @@
-import * as Updates from 'expo-updates'
 import 'react-native-url-polyfill/auto'
 import FontAwesome from '@expo/vector-icons/FontAwesome'
 import {
@@ -7,7 +6,7 @@ import {
   ThemeProvider,
 } from '@react-navigation/native'
 import { useFonts } from 'expo-font'
-import { SplashScreen, Stack } from 'expo-router'
+import { SplashScreen } from 'expo-router'
 import { useEffect } from 'react'
 import { TamaguiProvider } from 'tamagui'
 import config from '../lib/tamagui.config'

@@ -1,9 +1,9 @@
 import Header from 'components/Header'
-import { Link, useSearchParams } from 'expo-router'
+import { Link, useNavigation, useRouter, useSearchParams } from 'expo-router'
 import { useEffect, useState } from 'react'
 import { Pressable } from 'react-native'
 import { YStack, Text, XStack, Spinner } from 'tamagui'
-import { FeedData } from 'types'
+import { Feed, FeedData, FeedListType } from 'types'
 import Favicon from 'components/Favicon'
 import _ from 'lodash'
 import { EmojiLookUp } from 'iconoir-react-native'
@@ -15,57 +15,48 @@ import { extract } from 'lib/task'
 import { Info } from '@tamagui/lucide-icons'
 import useFeed from 'hooks/useFeed'
 import SimpleEntryList from 'components/SimpleEntryList'
+import FeedSheet from 'components/FeedSheet'
 
 export default function FeedProfile() {
   const [feedData, setFeedData] = useState<FeedData>()
   const [error, setError] = useState()
   const [loading, setLoading] = useState(false)
-  const { url, title, from } = useSearchParams()
-  const feed = useFeed(url as string)
-  const { entries } = useEntryFlow()
+  const [feed, setFeed] = useState<Feed>()
+  const { url, from } = useSearchParams()
+  const oldSub = useFeed(url as string)
+
+  const navigation = useNavigation()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (oldSub && oldSub.deleted) {
+      setFeed(oldSub)
+    }
+  }, [oldSub])
 
   useEffect(() => {
     setFeedData(undefined)
     setError(undefined)
-    if (feed && !feed.deleted) {
-      setFeedData({
-        feed,
-        entries: entries.filter((e) => e.feedUrl === url),
+    setLoading(true)
+    extract(url as string)
+      .then((res) => {
+        setFeedData(res)
+        setLoading(false)
       })
-    } else if (url) {
-      setLoading(true)
-      extract(url as string)
-        .then((res) => {
-          setFeedData(res)
-          setLoading(false)
-          handleSubscribe(res)
-        })
-        .catch((error) => {
-          setError(error)
-          setLoading(false)
-        })
+      .catch((error) => {
+        setError(error)
+        setLoading(false)
+      })
+  }, [url])
+
+  const onOpenChange = (open: boolean) => {
+    if (!open) {
+      setFeed(undefined)
     }
-  }, [url, feed, entries])
-
-  const handleSubscribe = async (fd: FeedData) => {
-    try {
-      const { feed: _feed, entries } = fd
-
-      if (feed) {
-        if (feed.deleted) {
-          resubFeed(_feed)
-          createEntries(entries)
-        }
-      } else {
-        if (Array.isArray(entries)) {
-          createEntries(entries)
-        }
-        subFeed(_feed)
-      }
-    } catch (error) {}
   }
 
-  const favicon = feedData?.feed.favicon
+  const favicon = feedData?.feed?.favicon || oldSub?.favicon
+  const title = feedData?.feed?.title || oldSub?.title
   const feedEntries = feedData?.entries || []
 
   return (
@@ -73,6 +64,14 @@ export default function FeedProfile() {
       <Header
         title=""
         back
+        onBack={() => {
+          if (from === 'feeds') {
+            // @ts-ignore
+            navigation.jumpTo(from)
+          } else {
+            router.back()
+          }
+        }}
         center={
           <XStack space={4} alignItems="center">
             <Favicon favicon={favicon} size={24} />
@@ -83,7 +82,7 @@ export default function FeedProfile() {
               maxWidth={140}
               numberOfLines={1}
             >
-              {title || feedData?.feed.title}
+              {title}
             </Text>
           </XStack>
         }
@@ -131,11 +130,12 @@ export default function FeedProfile() {
         ) : error ? null : (
           <SimpleEntryList
             entries={feedEntries}
-            type="feed"
+            type={from as FeedListType}
             onRefresh={() => {}}
           />
         )}
       </YStack>
+      <FeedSheet feed={feed} onOpenChange={onOpenChange} />
     </YStack>
   )
 }

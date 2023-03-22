@@ -10,17 +10,27 @@ export default function Header({
   center,
   right,
   back,
+  onBack,
 }: {
   title: string
   center?: React.ReactNode
   right?: React.ReactNode
   back?: boolean
+  onBack?: () => void
 }) {
   const insets = useSafeAreaInsets()
   const router = useRouter()
 
   const left = back ? (
-    <Pressable onPress={() => router.back()}>
+    <Pressable
+      onPress={() => {
+        if (onBack) {
+          onBack()
+        } else {
+          router.back()
+        }
+      }}
+    >
       <XStack alignItems="center">
         <ChevronLeft width={32} height={32} />
         <Text fontSize={20} color="$color12">
