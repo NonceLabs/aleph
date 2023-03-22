@@ -126,6 +126,7 @@ function Cover({ item, feed }: { item: FeedEntry; feed?: Feed }) {
             } else if (
               [State.Paused, State.None].includes(queue[queuedIdx]?.playing)
             ) {
+              await TrackPlayer.pause()
               await TrackPlayer.skip(queuedIdx)
               await TrackPlayer.play()
             }
@@ -141,11 +142,12 @@ function Cover({ item, feed }: { item: FeedEntry; feed?: Feed }) {
               0
             )
 
+            PubSub.publish(PubEvent.TRACK_QUEUE_UPDATE)
             if (typeof idx === 'number') {
+              await TrackPlayer.pause()
               await TrackPlayer.skip(idx)
               await TrackPlayer.play()
             }
-            PubSub.publish(PubEvent.TRACK_QUEUE_UPDATE)
           }
         } catch (error) {
           console.log('error', error)
@@ -157,7 +159,7 @@ function Cover({ item, feed }: { item: FeedEntry; feed?: Feed }) {
           source={{ uri: cover }}
           placeholder={placeholder}
           style={{ height: 80, width: 80, borderRadius: 8 }}
-          blurRadius={10}
+          blurRadius={16}
         />
         <XStack position="absolute" top={20} left={20}>
           <TrackStatus

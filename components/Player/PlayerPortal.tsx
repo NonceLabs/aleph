@@ -7,27 +7,17 @@ import PlayingTrack from './PlayingTrack'
 import { BlurView } from 'expo-blur'
 import useTheme from 'hooks/useTheme'
 import { useRouter } from 'expo-router'
-import useEntry from 'hooks/useEntry'
-import {
-  Bookmark,
-  ChevronLast,
-  Info,
-  ListMusic,
-  PauseCircle,
-  PlayCircle,
-} from '@tamagui/lucide-icons'
+import { Info, ListMusic } from '@tamagui/lucide-icons'
 import { PubEvent } from 'types'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import PlayerStatus from './PlayerStatus'
+import PlayerController from './PlayerController'
 import PlayList from './PlayList'
-import TrackPlayer, {
+import {
   State,
   useActiveTrack,
   usePlaybackState,
 } from 'react-native-track-player'
 import icons from 'lib/icons'
-import Toast from 'lib/toast'
-import { useAppSelector } from 'store/hooks'
 
 type ActiveButton = 'info' | 'caption' | 'list'
 
@@ -35,7 +25,6 @@ export default function PlayerPortal() {
   const [open, setOpen] = useState(false)
   const [position, setPosition] = useState(0)
   const [active, setActive] = useState('info')
-  const queue = useAppSelector((state) => state.feed.playlist)
   const theme = useTheme()
 
   const iconSize = 24
@@ -43,14 +32,15 @@ export default function PlayerPortal() {
   const router = useRouter()
   const insets = useSafeAreaInsets()
   const { height } = useWindowDimensions()
-  const playerState = usePlaybackState()
+  const playbackState = usePlaybackState()
   const currentTrack = useActiveTrack()
-  const { entry, onToggleBookmark } = useEntry(currentTrack?.id)
 
-  const isPlaying = playerState.state === State.Playing
+  const isPlaying = playbackState.state === State.Playing
 
   useEffect(() => {
     const listener = PubSub.subscribe(PubEvent.ON_PODCAST_PORTAL, () => {
+      console.log('###ON_PODCAST_PORTAL')
+
       setOpen(true)
     })
 
@@ -61,6 +51,15 @@ export default function PlayerPortal() {
 
   if (!currentTrack) {
     return null
+  }
+
+  const onOpenChange = (open: boolean) => {
+    console.log('###onOpenChange')
+
+    setOpen(open)
+    if (!open) {
+      setActive('info')
+    }
   }
 
   return (
@@ -80,7 +79,7 @@ export default function PlayerPortal() {
         forceRemoveScrollEnabled={open}
         modal
         open={open}
-        onOpenChange={setOpen}
+        onOpenChange={onOpenChange}
         snapPoints={[90]}
         dismissOnSnapToBottom
         position={position}
@@ -111,7 +110,10 @@ export default function PlayerPortal() {
           <YStack flex={1} ai="center" jc="center">
             {active === 'list' ? (
               <View style={{ height: '100%', width: '100%' }}>
-                <PlayList />
+                <PlayList
+                  onPlay={() => setActive('info')}
+                  currentTrack={currentTrack}
+                />
               </View>
             ) : (
               <YStack px={8} space={16} ai="center" jc="center" w="100%">
@@ -153,68 +155,10 @@ export default function PlayerPortal() {
             )}
           </YStack>
           <YStack ai="center" jc="flex-end" space={16} px={8}>
-            <YStack w="90%" ai="center" space={20}>
-              <PlayerStatus />
-
-              <XStack ai="center" jc="center" space={32}>
-                <Pressable
-                  onPress={() => {
-                    if (!entry) {
-                      return Toast.error('Entry not found')
-                    }
-                    onToggleBookmark({
-                      ...entry,
-                      bookmarked: !entry.bookmarked,
-                    })
-                  }}
-                >
-                  {entry && (
-                    <Bookmark
-                      size={30}
-                      color={entry.bookmarked ? MAIN_COLOR : '$color11'}
-                    />
-                  )}
-                </Pressable>
-                <Pressable
-                  onPress={async () => {
-                    try {
-                      if (isPlaying) {
-                        await TrackPlayer.pause()
-                      } else {
-                        await TrackPlayer.play()
-                      }
-                    } catch (error) {
-                      Toast.error(error)
-                    }
-                  }}
-                >
-                  {isPlaying ? (
-                    <PauseCircle size={50} color="$color12" />
-                  ) : (
-                    <PlayCircle size={50} color="$color12" />
-                  )}
-                </Pressable>
-                <Pressable
-                  onPress={async () => {
-                    try {
-                      const idx = await TrackPlayer.getActiveTrackIndex()
-                      if (typeof idx === 'number' && queue.length > 1) {
-                        const nextIdx = (idx + 1) % queue.length
-                        const nextTrack = queue[nextIdx]
-                        await TrackPlayer.skip(
-                          nextIdx,
-                          nextTrack?.position || 0
-                        )
-                      }
-                    } catch (error) {
-                      Toast.error(error)
-                    }
-                  }}
-                >
-                  <ChevronLast size={30} color="$color11" />
-                </Pressable>
-              </XStack>
-            </YStack>
+            <PlayerController
+              currentTrack={currentTrack}
+              playbackState={playbackState}
+            />
 
             <XStack w="90%" ai="center" jc="space-between">
               {[

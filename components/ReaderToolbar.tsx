@@ -16,8 +16,7 @@ import Toast from 'lib/toast'
 import { useEffect, useState } from 'react'
 import { Pressable } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import TrackPlayer from 'react-native-track-player'
-import { useAppDispatch } from 'store/hooks'
+import TrackPlayer, { State } from 'react-native-track-player'
 import { XStack } from 'tamagui'
 import { FeedEntry, FeedListType, FeedType, PubEvent } from 'types'
 import ReaderSettings from './ReaderSettings'
@@ -79,16 +78,7 @@ export default function ReaderToolbar({
 
   const onAddToList = async () => {
     try {
-      if (playStatus.isQueued) {
-        const queue = await TrackPlayer.getQueue()
-        const idx = queue.findIndex((item) => item.id === entry?.id)
-        await TrackPlayer.remove(idx)
-        if (playStatus.isPlaying) {
-          await TrackPlayer.skipToNext()
-        }
-        Toast.success('Removed from queue')
-        setPlayStatus({ isPlaying: false, isQueued: false })
-      } else {
+      if (!playStatus.isQueued) {
         await TrackPlayer.add({
           id: entry?.id,
           url: entry?.media!,
@@ -109,20 +99,33 @@ export default function ReaderToolbar({
     try {
       if (playStatus.isPlaying) {
         TrackPlayer.pause()
-      } else if (playStatus.isQueued) {
-        TrackPlayer.play()
+        setPlayStatus({ ...playStatus, isPlaying: false })
       } else {
-        TrackPlayer.add(
-          {
-            id: entry?.id,
-            url: entry?.media!,
-            title: entry?.title,
-            artist: feed?.title,
-            artwork: entry?.cover || feed?.favicon || icons.DEFAULT_COVER,
-          },
-          0
-        )
-        TrackPlayer.play()
+        const queue = await TrackPlayer.getQueue()
+        const idx = queue.findIndex((item) => item.id === entry?.id)
+        if (idx !== -1) {
+          await TrackPlayer.pause()
+          await TrackPlayer.skip(idx)
+          await TrackPlayer.play()
+          setPlayStatus({ ...playStatus, isPlaying: true, isQueued: true })
+        } else {
+          const newIdx = await TrackPlayer.add(
+            {
+              id: entry?.id,
+              url: entry?.media!,
+              title: entry?.title,
+              artist: feed?.title,
+              artwork: entry?.cover || feed?.favicon || icons.DEFAULT_COVER,
+            },
+            0
+          )
+          if (typeof newIdx === 'number') {
+            await TrackPlayer.pause()
+            await TrackPlayer.skip(newIdx)
+            await TrackPlayer.play()
+          }
+          setPlayStatus({ ...playStatus, isPlaying: true, isQueued: true })
+        }
       }
       PubSub.publish(PubEvent.TRACK_QUEUE_UPDATE)
     } catch (error) {
@@ -148,7 +151,6 @@ export default function ReaderToolbar({
         </Pressable>
         <XStack space={24}>
           {entry?.entryType === FeedType.RSS && <Summarize entry={entry} />}
-          {entry?.entryType === FeedType.RSS && <ReaderSettings />}
           {entry?.entryType === FeedType.Podcast && (
             <Pressable onPress={onPlay}>
               {playStatus.isPlaying ? (
@@ -160,13 +162,15 @@ export default function ReaderToolbar({
           )}
           {entry?.entryType === FeedType.Podcast && (
             <Pressable onPress={onAddToList}>
-              {playStatus.isQueued ? (
-                <ListMinus size={28} color="$color11" />
-              ) : (
-                <ListPlus size={28} color="$color11" />
-              )}
+              <ListPlus
+                size={28}
+                color="$color11"
+                opacity={playStatus.isQueued ? 0.7 : 1}
+              />
             </Pressable>
           )}
+
+          <ReaderSettings />
 
           <Pressable onPress={onBookmark}>
             <Bookmark

@@ -61,7 +61,7 @@ export default function DrawerPanel() {
       space
       px={8}
       jc="space-between"
-      pb={insets.bottom + 40}
+      pb={insets.bottom}
       bc={theme === 'light' ? '#f6eee3' : '$background'}
     >
       <XStack jc="flex-end">
@@ -75,41 +75,7 @@ export default function DrawerPanel() {
           </Text>
         </YStack>
       </XStack>
-      {currentTrack && (
-        <Link href="/" onPress={onPlayInfo}>
-          <XStack space={8} w={234} ai="center" jc="flex-end" pr={8}>
-            <YStack flex={1} ai="flex-end" jc="flex-end" space={8}>
-              <XStack ai="center" jc="flex-end" space={8}>
-                <Text
-                  color="$color12"
-                  fontFamily="Gilroy-Bold"
-                  fontWeight="bold"
-                  fontSize={14}
-                  numberOfLines={1}
-                  ta="right"
-                >
-                  {currentTrack.artist}
-                </Text>
-              </XStack>
-              <Text
-                fontFamily="Gilroy-Bold"
-                fontWeight="bold"
-                fontSize={16}
-                numberOfLines={1}
-                color="$color11"
-                ellipsizeMode="tail"
-              >
-                {currentTrack.title}
-              </Text>
-            </YStack>
-            <Image
-              source={currentTrack.artwork}
-              placeholder={icons.DEFAULT_COVER}
-              style={{ width: 60, height: 60, borderRadius: 8 }}
-            />
-          </XStack>
-        </Link>
-      )}
+
       <YStack width="100%" space={8} ai="flex-end" pr={8}>
         {routes.map(({ href, title, Icon }) => {
           return (
@@ -130,6 +96,43 @@ export default function DrawerPanel() {
             </Link>
           )
         })}
+        <XStack h={60} mt={30}>
+          {currentTrack && (
+            <Link href="/" onPress={onPlayInfo}>
+              <XStack space={8} w={234} ai="center" jc="flex-end" pr={8}>
+                <YStack flex={1} ai="flex-end" jc="flex-end" space={8}>
+                  <XStack ai="center" jc="flex-end" space={8}>
+                    <Text
+                      color="$color11"
+                      fontFamily="Gilroy-Bold"
+                      fontWeight="bold"
+                      fontSize={14}
+                      numberOfLines={1}
+                      ta="right"
+                    >
+                      {currentTrack.artist}
+                    </Text>
+                  </XStack>
+                  <Text
+                    fontFamily="Gilroy-Bold"
+                    fontWeight="bold"
+                    fontSize={16}
+                    numberOfLines={1}
+                    color="$color12"
+                    ellipsizeMode="tail"
+                  >
+                    {currentTrack.title}
+                  </Text>
+                </YStack>
+                <Image
+                  source={currentTrack.artwork}
+                  placeholder={icons.DEFAULT_COVER}
+                  style={{ width: 60, height: 60, borderRadius: 8 }}
+                />
+              </XStack>
+            </Link>
+          )}
+        </XStack>
       </YStack>
     </YStack>
   )

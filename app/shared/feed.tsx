@@ -8,8 +8,6 @@ import Favicon from 'components/Favicon'
 import _ from 'lodash'
 import { EmojiLookUp } from 'iconoir-react-native'
 import AddFeedButton from 'components/AddFeedButton'
-import { createEntries, resubFeed, subFeed } from 'lib/db'
-import useEntryFlow from 'hooks/useEntryFlow'
 import { MAIN_COLOR } from 'lib/constants'
 import { extract } from 'lib/task'
 import { Info } from '@tamagui/lucide-icons'
@@ -30,6 +28,7 @@ export default function FeedProfile() {
 
   useEffect(() => {
     if (oldSub && oldSub.deleted) {
+      // open the sheet
       setFeed(oldSub)
     }
   }, [oldSub])
@@ -41,6 +40,9 @@ export default function FeedProfile() {
     extract(url as string)
       .then((res) => {
         setFeedData(res)
+        if (!oldSub) {
+          setFeed(res.feed)
+        }
         setLoading(false)
       })
       .catch((error) => {
