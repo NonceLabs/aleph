@@ -120,6 +120,7 @@ export default function Reader() {
               contentWidth={width}
               systemFonts={[fontFamily, 'Vollkorn', 'Gilroy-Bold']}
               tagsStyles={tagsStyle as any}
+              ignoredDomTags={['audio']}
             />
           </YStack>
         </ScrollView>

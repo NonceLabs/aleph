@@ -1,9 +1,9 @@
+import { FlashList } from '@shopify/flash-list'
 import AddFeedButton from 'components/AddFeedButton'
 import DrawerHeader from 'components/DrawerHeader'
 import SourceItem from 'components/SourceItem'
 import useFeeds from 'hooks/useFeeds'
 import { EmojiLookDown } from 'iconoir-react-native'
-import { FlatList } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Text, YStack } from 'tamagui'
 
@@ -13,20 +13,17 @@ export default function Feeds() {
 
   return (
     <YStack flex={1}>
-      <DrawerHeader title="Feeds" right={<AddFeedButton />} />
-      <FlatList
-        data={feeds.filter((t) => !t.deleted)}
-        style={{
-          flex: 1,
-        }}
+      <FlashList
+        data={['Header', ...feeds.filter((t) => !t.deleted)]}
         contentContainerStyle={{
-          padding: 20,
           paddingBottom: insets.bottom + 20,
         }}
-        ItemSeparatorComponent={() => (
-          <YStack height={1} backgroundColor="$borderColor" />
-        )}
+        stickyHeaderIndices={[0]}
+        estimatedItemSize={55}
         renderItem={({ item }) => {
+          if (typeof item === 'string') {
+            return <DrawerHeader title="Feeds" right={<AddFeedButton />} />
+          }
           return <SourceItem item={item} />
         }}
         ListEmptyComponent={

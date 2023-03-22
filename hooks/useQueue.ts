@@ -1,6 +1,11 @@
 import { Observable } from 'lib/obserable'
 import { useEffect, useState } from 'react'
-import TrackPlayer, { Track, useActiveTrack } from 'react-native-track-player'
+import TrackPlayer, {
+  Event,
+  Track,
+  useActiveTrack,
+  useTrackPlayerEvents,
+} from 'react-native-track-player'
 import { useAppDispatch } from 'store/hooks'
 
 const queueStore = new Observable<Track[]>([])
@@ -25,6 +30,17 @@ export default function useQueue() {
         console.log('e', e)
       })
   }, [currentTrack?.id])
+
+  useTrackPlayerEvents([Event.PlaybackActiveTrackChanged], (event) => {
+    TrackPlayer.getQueue()
+      .then((res) => {
+        queueStore.set(res)
+        dispatch({ type: 'feed/updatePlaylist', payload: res })
+      })
+      .catch((e) => {
+        console.log('e', e)
+      })
+  })
 
   return queue
 }

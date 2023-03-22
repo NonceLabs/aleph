@@ -14,12 +14,12 @@ export default function SettingsPage() {
   const dispatch = useAppDispatch()
   return (
     <YStack flex={1}>
-      <DrawerHeader title="Settings" />
-
       <ScrollView
-        style={{ flex: 1, paddingVertical: 10, paddingHorizontal: 16 }}
+        style={{ flex: 1, paddingVertical: 10 }}
+        stickyHeaderIndices={[0]}
       >
-        <YStack space={16}>
+        <DrawerHeader title="Settings" />
+        <YStack space={16} px={16} mt={16}>
           <XStack space ai="center" jc="space-between">
             <Text fontWeight="bold" fontSize={18} color="$color11">
               Hide read

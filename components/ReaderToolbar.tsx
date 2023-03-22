@@ -58,6 +58,7 @@ export default function ReaderToolbar({
   const onBookmark = () => {
     if (entry) {
       onToggleBookmark({ ...entry, bookmarked: !isBookmarked })
+      Toast.success(isBookmarked ? 'Unbookmarked' : 'Bookmarked')
     }
   }
 
@@ -78,16 +79,14 @@ export default function ReaderToolbar({
 
   const onAddToList = async () => {
     try {
-      TrackPlayer.add(
-        {
-          id: entry?.id,
-          url: entry?.media!,
-          title: entry?.title,
-          artist: feed?.title,
-          artwork: entry?.cover || feed?.favicon || icons.DEFAULT_COVER,
-        },
-        0
-      )
+      await TrackPlayer.add({
+        id: entry?.id,
+        url: entry?.media!,
+        title: entry?.title,
+        artist: feed?.title,
+        artwork: entry?.cover || feed?.favicon || icons.DEFAULT_COVER,
+      })
+      Toast.success('Added to queue')
     } catch (error) {
       Toast.error(error)
     }

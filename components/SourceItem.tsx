@@ -28,6 +28,7 @@ export default function SourceItem({
           },
         })
       }}
+      style={{ marginTop: 4 }}
     >
       <XStack
         space={8}
@@ -35,6 +36,7 @@ export default function SourceItem({
         paddingVertical={12}
         backgroundColor="$background"
         px={12}
+        mx={16}
         borderRadius={4}
       >
         <Favicon favicon={item.favicon} />

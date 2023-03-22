@@ -63,8 +63,12 @@ export default function Explore() {
 
   return (
     <YStack flex={1}>
-      <DrawerHeader title="Explore" />
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        // StickyHeaderComponent={() => <DrawerHeader title="Explore" />}
+        stickyHeaderIndices={[0]}
+      >
+        <DrawerHeader title="Explore" />
         {explore.map((item) => {
           return (
             <YStack key={item.title} px={4} py={8}>
