@@ -1,26 +1,25 @@
-import { PauseCircle, PlayCircle } from '@tamagui/lucide-icons'
 import { Image } from 'expo-image'
 import icons from 'lib/icons'
 import { useEffect, useRef } from 'react'
 import { Animated, Easing, Pressable } from 'react-native'
-import { Track } from 'react-native-track-player'
+import { Track, usePlaybackState } from 'react-native-track-player'
 import { XStack } from 'tamagui'
+import TrackStatus from './TrackStatus'
 
 export default function PlayingTrack({
   track,
   animate = false,
   isPlaying,
   size = 80,
-  withControl = true,
   onPress,
 }: {
   track: Track
   isPlaying: boolean
   animate?: boolean
   size?: number
-  withControl?: boolean
   onPress?: () => void
 }) {
+  const playbackState = usePlaybackState()
   const spinValue = useRef(new Animated.Value(0)).current
   const anim = useRef(
     Animated.loop(
@@ -62,15 +61,9 @@ export default function PlayingTrack({
           style={{ height: size, width: size, borderRadius: size / 2 }}
           blurRadius={isPlaying ? 10 : 5}
         />
-        {withControl && (
-          <XStack position="absolute" top={size / 2 - 20} left={size / 2 - 20}>
-            {isPlaying ? (
-              <PauseCircle width={40} height={40} color="white" />
-            ) : (
-              <PlayCircle width={40} height={40} color="white" />
-            )}
-          </XStack>
-        )}
+        <XStack position="absolute" top={size / 2 - 12} left={size / 2 - 12}>
+          <TrackStatus queued state={playbackState.state} size={24} />
+        </XStack>
       </Animated.View>
     </Pressable>
   )

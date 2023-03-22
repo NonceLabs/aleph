@@ -16,7 +16,14 @@ export default function EntryListHeader({
   const navigation = useNavigation()
 
   return (
-    <XStack space={8} flex={1} px={16} alignItems="center" pt={insets.top}>
+    <XStack
+      space={8}
+      flex={1}
+      pl={8}
+      pr={8}
+      alignItems="center"
+      pt={insets.top}
+    >
       <Pressable
         onPress={() => {
           // @ts-ignore
@@ -38,7 +45,6 @@ export default function EntryListHeader({
         }}
       />
       <PlayerPortal />
-      {/* <Shortcut /> */}
     </XStack>
   )
 }

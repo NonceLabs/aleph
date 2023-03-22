@@ -1,6 +1,7 @@
 import {
   Bookmark,
   ChevronLeft,
+  ListMinus,
   ListPlus,
   PauseCircle,
   PlayCircle,
@@ -18,7 +19,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import TrackPlayer from 'react-native-track-player'
 import { useAppDispatch } from 'store/hooks'
 import { XStack } from 'tamagui'
-import { FeedEntry, FeedListType, FeedType } from 'types'
+import { FeedEntry, FeedListType, FeedType, PubEvent } from 'types'
 import ReaderSettings from './ReaderSettings'
 import Summarize from './Summarize'
 
@@ -79,14 +80,27 @@ export default function ReaderToolbar({
 
   const onAddToList = async () => {
     try {
-      await TrackPlayer.add({
-        id: entry?.id,
-        url: entry?.media!,
-        title: entry?.title,
-        artist: feed?.title,
-        artwork: entry?.cover || feed?.favicon || icons.DEFAULT_COVER,
-      })
-      Toast.success('Added to queue')
+      if (playStatus.isQueued) {
+        const queue = await TrackPlayer.getQueue()
+        const idx = queue.findIndex((item) => item.id === entry?.id)
+        await TrackPlayer.remove(idx)
+        if (playStatus.isPlaying) {
+          await TrackPlayer.skipToNext()
+        }
+        Toast.success('Removed from queue')
+        setPlayStatus({ isPlaying: false, isQueued: false })
+      } else {
+        await TrackPlayer.add({
+          id: entry?.id,
+          url: entry?.media!,
+          title: entry?.title,
+          artist: feed?.title,
+          artwork: entry?.cover || feed?.favicon || icons.DEFAULT_COVER,
+        })
+        setPlayStatus({ isPlaying: false, isQueued: true })
+        Toast.success('Added to queue')
+      }
+      PubSub.publish(PubEvent.TRACK_QUEUE_UPDATE)
     } catch (error) {
       Toast.error(error)
     }
@@ -111,6 +125,7 @@ export default function ReaderToolbar({
         )
         TrackPlayer.play()
       }
+      PubSub.publish(PubEvent.TRACK_QUEUE_UPDATE)
     } catch (error) {
       Toast.error(error)
     }
@@ -138,15 +153,19 @@ export default function ReaderToolbar({
           {entry?.entryType === FeedType.Podcast && (
             <Pressable onPress={onPlay}>
               {playStatus.isPlaying ? (
-                <PauseCircle width={28} height={28} color="$color11" />
+                <PauseCircle size={28} color="$color11" />
               ) : (
-                <PlayCircle width={28} height={28} color="$color11" />
+                <PlayCircle size={28} color="$color11" />
               )}
             </Pressable>
           )}
-          {entry?.entryType === FeedType.Podcast && !playStatus.isQueued && (
+          {entry?.entryType === FeedType.Podcast && (
             <Pressable onPress={onAddToList}>
-              <ListPlus width={28} height={28} color="$color11" />
+              {playStatus.isQueued ? (
+                <ListMinus size={28} color="$color11" />
+              ) : (
+                <ListPlus size={28} color="$color11" />
+              )}
             </Pressable>
           )}
 

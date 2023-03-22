@@ -76,6 +76,7 @@ export enum PubEvent {
   ON_PODCAST_PORTAL = 'ON_PODCAST_PORTAL',
   TOAST_MESSAGE = 'TOAST_MESSAGE',
   TOAST_HIDE = 'TOAST_HIDE',
+  TRACK_QUEUE_UPDATE = 'TRACK_QUEUE_UPDATE',
 }
 
 export type ToastType = 'success' | 'error' | 'info' | 'warning'

@@ -19,7 +19,14 @@ export default function DrawerHeader({
   const theme = useTheme()
   return (
     <BlurView intensity={80} tint={theme}>
-      <XStack pt={insets.top} px={16} pb={8} ai="center" jc="space-between">
+      <XStack
+        pt={insets.top}
+        pl={8}
+        pr={4}
+        pb={8}
+        ai="center"
+        jc="space-between"
+      >
         <XStack ai="center" space={8}>
           <Pressable
             onPress={() => {

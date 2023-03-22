@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import _ from 'lodash'
-import { Track } from 'react-native-track-player'
+import { State, Track } from 'react-native-track-player'
 import { Feed } from 'types'
 
 interface FeedSlice {
@@ -21,22 +21,31 @@ export const feedSlice = createSlice({
       state.explore = action.payload
     },
     updatePlaylist: (state, action) => {
-      state.playlist = action.payload
+      state.playlist = action.payload.map((t: Track) => {
+        const oldOne = state.playlist.find((p) => p.id === t.id)
+        return oldOne || t
+      })
     },
     updatePosition: (state, action) => {
-      const { id, position, duration } = action.payload
+      const { id, position, duration, playing } = action.payload
       state.playlist = state.playlist.map((t) => {
         if (t.id === id) {
+          if ([State.Buffering, State.Loading].includes(playing)) {
+            return {
+              ...t,
+              playing,
+            }
+          }
           return {
             ...t,
             position,
             duration,
-            playing: true,
+            playing,
           }
         }
         return {
           ...t,
-          playing: false,
+          playing: State.Paused,
         }
       })
     },

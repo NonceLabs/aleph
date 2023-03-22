@@ -7,12 +7,14 @@ import { initSQLite } from 'lib/db'
 import useFeeds from 'hooks/useFeeds'
 import useEntryFlow from 'hooks/useEntryFlow'
 import useBookmarks from 'hooks/useBookmarks'
+import useQueue from 'hooks/useQueue'
 
 export default function FlowPage() {
   const [refreshing, setRefreshing] = useState(false)
   const { feeds } = useFeeds()
   const { entries } = useEntryFlow()
   useBookmarks()
+  useQueue()
 
   useEffect(() => {
     setTimeout(() => {

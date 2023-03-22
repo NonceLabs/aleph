@@ -17,17 +17,16 @@ export default function PlayerStatus() {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    if (position > 0) {
-      dispatch({
-        type: 'feed/updatePosition',
-        payload: {
-          id: currentTrack?.id,
-          position,
-          duration,
-        },
-      })
-    }
-  }, [position, currentTrack?.url])
+    dispatch({
+      type: 'feed/updatePosition',
+      payload: {
+        id: currentTrack?.id,
+        position,
+        duration,
+        playing: playbackState.state,
+      },
+    })
+  }, [position, currentTrack?.url, playbackState.state])
 
   if (playbackState.state === State.Loading || duration === 0) {
     return (
@@ -62,7 +61,7 @@ export default function PlayerStatus() {
           } catch (error) {}
         }}
       >
-        <Slider.Track bc="$color8" height={30}>
+        <Slider.Track bc="rgba(240, 53, 60, 0.4)" height={30}>
           <Slider.TrackActive bc={MAIN_COLOR} />
         </Slider.Track>
         <Slider.Thumb index={0} circular elevate />

@@ -27,6 +27,7 @@ import TrackPlayer, {
 } from 'react-native-track-player'
 import icons from 'lib/icons'
 import Toast from 'lib/toast'
+import { useAppSelector } from 'store/hooks'
 
 type ActiveButton = 'info' | 'caption' | 'list'
 
@@ -34,6 +35,7 @@ export default function PlayerPortal() {
   const [open, setOpen] = useState(false)
   const [position, setPosition] = useState(0)
   const [active, setActive] = useState('info')
+  const queue = useAppSelector((state) => state.feed.playlist)
   const theme = useTheme()
 
   const iconSize = 24
@@ -68,7 +70,6 @@ export default function PlayerPortal() {
           track={currentTrack}
           isPlaying={isPlaying}
           animate
-          withControl={false}
           size={40}
           onPress={() => {
             setOpen(true)
@@ -172,16 +173,12 @@ export default function PlayerPortal() {
                 <Pressable
                   onPress={async () => {
                     try {
-                      console.log('isPlaying', isPlaying)
-
                       if (isPlaying) {
                         await TrackPlayer.pause()
                       } else {
                         await TrackPlayer.play()
                       }
                     } catch (error) {
-                      console.log('error', error)
-
                       Toast.error(error)
                     }
                   }}
@@ -193,8 +190,20 @@ export default function PlayerPortal() {
                   )}
                 </Pressable>
                 <Pressable
-                  onPress={() => {
-                    TrackPlayer.skipToNext()
+                  onPress={async () => {
+                    try {
+                      const idx = await TrackPlayer.getActiveTrackIndex()
+                      if (typeof idx === 'number' && queue.length > 1) {
+                        const nextIdx = (idx + 1) % queue.length
+                        const nextTrack = queue[nextIdx]
+                        await TrackPlayer.skip(
+                          nextIdx,
+                          nextTrack?.position || 0
+                        )
+                      }
+                    } catch (error) {
+                      Toast.error(error)
+                    }
                   }}
                 >
                   <ChevronLast size={30} color="$color11" />

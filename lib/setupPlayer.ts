@@ -3,6 +3,7 @@ import TrackPlayer, {
   AppKilledPlaybackBehavior,
   Capability,
   RepeatMode,
+  State,
   Track,
 } from 'react-native-track-player'
 import { store } from 'store'
@@ -55,7 +56,7 @@ export const initQueue = async () => {
       return {
         ...t,
         position: t.position || 0,
-        playing: t.playing || false,
+        playing: t.playing || State.None,
         duration: t.duration ? t.duration : undefined,
       }
     })
@@ -66,10 +67,10 @@ export const initQueue = async () => {
     await Promise.all(
       playlist.map(async (t, idx) => {
         await TrackPlayer.skip(idx, t.position)
-        if (t.playing) {
-          // playingItem = t
-          // playingIdx = idx
-        }
+        // if (t.playing) {
+        //   playingItem = t
+        //   playingIdx = idx
+        // }
       })
     )
   } catch (error) {}

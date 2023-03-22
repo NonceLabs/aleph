@@ -1,15 +1,16 @@
 import dayjs from 'dayjs'
-import { YStack, Text, XStack, useWindowDimensions } from 'tamagui'
-import { Feed, FeedEntry, FeedListType, FeedType } from 'types'
+import { YStack, Text, XStack, useWindowDimensions, Spinner } from 'tamagui'
+import { Feed, FeedEntry, FeedListType, FeedType, PubEvent } from 'types'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import { Pressable, StyleSheet } from 'react-native'
 import { useRouter } from 'expo-router'
 import Favicon from './Favicon'
-import { ListMusic, PlayCircle } from '@tamagui/lucide-icons'
+import { ListMusic, Pause, PlayCircle } from '@tamagui/lucide-icons'
 import { Image } from 'expo-image'
-import TrackPlayer from 'react-native-track-player'
+import TrackPlayer, { State, usePlaybackState } from 'react-native-track-player'
 import icons from 'lib/icons'
-import useQueue from 'hooks/useQueue'
+import { useAppSelector } from 'store/hooks'
+import TrackStatus from './Player/TrackStatus'
 
 dayjs.extend(relativeTime)
 
@@ -98,7 +99,7 @@ export default function FeedItem({
 
 function Cover({ item, feed }: { item: FeedEntry; feed?: Feed }) {
   const placeholder = icons.DEFAULT_COVER
-  const queue = useQueue()
+  const queue = useAppSelector((state) => state.feed.playlist)
 
   if (item.entryType === FeedType.RSS) {
     return item.cover ? (
@@ -118,10 +119,16 @@ function Cover({ item, feed }: { item: FeedEntry; feed?: Feed }) {
     <Pressable
       onPress={async () => {
         try {
-          console.log('queuedIdx', queuedIdx)
           // queued
           if (queuedIdx !== -1) {
-            await TrackPlayer.remove(queuedIdx)
+            if (queue[queuedIdx]?.playing === State.Playing) {
+              await TrackPlayer.pause()
+            } else if (
+              [State.Paused, State.None].includes(queue[queuedIdx]?.playing)
+            ) {
+              await TrackPlayer.skip(queuedIdx)
+              await TrackPlayer.play()
+            }
           } else {
             const idx = await TrackPlayer.add(
               {
@@ -134,12 +141,11 @@ function Cover({ item, feed }: { item: FeedEntry; feed?: Feed }) {
               0
             )
 
-            console.log('idx', idx)
-
             if (typeof idx === 'number') {
               await TrackPlayer.skip(idx)
               await TrackPlayer.play()
             }
+            PubSub.publish(PubEvent.TRACK_QUEUE_UPDATE)
           }
         } catch (error) {
           console.log('error', error)
@@ -154,12 +160,24 @@ function Cover({ item, feed }: { item: FeedEntry; feed?: Feed }) {
           blurRadius={15}
         />
         <XStack position="absolute" top={20} left={20}>
-          {queuedIdx !== -1 ? (
-            <ListMusic size={40} color="white" />
-          ) : (
-            <PlayCircle size={40} color="white" />
-          )}
+          <TrackStatus
+            state={queue[queuedIdx]?.playing}
+            queued={queuedIdx !== -1}
+          />
         </XStack>
+        {queuedIdx !== -1 && (
+          <XStack
+            position="absolute"
+            top={60}
+            left={60}
+            p={4}
+            bc="gray"
+            borderTopLeftRadius={8}
+            borderBottomRightRadius={8}
+          >
+            <ListMusic size={12} color="white" />
+          </XStack>
+        )}
       </XStack>
     </Pressable>
   )
