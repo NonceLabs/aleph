@@ -8,18 +8,34 @@ import useFeeds from 'hooks/useFeeds'
 import useEntryFlow from 'hooks/useEntryFlow'
 import useBookmarks from 'hooks/useBookmarks'
 import useQueue from 'hooks/useQueue'
+import { fetcher } from 'lib/request'
+import { HOST } from 'lib/constants'
+import { useAppDispatch } from 'store/hooks'
 
 export default function FlowPage() {
   const [refreshing, setRefreshing] = useState(false)
+  const [initing, setIniting] = useState(false)
   const { feeds } = useFeeds()
   const { entries } = useEntryFlow()
   useBookmarks()
   useQueue()
 
+  const dispatch = useAppDispatch()
   useEffect(() => {
+    fetcher(`${HOST}/explore`).then((res) => {
+      dispatch({
+        type: 'feed/setExplore',
+        payload: res,
+      })
+    })
+
     setTimeout(() => {
       initSQLite()
     }, 300)
+    setIniting(true)
+    setTimeout(() => {
+      setIniting(false)
+    }, 3000)
   }, [])
 
   useEffect(() => {
@@ -47,6 +63,7 @@ export default function FlowPage() {
           }
         }}
         refreshing={refreshing}
+        initing={initing}
       />
     </YStack>
   )

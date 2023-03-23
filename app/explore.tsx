@@ -2,28 +2,17 @@ import { Podcast, Rss } from '@tamagui/lucide-icons'
 import DrawerHeader from 'components/DrawerHeader'
 import FeedSheet from 'components/FeedSheet'
 import { Image } from 'expo-image'
-import { HOST } from 'lib/constants'
-import { fetcher } from 'lib/request'
+import icons from 'lib/icons'
 import _ from 'lodash'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { ScrollView } from 'react-native'
-import { useAppDispatch, useAppSelector } from 'store/hooks'
-import { YStack, Text, XStack, Sheet, Anchor, Button } from 'tamagui'
+import { useAppSelector } from 'store/hooks'
+import { YStack, Text, XStack } from 'tamagui'
 import { Feed, FeedType } from 'types'
 
 export default function Explore() {
   const explore = useAppSelector((state) => state.feed.explore || [])
-  const dispatch = useAppDispatch()
   const [feed, setFeed] = useState<Feed>()
-
-  useEffect(() => {
-    fetcher(`${HOST}/explore`).then((res) => {
-      dispatch({
-        type: 'feed/setExplore',
-        payload: res,
-      })
-    })
-  }, [])
 
   const onOpenChange = (open: boolean) => {
     if (!open) {
@@ -51,11 +40,12 @@ export default function Explore() {
                     <YStack key={idx} space={16} px={4} py={8} mx={16} my={16}>
                       <YStack
                         key={item.title}
-                        space={8}
+                        space={4}
                         onPress={() => setFeed(item)}
                       >
                         <Image
                           source={item.favicon}
+                          placeholder={icons.DEFAULT_COVER}
                           style={{
                             width: 160,
                             height: 160,
@@ -83,6 +73,7 @@ export default function Explore() {
                             color="$color11"
                             maxWidth={150}
                             numberOfLines={1}
+                            fontWeight="bold"
                           >
                             {item.title}
                           </Text>

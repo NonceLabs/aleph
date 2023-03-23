@@ -14,6 +14,7 @@ import { Info } from '@tamagui/lucide-icons'
 import useFeed from 'hooks/useFeed'
 import SimpleEntryList from 'components/SimpleEntryList'
 import FeedSheet from 'components/FeedSheet'
+import useEntryFlow from 'hooks/useEntryFlow'
 
 export default function FeedProfile() {
   const [feedData, setFeedData] = useState<FeedData>()
@@ -22,34 +23,44 @@ export default function FeedProfile() {
   const [feed, setFeed] = useState<Feed>()
   const { url, from } = useSearchParams()
   const oldSub = useFeed(url as string)
+  const { entries } = useEntryFlow()
 
   const navigation = useNavigation()
   const router = useRouter()
 
   useEffect(() => {
-    if (oldSub && oldSub.deleted) {
-      // open the sheet
-      setFeed(oldSub)
+    if (oldSub) {
+      if (oldSub.deleted) {
+        // open the sheet
+        setFeed(oldSub)
+      } else {
+        setFeedData({
+          feed: oldSub,
+          entries: entries.filter((e) => e.feedUrl === oldSub.url),
+        })
+      }
     }
   }, [oldSub])
 
   useEffect(() => {
-    setFeedData(undefined)
-    setError(undefined)
-    setLoading(true)
-    extract(url as string)
-      .then((res) => {
-        setFeedData(res)
-        if (!oldSub) {
-          setFeed(res.feed)
-        }
-        setLoading(false)
-      })
-      .catch((error) => {
-        setError(error)
-        setLoading(false)
-      })
-  }, [url])
+    if (oldSub && oldSub.deleted) {
+      setFeedData(undefined)
+      setError(undefined)
+      setLoading(true)
+      extract(url as string)
+        .then((res) => {
+          setFeedData(res)
+          if (!oldSub) {
+            setFeed(res.feed)
+          }
+          setLoading(false)
+        })
+        .catch((error) => {
+          setError(error)
+          setLoading(false)
+        })
+    }
+  }, [url, oldSub])
 
   const onOpenChange = (open: boolean) => {
     if (!open) {

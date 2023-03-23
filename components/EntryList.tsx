@@ -1,7 +1,7 @@
 import { useAppSelector } from 'store/hooks'
 import { FeedEntry, FeedListType, FeedType, Tag } from 'types'
 import { FlashList } from '@shopify/flash-list'
-import { Text, YStack } from 'tamagui'
+import { Text, useWindowDimensions, XStack, YStack } from 'tamagui'
 import EntryItem from './EntryItem'
 import { Animated, useAnimatedValue } from 'react-native'
 import _ from 'lodash'
@@ -14,6 +14,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import AddFeedButton from './AddFeedButton'
 import useFeeds from 'hooks/useFeeds'
 import { Eye, Haze, Podcast } from '@tamagui/lucide-icons'
+import { Link } from 'expo-router'
+import LottieView from 'lottie-react-native'
 
 const customTags = [
   {
@@ -37,16 +39,19 @@ export default function EntryList({
   entries,
   refreshing,
   onRefresh = () => {},
+  initing,
 }: {
   entries: FeedEntry[]
   refreshing: boolean
   onRefresh?: () => void
+  initing: boolean
 }) {
   const [page, setPage] = useState(1)
   const listRef = useRef<FlashList<any>>(null)
   const [selectedTag, setSelectedTag] = useState<Tag | undefined>()
   const [keyword, setKeyword] = useState('')
   const { feeds } = useFeeds()
+  const { width } = useWindowDimensions()
   const hideRead = useAppSelector((state) => state.setting.flow.hideRead)
   const scrollY = useAnimatedValue(0)
   const insets = useSafeAreaInsets()
@@ -179,26 +184,56 @@ export default function EntryList({
       refreshing={refreshing}
       ListFooterComponent={
         isEmpty ? (
-          <YStack flex={1} ai="center" jc="center" space pt={100}>
-            <EmojiSingRightNote
-              width={140}
-              height={140}
-              color="#999"
-              strokeWidth={1}
-            />
-            <Text color="$color11" fontSize={18}>
-              No feeds
-            </Text>
-            {feeds.filter((t) => !t.deleted).length === 0 && (
-              <AddFeedButton
-                trigger={
-                  <Text color="$blue10" fontSize={18} fontFamily="Gilroy-Bold">
-                    Add feeds
-                  </Text>
-                }
+          initing ? (
+            <XStack ai="center" jc="center">
+              <LottieView
+                autoPlay
+                loop
+                style={{
+                  width,
+                  height: width,
+                }}
+                speed={1.4}
+                source={require(`../assets/loading.json`)}
               />
-            )}
-          </YStack>
+            </XStack>
+          ) : (
+            <YStack flex={1} ai="center" jc="center" space pt={100}>
+              <EmojiSingRightNote
+                width={140}
+                height={140}
+                color="#999"
+                strokeWidth={1}
+              />
+              {feeds.filter((t) => !t.deleted).length === 0 && (
+                <YStack space={4} ai="center">
+                  <AddFeedButton
+                    trigger={
+                      <Text
+                        color="$blue10"
+                        fontSize={18}
+                        fontFamily="Gilroy-Bold"
+                      >
+                        Add feeds
+                      </Text>
+                    }
+                  />
+                  <Text fontSize={16} color="$color11">
+                    or
+                  </Text>
+                  <Link href="/explore">
+                    <Text
+                      color="$blue10"
+                      fontSize={18}
+                      fontFamily="Gilroy-Bold"
+                    >
+                      Explore
+                    </Text>
+                  </Link>
+                </YStack>
+              )}
+            </YStack>
+          )
         ) : null
       }
     />

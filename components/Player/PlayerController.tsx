@@ -109,12 +109,16 @@ export default function PlayerController({
           onPress={async () => {
             try {
               setHandling(true)
-              const activeIdx = await TrackPlayer.getActiveTrackIndex()
-              if (typeof activeIdx === 'number') {
-                await TrackPlayer.remove(activeIdx)
-                PubSub.publish(PubEvent.TRACK_QUEUE_UPDATE)
-                Toast.success('Removed from play list')
-              }
+              await TrackPlayer.pause()
+              setTimeout(async () => {
+                const activeIdx = await TrackPlayer.getActiveTrackIndex()
+                if (typeof activeIdx === 'number') {
+                  await TrackPlayer.remove(activeIdx)
+                  await TrackPlayer.skipToNext()
+                  PubSub.publish(PubEvent.TRACK_QUEUE_UPDATE)
+                  Toast.success('Removed from play list')
+                }
+              }, 500)
               setHandling(false)
             } catch (error) {
               Toast.error(error)
@@ -127,6 +131,9 @@ export default function PlayerController({
         <Pressable
           onPress={async () => {
             try {
+              if (handling) {
+                return
+              }
               if (isPlaying) {
                 await TrackPlayer.pause()
               } else {
