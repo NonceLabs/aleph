@@ -29,7 +29,7 @@ export default function FeedProfile() {
   const router = useRouter()
 
   useEffect(() => {
-    if (oldSub) {
+    if (oldSub && !feedData) {
       if (oldSub.deleted) {
         // open the sheet
         setFeed(oldSub)
@@ -43,7 +43,7 @@ export default function FeedProfile() {
   }, [oldSub])
 
   useEffect(() => {
-    if (oldSub && oldSub.deleted) {
+    if (!oldSub || oldSub.deleted) {
       setFeedData(undefined)
       setError(undefined)
       setLoading(true)
@@ -81,6 +81,9 @@ export default function FeedProfile() {
           if (from === 'feeds') {
             // @ts-ignore
             navigation.jumpTo(from)
+          } else if (from === 'index') {
+            // @ts-ignore
+            navigation.jumpTo('index')
           } else {
             router.back()
           }
@@ -132,6 +135,7 @@ export default function FeedProfile() {
                   </Text>
                 </Pressable>
               }
+              from={from as string}
             />
           </YStack>
         )}

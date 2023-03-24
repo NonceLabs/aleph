@@ -16,9 +16,11 @@ import { FeedType } from 'types'
 export default function AddFeedButton({
   feedType = FeedType.RSS,
   trigger,
+  from,
 }: {
   feedType?: FeedType
   trigger?: React.ReactNode
+  from: string
 }) {
   const [url, setUrl] = useState('')
 
@@ -83,7 +85,7 @@ export default function AddFeedButton({
                 onPress={() => {
                   router.push({
                     pathname: 'shared/feed',
-                    params: { url: encodeURIComponent(url), feedType },
+                    params: { url: encodeURIComponent(url), feedType, from },
                   })
                   setUrl('')
                 }}

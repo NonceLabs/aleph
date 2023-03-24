@@ -217,6 +217,7 @@ export default function EntryList({
                         Add feeds
                       </Text>
                     }
+                    from="index"
                   />
                   <Text fontSize={16} color="$color11">
                     or

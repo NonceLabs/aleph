@@ -17,7 +17,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "buildNumber": "15",
+      "buildNumber": "17",
       "config": {
         "usesNonExemptEncryption": false
       },
@@ -32,7 +32,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "dev.chezhe.aleph"
     },
     "web": {
       "bundler": "metro",

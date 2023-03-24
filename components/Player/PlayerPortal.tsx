@@ -1,7 +1,7 @@
 import { Image } from 'expo-image'
 import { MAIN_COLOR } from 'lib/constants'
 import { useEffect, useState } from 'react'
-import { Pressable, StyleSheet, View } from 'react-native'
+import { Platform, Pressable, StyleSheet, View } from 'react-native'
 import { XStack, Text, Sheet, YStack, useWindowDimensions } from 'tamagui'
 import PlayingTrack from './PlayingTrack'
 import { BlurView } from 'expo-blur'
@@ -92,7 +92,9 @@ export default function PlayerPortal() {
           f={1}
           space="$3"
           jc="flex-end"
-          pb={insets.bottom + height * 0.1}
+          pb={
+            insets.bottom + height * 0.1 + (Platform.OS === 'android' ? 20 : 0)
+          }
         >
           <View style={StyleSheet.absoluteFill}>
             <Image

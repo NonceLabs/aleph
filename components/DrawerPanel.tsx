@@ -10,6 +10,7 @@ import {
 } from 'iconoir-react-native'
 import { MAIN_COLOR } from 'lib/constants'
 import icons from 'lib/icons'
+import { Platform } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useActiveTrack } from 'react-native-track-player'
 import { Text, XStack, YStack } from 'tamagui'
@@ -61,7 +62,7 @@ export default function DrawerPanel() {
       space
       px={8}
       jc="space-between"
-      pb={insets.bottom}
+      pb={insets.bottom + (Platform.OS === 'android' ? 20 : 0)}
       bc={theme === 'light' ? '#f6eee3' : '$background'}
     >
       <XStack jc="flex-end">

@@ -22,7 +22,12 @@ export default function Feeds() {
         estimatedItemSize={55}
         renderItem={({ item }) => {
           if (typeof item === 'string') {
-            return <DrawerHeader title="Feeds" right={<AddFeedButton />} />
+            return (
+              <DrawerHeader
+                title="Feeds"
+                right={<AddFeedButton from="feeds" />}
+              />
+            )
           }
           return <SourceItem item={item} />
         }}
