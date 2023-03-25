@@ -91,22 +91,14 @@ export default function Reader() {
             </Text>
           </YStack>
           {entry?.tags.length ? (
-            <XStack flexWrap="wrap">
+            <XStack flexWrap="wrap" space={6}>
               {entry.tags.map((tag: string, idx) => {
-                const isLast = idx + 1 === entry?.tags?.length
                 return (
                   <Link key={idx} href={`shared/entryByTag?tag=${tag}`}>
                     <XStack mr={2} mb={4}>
-                      <Text
-                        color="$color11"
-                        fontFamily="$heading"
-                        bbw={StyleSheet.hairlineWidth}
-                        bbc="$color11"
-                        textDecorationLine="underline"
-                      >
-                        {tag}
+                      <Text color="$blue11" fontFamily="$heading">
+                        #{tag}
                       </Text>
-                      {!isLast && <Text>,</Text>}
                     </XStack>
                   </Link>
                 )
