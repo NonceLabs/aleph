@@ -4,8 +4,13 @@ import { Pressable, ScrollView } from 'react-native'
 import DrawerHeader from 'components/Drawer/DrawerHeader'
 import { markAllRead } from 'lib/db'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
-import { MAIN_COLOR } from 'lib/constants'
+import { HOST, MAIN_COLOR } from 'lib/constants'
 import { ChevronRight } from '@tamagui/lucide-icons'
+import MyAPIKey from 'components/Settings/MyAPIKey'
+import RoleSheet from 'components/Settings/RoleSheet'
+import ModelSheet from 'components/Settings/ModelSheet'
+import { useEffect } from 'react'
+import { fetcher, post } from 'lib/request'
 
 export default function SettingsPage() {
   const hideRead = useAppSelector((state) => state.setting?.flow?.hideRead)
@@ -15,6 +20,17 @@ export default function SettingsPage() {
   const { apiKey, model, role } = useAppSelector(
     (state) => state.setting?.openAPI
   )
+
+  useEffect(() => {
+    post(`${HOST}/models`, { apiKey })
+      .then((result) => {
+        dispatch({
+          type: 'setting/updateModels',
+          payload: result,
+        })
+      })
+      .catch(console.log)
+  }, [apiKey])
 
   const dispatch = useAppDispatch()
   return (
@@ -73,7 +89,7 @@ export default function SettingsPage() {
           </XStack>
 
           <Separator />
-          <YStack space>
+          <YStack space={4}>
             <Text fontWeight="bold" fontSize={18} color="$color11">
               Only fetch articles since last
             </Text>
@@ -119,37 +135,11 @@ export default function SettingsPage() {
             </XStack>
           )}
 
-          <XStack space ai="center" jc="space-between">
-            <Text color="$color11" fontFamily="Gilroy-Bold" fontSize={18}>
-              Model
-            </Text>
-            <Pressable>
-              <XStack ai="center">
-                <Text color={MAIN_COLOR} fontSize={16} fontFamily="Arvo">
-                  {model || 'gpt-4'}
-                </Text>
-                <ChevronRight size={16} color="$color9" />
-              </XStack>
-            </Pressable>
-          </XStack>
+          <ModelSheet />
 
-          <XStack space ai="center" jc="space-between">
-            <Text color="$color11" fontFamily="Gilroy-Bold" fontSize={18}>
-              Role
-            </Text>
-            <Pressable>
-              <XStack ai="center">
-                <Text color={MAIN_COLOR} fontSize={16} fontFamily="Arvo">
-                  {role || 'assistant'}
-                </Text>
-                <ChevronRight size={16} color="$color9" />
-              </XStack>
-            </Pressable>
-          </XStack>
+          <RoleSheet />
 
-          <Button bc={MAIN_COLOR} color="white">
-            Enter API Key
-          </Button>
+          <MyAPIKey />
         </YStack>
       </ScrollView>
     </YStack>

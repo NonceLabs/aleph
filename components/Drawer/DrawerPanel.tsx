@@ -1,9 +1,11 @@
+import { Tags } from '@tamagui/lucide-icons'
 import { Image } from 'expo-image'
 import { Link } from 'expo-router'
 import useTheme from 'hooks/useTheme'
 import {
   BookmarkEmpty,
   Home,
+  Label,
   Planet,
   RssFeedTag,
   Settings,
@@ -21,6 +23,11 @@ const routes = [
     href: '/',
     title: 'Home',
     Icon: Home,
+  },
+  {
+    href: '/tags',
+    title: 'Tags',
+    Icon: Label,
   },
   {
     href: '/feeds',

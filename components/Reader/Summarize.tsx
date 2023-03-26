@@ -3,9 +3,20 @@ import { HOST, MAIN_COLOR } from 'lib/constants'
 import { post } from 'lib/request'
 import { useState } from 'react'
 import { Pressable } from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useAppSelector } from 'store/hooks'
-import { Text, Sheet, YStack, Spinner, ScrollView } from 'tamagui'
+import {
+  Text,
+  Sheet,
+  YStack,
+  Spinner,
+  ScrollView,
+  XStack,
+  Button,
+  useWindowDimensions,
+} from 'tamagui'
 import { FeedEntry } from 'types'
+import LottieView from 'lottie-react-native'
 
 export default function Summarize({ entry }: { entry?: FeedEntry }) {
   const [position, setPosition] = useState(0)
@@ -14,8 +25,13 @@ export default function Summarize({ entry }: { entry?: FeedEntry }) {
   const [summary, setSummary] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
 
+  const { width, height } = useWindowDimensions()
+
   const fontFamily = useAppSelector(
     (state) => state.setting?.reader?.fontFamily
+  )
+  const { apiKey, model, role } = useAppSelector(
+    (state) => state.setting?.openAPI
   )
 
   if (!entry) {
@@ -30,6 +46,9 @@ export default function Summarize({ entry }: { entry?: FeedEntry }) {
     if (_open && entry) {
       post(`${HOST}/summarize`, {
         url: entry.id,
+        apiKey,
+        model,
+        role,
       })
         .then((result) => {
           setGenerating(false)
@@ -60,7 +79,7 @@ export default function Summarize({ entry }: { entry?: FeedEntry }) {
         modal
         open={open}
         onOpenChange={onOpenChange}
-        snapPoints={[81]}
+        snapPoints={[90]}
         dismissOnSnapToBottom
         position={position}
         onPositionChange={setPosition}
@@ -69,10 +88,10 @@ export default function Summarize({ entry }: { entry?: FeedEntry }) {
         <Sheet.Overlay />
         <Sheet.Handle />
         <Sheet.Frame f={1} p="$4">
-          <ScrollView f={1} p={8}>
+          <ScrollView h={height * 0.8} p={8}>
             {summary && (
               <Text
-                fontSize={18}
+                fontSize={20}
                 color="$color12"
                 ta="left"
                 fontFamily={fontFamily}
@@ -87,10 +106,16 @@ export default function Summarize({ entry }: { entry?: FeedEntry }) {
             )}
             {generating && (
               <YStack pt={20} space={8} ai="center">
-                <Spinner size="large" />
-                <Text fontSize={16} color="$color11">
-                  Generatinng summary
-                </Text>
+                <LottieView
+                  autoPlay
+                  loop
+                  style={{
+                    width,
+                    height: width,
+                  }}
+                  speed={1.4}
+                  source={require(`../../assets/loading.json`)}
+                />
               </YStack>
             )}
           </ScrollView>

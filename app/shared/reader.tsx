@@ -3,7 +3,9 @@ import { Link, useSearchParams } from 'expo-router'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useAppSelector } from 'store/hooks'
 import {
+  Button,
   ScrollView,
+  Separator,
   Text,
   useWindowDimensions,
   XStack,
@@ -18,6 +20,9 @@ import useTheme from 'hooks/useTheme'
 import useEntry from 'hooks/useEntry'
 import useFeeds from 'hooks/useFeeds'
 import { FeedListType } from 'types'
+import { MAIN_COLOR } from 'lib/constants'
+import { ThumbsDown, ThumbsUp } from '@tamagui/lucide-icons'
+import Toast from 'lib/toast'
 
 export default function Reader() {
   const { id, type } = useSearchParams()
@@ -30,6 +35,9 @@ export default function Reader() {
   const insets = useSafeAreaInsets()
   const { width } = useWindowDimensions()
   const feed = feeds.find((t) => t.url === entry?.feedUrl)
+  const { apiKey, model, role } = useAppSelector(
+    (state) => state.setting.openAPI
+  )
 
   const theme = useTheme()
 
@@ -64,6 +72,12 @@ export default function Reader() {
       },
     }
   }, [fontSize, fontFamily, theme])
+
+  const onToggleLike = (like: boolean) => {
+    if (!apiKey) {
+      return Toast.error("You haven't setup your own key")
+    }
+  }
 
   return (
     <YStack flex={1}>
@@ -114,6 +128,35 @@ export default function Reader() {
               ignoredDomTags={['audio', 'svg']}
             />
           </YStack>
+          <XStack ai="center" space="$2">
+            <Separator borderColor="$color8" />
+            <Text ta="center" color="$color10">
+              Make AI know you better
+            </Text>
+            <Separator borderColor="$color8" />
+          </XStack>
+          <XStack w="100%" space={10} pb={20}>
+            <Button
+              f={1}
+              bc="$red9"
+              color="white"
+              icon={ThumbsUp}
+              scaleIcon={1.4}
+              onPress={() => onToggleLike(true)}
+            >
+              Upvote
+            </Button>
+            <Button
+              bc="$gray9"
+              color="white"
+              f={1}
+              icon={ThumbsDown}
+              scaleIcon={1.4}
+              onPress={() => onToggleLike(false)}
+            >
+              Downvote
+            </Button>
+          </XStack>
         </ScrollView>
 
         <ReaderToolbar

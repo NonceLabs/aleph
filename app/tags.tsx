@@ -44,7 +44,7 @@ export default function TagsPage() {
       <DrawerHeader
         title="Tags"
         right={
-          <XStack>
+          <XStack pr={10}>
             <Text color="$blue10" fontWeight="bold">
               {topTags.length}
             </Text>
@@ -73,15 +73,17 @@ export default function TagsPage() {
                 w={width - 32}
                 px={20}
                 py={8}
-                pr={8}
+                pr={4}
                 backgroundColor="$background"
               >
                 <Text color="$color12" fontSize={18} fontFamily="Gilroy-Bold">
                   {item.title}
                 </Text>
                 <XStack ai="center">
-                  <Text color="$color11">{item.count}</Text>
-                  <ChevronRight width={28} height={28} color="$color11" />
+                  <Text color="$color11" fontSize={16}>
+                    {item.count}
+                  </Text>
+                  <ChevronRight size={28} color="$color8" />
                 </XStack>
               </XStack>
             </Link>

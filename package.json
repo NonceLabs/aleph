@@ -23,6 +23,7 @@
     "@tamagui/font-fira-mono": "^1.9.3",
     "@tamagui/font-inter": "^1.8.4",
     "@tamagui/font-silkscreen": "^1.9.3",
+    "@tamagui/linear-gradient": "^1.9.4",
     "@tamagui/lucide-icons": "^1.8.4",
     "@tamagui/themes": "^1.8.4",
     "cross-fetch": "^3.1.5",

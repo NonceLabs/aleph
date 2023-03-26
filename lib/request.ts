@@ -1,4 +1,4 @@
-export const post = async (url: string, json: object) => {
+export const post = async (url: string, json: object, headers = {}) => {
   const body = JSON.stringify(json)
   try {
     const response = await fetch(url, {
@@ -7,6 +7,7 @@ export const post = async (url: string, json: object) => {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
+        ...headers
       },
     })
     const responseJson = await response.json()

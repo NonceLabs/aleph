@@ -15,6 +15,7 @@ interface SettingSlice {
     apiKey: string
     model: string
     role: string
+    models: string[]
   }
 }
 
@@ -31,7 +32,8 @@ const initialState: SettingSlice = {
   openAPI: {
     apiKey: '',
     model: '',
-    role: 'assistant',
+    role: 'user',
+    models: [],
   },
 }
 
@@ -53,6 +55,18 @@ export const settingSlice = createSlice({
     },
     updatePublishLimit: (state, action) => {
       state.flow.publishLimit = action.payload
+    },
+    updateModels: (state, action) => {
+      state.openAPI.models = action.payload
+    },
+    updateModel: (state, action) => {
+      state.openAPI.model = action.payload
+    },
+    updateApiKey: (state, action) => {
+      state.openAPI.apiKey = action.payload
+    },
+    updateRole: (state, action) => {
+      state.openAPI.role = action.payload
     },
   },
 })
