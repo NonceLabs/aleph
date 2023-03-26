@@ -1,16 +1,21 @@
 import { YStack, XStack, Text, Switch, Button, Group, Separator } from 'tamagui'
 import { DoubleCheck } from 'iconoir-react-native'
-import { ScrollView } from 'react-native'
-import DrawerHeader from 'components/DrawerHeader'
-import { markAllRead, purgeAllData } from 'lib/db'
+import { Pressable, ScrollView } from 'react-native'
+import DrawerHeader from 'components/Drawer/DrawerHeader'
+import { markAllRead } from 'lib/db'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { MAIN_COLOR } from 'lib/constants'
+import { ChevronRight } from '@tamagui/lucide-icons'
 
 export default function SettingsPage() {
   const hideRead = useAppSelector((state) => state.setting?.flow?.hideRead)
   const publishLimit = useAppSelector(
     (state) => state.setting?.flow?.publishLimit || 'Month'
   )
+  const { apiKey, model, role } = useAppSelector(
+    (state) => state.setting?.openAPI
+  )
+
   const dispatch = useAppDispatch()
   return (
     <YStack flex={1}>
@@ -20,6 +25,13 @@ export default function SettingsPage() {
       >
         <DrawerHeader title="Settings" />
         <YStack space={16} px={16} mt={16}>
+          <XStack ai="center" space>
+            <Separator borderColor="$color11" />
+            <Text color="$color11" fontFamily="Gilroy-Bold">
+              Common Settings
+            </Text>
+            <Separator borderColor="$color11" />
+          </XStack>
           <XStack space ai="center" jc="space-between">
             <Text fontWeight="bold" fontSize={18} color="$color11">
               Hide read
@@ -63,7 +75,7 @@ export default function SettingsPage() {
           <Separator />
           <YStack space>
             <Text fontWeight="bold" fontSize={18} color="$color11">
-              Articles in last
+              Only fetch articles since last
             </Text>
             <Group axis="horizontal" bc="$backgroundTransparent" width="100%">
               {['Week', 'Month', 'Year', 'Ever'].map((t) => {
@@ -88,6 +100,56 @@ export default function SettingsPage() {
               })}
             </Group>
           </YStack>
+
+          <XStack ai="center" space>
+            <Separator borderColor="$color11" />
+            <Text color="$color11" fontFamily="Gilroy-Bold">
+              Use My Own API Key
+            </Text>
+            <Separator borderColor="$color11" />
+          </XStack>
+
+          {!apiKey && (
+            <XStack>
+              <Text color="$color10" fontSize={12} fontFamily="Arvo">
+                With your own API key, you can customize model and role, also
+                you can give feedback to AI which will make AI know you better,
+                and learn your preference.
+              </Text>
+            </XStack>
+          )}
+
+          <XStack space ai="center" jc="space-between">
+            <Text color="$color11" fontFamily="Gilroy-Bold" fontSize={18}>
+              Model
+            </Text>
+            <Pressable>
+              <XStack ai="center">
+                <Text color={MAIN_COLOR} fontSize={16} fontFamily="Arvo">
+                  {model || 'gpt-4'}
+                </Text>
+                <ChevronRight size={16} color="$color9" />
+              </XStack>
+            </Pressable>
+          </XStack>
+
+          <XStack space ai="center" jc="space-between">
+            <Text color="$color11" fontFamily="Gilroy-Bold" fontSize={18}>
+              Role
+            </Text>
+            <Pressable>
+              <XStack ai="center">
+                <Text color={MAIN_COLOR} fontSize={16} fontFamily="Arvo">
+                  {role || 'assistant'}
+                </Text>
+                <ChevronRight size={16} color="$color9" />
+              </XStack>
+            </Pressable>
+          </XStack>
+
+          <Button bc={MAIN_COLOR} color="white">
+            Enter API Key
+          </Button>
         </YStack>
       </ScrollView>
     </YStack>

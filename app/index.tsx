@@ -1,6 +1,6 @@
 import { YStack } from 'tamagui'
 import { useEffect, useState } from 'react'
-import EntryList from 'components/EntryList'
+import EntryList from 'components/Entry/EntryList'
 import { fetchFeedFlow, tagFeedEntries } from 'lib/task'
 import _ from 'lodash'
 import { initSQLite } from 'lib/db'

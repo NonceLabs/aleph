@@ -15,7 +15,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { Provider } from 'react-redux'
 import { store } from 'store'
 import { Drawer } from './Drawer'
-import DrawerPanel from 'components/DrawerPanel'
+import DrawerPanel from 'components/Drawer/DrawerPanel'
 import useTheme from 'hooks/useTheme'
 import ToastContainer from 'components/ToastContainer'
 import { Host } from 'react-native-portalize'
@@ -37,7 +37,9 @@ export const unstable_settings = {
 export default function RootLayout() {
   const [loaded, error] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-    Inter: require('../assets/fonts/Inter.ttf'),
+    Inter: require('@tamagui/font-inter/otf/Inter-Medium.otf'),
+    InterBold: require('@tamagui/font-inter/otf/Inter-Bold.otf'),
+    Silkscreen: require('@tamagui/font-silkscreen/files/slkscr.ttf'),
     Gilroy: require('../assets/fonts/Gilroy-Medium.ttf'),
     'Gilroy-Bold': require('../assets/fonts/Gilroy-Bold.ttf'),
     Vollkorn: require('../assets/fonts/Vollkorn.ttf'),

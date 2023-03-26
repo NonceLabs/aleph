@@ -1,6 +1,6 @@
 import { FlashList } from '@shopify/flash-list'
 import { ChevronRight } from '@tamagui/lucide-icons'
-import DrawerHeader from 'components/DrawerHeader'
+import DrawerHeader from 'components/Drawer/DrawerHeader'
 import { Link } from 'expo-router'
 import useEntryFlow from 'hooks/useEntryFlow'
 import { PAGE_SIZE } from 'lib/constants'
@@ -73,6 +73,7 @@ export default function TagsPage() {
                 w={width - 32}
                 px={20}
                 py={8}
+                pr={8}
                 backgroundColor="$background"
               >
                 <Text color="$color12" fontSize={18} fontFamily="Gilroy-Bold">

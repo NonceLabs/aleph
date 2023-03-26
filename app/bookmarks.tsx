@@ -1,5 +1,5 @@
-import DrawerHeader from 'components/DrawerHeader'
-import SimpleEntryList from 'components/SimpleEntryList'
+import DrawerHeader from 'components/Drawer/DrawerHeader'
+import SimpleEntryList from 'components/Entry/SimpleEntryList'
 import useBookmarks from 'hooks/useBookmarks'
 import { getBookmarkedEntries } from 'lib/db'
 import { useEffect, useState } from 'react'

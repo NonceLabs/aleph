@@ -1,4 +1,5 @@
 import { createInterFont } from '@tamagui/font-inter'
+import { createSilkscreenFont } from '@tamagui/font-silkscreen'
 import { createMedia } from '@tamagui/react-native-media-driver'
 import { shorthands } from '@tamagui/shorthands'
 import { themes, tokens } from '@tamagui/themes'
@@ -26,6 +27,7 @@ const animations = createAnimations({
 })
 const headingFont = createInterFont()
 const bodyFont = createInterFont()
+const variableFont = createSilkscreenFont()
 
 const config = createTamagui({
   animations,
@@ -36,6 +38,7 @@ const config = createTamagui({
   fonts: {
     heading: headingFont,
     body: bodyFont,
+    variable: variableFont,
   },
   themes,
   tokens,

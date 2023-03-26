@@ -11,6 +11,11 @@ interface SettingSlice {
     hideRead: boolean
     publishLimit: FeedPublishLimit
   }
+  openAPI: {
+    apiKey: string
+    model: string
+    role: string
+  }
 }
 
 const initialState: SettingSlice = {
@@ -22,6 +27,11 @@ const initialState: SettingSlice = {
   flow: {
     hideRead: false,
     publishLimit: FeedPublishLimit.Ever,
+  },
+  openAPI: {
+    apiKey: '',
+    model: '',
+    role: 'assistant',
   },
 }
 

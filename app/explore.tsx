@@ -1,6 +1,6 @@
 import { Podcast, Rss } from '@tamagui/lucide-icons'
-import DrawerHeader from 'components/DrawerHeader'
-import FeedSheet from 'components/FeedSheet'
+import DrawerHeader from 'components/Drawer/DrawerHeader'
+import FeedSheet from 'components/Entry/FeedSheet'
 import { Image } from 'expo-image'
 import icons from 'lib/icons'
 import _ from 'lodash'

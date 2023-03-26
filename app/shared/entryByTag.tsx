@@ -1,5 +1,5 @@
 import { ChevronLeft } from '@tamagui/lucide-icons'
-import SimpleEntryList from 'components/SimpleEntryList'
+import SimpleEntryList from 'components/Entry/SimpleEntryList'
 import { useNavigation, useRouter, useSearchParams } from 'expo-router'
 import useEntryFlow from 'hooks/useEntryFlow'
 import _ from 'lodash'

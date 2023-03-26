@@ -67,10 +67,7 @@ export default function DrawerPanel() {
     >
       <XStack jc="flex-end">
         <YStack p={10} ai="flex-end" space={4}>
-          <Image
-            source={require('../assets/images/icon.png')}
-            style={{ width: 80, height: 80 }}
-          />
+          <Image source={icons.LOGO} style={{ width: 80, height: 80 }} />
           <Text fontFamily={'Poppins'} color={MAIN_COLOR}>
             Aleph Reader
           </Text>

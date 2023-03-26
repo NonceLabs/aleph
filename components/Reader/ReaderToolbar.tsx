@@ -1,7 +1,6 @@
 import {
   Bookmark,
   ChevronLeft,
-  ListMinus,
   ListPlus,
   PauseCircle,
   PlayCircle,

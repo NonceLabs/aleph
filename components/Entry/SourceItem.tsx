@@ -3,7 +3,7 @@ import useEntryFlow from 'hooks/useEntryFlow'
 import { Pressable } from 'react-native'
 import { Text, XStack } from 'tamagui'
 import { Feed } from 'types'
-import Favicon from './Favicon'
+import Favicon from 'components/Favicon'
 
 export default function SourceItem({
   item,

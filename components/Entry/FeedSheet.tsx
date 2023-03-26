@@ -5,7 +5,7 @@ import Toast from 'lib/toast'
 import { useState } from 'react'
 import { Anchor, Button, Sheet, Text, YStack } from 'tamagui'
 import { Feed } from 'types'
-import Favicon from './Favicon'
+import Favicon from 'components/Favicon'
 
 export default function FeedSheet({
   feed,

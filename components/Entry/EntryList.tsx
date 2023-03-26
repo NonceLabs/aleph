@@ -194,7 +194,7 @@ export default function EntryList({
                   height: width,
                 }}
                 speed={1.4}
-                source={require(`../assets/loading.json`)}
+                source={require(`../../assets/loading.json`)}
               />
             </XStack>
           ) : (

@@ -4,13 +4,13 @@ import { Feed, FeedEntry, FeedListType, FeedType, PubEvent } from 'types'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import { Pressable, StyleSheet } from 'react-native'
 import { useRouter } from 'expo-router'
-import Favicon from './Favicon'
+import Favicon from 'components/Favicon'
 import { ListMusic, Pause, PlayCircle } from '@tamagui/lucide-icons'
 import { Image } from 'expo-image'
 import TrackPlayer, { State, usePlaybackState } from 'react-native-track-player'
 import icons from 'lib/icons'
 import { useAppSelector } from 'store/hooks'
-import TrackStatus from './Player/TrackStatus'
+import TrackStatus from '../Player/TrackStatus'
 
 dayjs.extend(relativeTime)
 

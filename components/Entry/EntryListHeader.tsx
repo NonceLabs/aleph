@@ -3,7 +3,7 @@ import { useNavigation } from 'expo-router'
 import { Pressable } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Input, XStack } from 'tamagui'
-import PlayerPortal from './Player/PlayerPortal'
+import PlayerPortal from 'components/Player/PlayerPortal'
 
 export default function EntryListHeader({
   keyword,

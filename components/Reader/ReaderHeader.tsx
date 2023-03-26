@@ -6,7 +6,7 @@ import { Feed, FeedEntry } from 'types'
 import * as WebBrowser from 'expo-web-browser'
 import { BlurView } from 'expo-blur'
 import useTheme from 'hooks/useTheme'
-import Favicon from './Favicon'
+import Favicon from 'components/Favicon'
 import { MAIN_COLOR } from 'lib/constants'
 import { Compass } from '@tamagui/lucide-icons'
 
