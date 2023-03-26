@@ -1,25 +1,16 @@
 import { Check, ChevronDown, ChevronUp } from '@tamagui/lucide-icons'
-import Toast from 'lib/toast'
-import { useState } from 'react'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { XStack, Text, Sheet, YStack, Select, Adapt } from 'tamagui'
 
-export default function ModelSheet() {
-  const {
-    apiKey,
-    model: _model,
-    models,
-  } = useAppSelector((state) => state.setting.openAPI)
-  const [model, setModel] = useState(_model)
+export default function PublishSheet() {
+  const publishLimit = useAppSelector((state) =>
+    state.setting.flow.publishLimit.toLowerCase()
+  )
   const dispatch = useAppDispatch()
 
-  const onChangeModel = (value: string) => {
-    if (!apiKey) {
-      return Toast.error("You don't have an API key yet")
-    }
-    setModel(value)
+  const onChange = (value: string) => {
     dispatch({
-      type: 'setting/updateModel',
+      type: 'setting/updatePublishLimit',
       payload: value,
     })
   }
@@ -27,19 +18,19 @@ export default function ModelSheet() {
   return (
     <XStack ai="center" jc="space-between">
       <Text color="$color11" fontFamily="Gilroy-Bold" fontSize={18}>
-        Model
+        Fetch feed since last
       </Text>
-      <Select id="food" value={model} onValueChange={onChangeModel}>
-        <Select.Trigger w={200} iconAfter={ChevronDown}>
+      <Select value={publishLimit} onValueChange={onChange}>
+        <Select.Trigger w={100} iconAfter={ChevronDown}>
           <Select.Value
-            placeholder={model}
+            placeholder={publishLimit}
             maxWidth={50}
             ellipsizeMode="tail"
           />
         </Select.Trigger>
 
         <Adapt when="sm" platform="touch">
-          <Sheet modal dismissOnSnapToBottom snapPoints={[50]}>
+          <Sheet modal dismissOnSnapToBottom snapPoints={[30]}>
             <Sheet.Frame>
               <Sheet.ScrollView>
                 <Adapt.Contents />
@@ -64,8 +55,10 @@ export default function ModelSheet() {
 
           <Select.Viewport minWidth={200}>
             <Select.Group space="$0">
-              <Select.Label fontFamily="Gilroy-Bold">Model</Select.Label>
-              {models.map((item, i) => {
+              <Select.Label fontFamily="Gilroy-Bold">
+                Fetch feed since last
+              </Select.Label>
+              {['Week', 'Month', 'Year', 'Ever'].map((item, i) => {
                 return (
                   <Select.Item index={i} key={item} value={item.toLowerCase()}>
                     <Select.ItemText
@@ -73,7 +66,7 @@ export default function ModelSheet() {
                       fontSize={16}
                       fontFamily="Arvo"
                     >
-                      {item}
+                      {item.toLowerCase()}
                     </Select.ItemText>
                     <Select.ItemIndicator ml="auto">
                       <Check size={16} />

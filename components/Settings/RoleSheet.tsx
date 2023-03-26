@@ -1,15 +1,21 @@
 import { Check, ChevronDown, ChevronUp } from '@tamagui/lucide-icons'
 import { ROLES } from 'lib/constants'
+import Toast from 'lib/toast'
 import { useState } from 'react'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { XStack, Text, Sheet, YStack, Select, Adapt } from 'tamagui'
 
 export default function RoleSheet() {
-  const _role = useAppSelector((state) => state.setting.openAPI.role)
+  const { apiKey, role: _role } = useAppSelector(
+    (state) => state.setting.openAPI
+  )
   const [role, setRole] = useState(_role)
   const dispatch = useAppDispatch()
 
   const onChangeRole = (value: string) => {
+    if (!apiKey) {
+      return Toast.error("You don't have an API key yet")
+    }
     setRole(value)
     dispatch({
       type: 'setting/updateRole',
@@ -57,7 +63,13 @@ export default function RoleSheet() {
               {ROLES.map((item, i) => {
                 return (
                   <Select.Item index={i} key={item} value={item.toLowerCase()}>
-                    <Select.ItemText>{item}</Select.ItemText>
+                    <Select.ItemText
+                      color="$red10"
+                      fontSize={16}
+                      fontFamily="Arvo"
+                    >
+                      {item}
+                    </Select.ItemText>
                     <Select.ItemIndicator ml="auto">
                       <Check size={16} />
                     </Select.ItemIndicator>

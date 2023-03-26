@@ -7,11 +7,11 @@ import { createEntries, updateEntries } from './db'
 import { fetcher, post } from './request'
 
 const DAYS_LIMIT = {
-  Day: 1,
-  Week: 7,
-  Month: 30,
-  Year: 365,
-  Ever: -1,
+  day: 1,
+  week: 7,
+  month: 30,
+  year: 365,
+  ever: -1,
 }
 
 export async function extract(url: string): Promise<FeedData> {
@@ -20,7 +20,7 @@ export async function extract(url: string): Promise<FeedData> {
 
 export async function fetchFeedFlow(feeds: Feed[]) {
   try {
-    const publishLimit = store.getState().setting.flow.publishLimit || 'Month'
+    const publishLimit = store.getState().setting.flow.publishLimit
 
     await Promise.all(
       feeds.map(async (feed) => {
@@ -29,7 +29,7 @@ export async function fetchFeedFlow(feeds: Feed[]) {
           const entries =
             result.entries ||
             [].filter((entry: FeedEntry) => {
-              if (publishLimit === 'Ever') {
+              if (publishLimit === 'ever') {
                 return true
               }
               return (

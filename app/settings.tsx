@@ -1,25 +1,20 @@
 import { YStack, XStack, Text, Switch, Button, Group, Separator } from 'tamagui'
 import { DoubleCheck } from 'iconoir-react-native'
-import { Pressable, ScrollView } from 'react-native'
+import { ScrollView } from 'react-native'
 import DrawerHeader from 'components/Drawer/DrawerHeader'
 import { markAllRead } from 'lib/db'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
-import { HOST, MAIN_COLOR } from 'lib/constants'
-import { ChevronRight } from '@tamagui/lucide-icons'
+import { HOST } from 'lib/constants'
 import MyAPIKey from 'components/Settings/MyAPIKey'
 import RoleSheet from 'components/Settings/RoleSheet'
 import ModelSheet from 'components/Settings/ModelSheet'
 import { useEffect } from 'react'
-import { fetcher, post } from 'lib/request'
+import { post } from 'lib/request'
+import PublishSheet from 'components/Settings/PublishSheet'
 
 export default function SettingsPage() {
   const hideRead = useAppSelector((state) => state.setting?.flow?.hideRead)
-  const publishLimit = useAppSelector(
-    (state) => state.setting?.flow?.publishLimit || 'Month'
-  )
-  const { apiKey, model, role } = useAppSelector(
-    (state) => state.setting?.openAPI
-  )
+  const { apiKey } = useAppSelector((state) => state.setting?.openAPI)
 
   useEffect(() => {
     post(`${HOST}/models`, { apiKey })
@@ -89,33 +84,7 @@ export default function SettingsPage() {
           </XStack>
 
           <Separator />
-          <YStack space={4}>
-            <Text fontWeight="bold" fontSize={18} color="$color11">
-              Only fetch articles since last
-            </Text>
-            <Group axis="horizontal" bc="$backgroundTransparent" width="100%">
-              {['Week', 'Month', 'Year', 'Ever'].map((t) => {
-                const isActive = publishLimit === t
-                return (
-                  <Group.Item key={t}>
-                    <Button
-                      size="$3"
-                      bc={isActive ? MAIN_COLOR : '$color8'}
-                      color={isActive ? 'white' : '$color12'}
-                      onPress={() => {
-                        dispatch({
-                          type: 'setting/updatePublishLimit',
-                          payload: t,
-                        })
-                      }}
-                    >
-                      {t}
-                    </Button>
-                  </Group.Item>
-                )
-              })}
-            </Group>
-          </YStack>
+          <PublishSheet />
 
           <XStack ai="center" space>
             <Separator borderColor="$color11" />
@@ -127,7 +96,7 @@ export default function SettingsPage() {
 
           {!apiKey && (
             <XStack>
-              <Text color="$color10" fontSize={12} fontFamily="Arvo">
+              <Text color="$color10" fontSize={14} fontFamily="Arvo">
                 With your own API key, you can customize model and role, also
                 you can give feedback to AI which will make AI know you better,
                 and learn your preference.

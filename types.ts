@@ -61,10 +61,10 @@ export type FeedListType =
   | 'podcast'
 
 export enum FeedPublishLimit {
-  Week = 'Week',
-  Month = 'Month',
-  Year = 'Year',
-  Ever = 'Ever',
+  Week = 'week',
+  Month = 'month',
+  Year = 'year',
+  Ever = 'ever',
 }
 
 export enum PubEvent {

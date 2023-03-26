@@ -9,7 +9,6 @@ import {
   useWindowDimensions,
   XStack,
   Text,
-  AlertDialog,
 } from 'tamagui'
 import { MAIN_COLOR } from 'lib/constants'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
