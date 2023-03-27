@@ -3,20 +3,11 @@ import { HOST, MAIN_COLOR } from 'lib/constants'
 import { post } from 'lib/request'
 import { useState } from 'react'
 import { Pressable } from 'react-native'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { useAppSelector } from 'store/hooks'
-import {
-  Text,
-  Sheet,
-  YStack,
-  Spinner,
-  ScrollView,
-  XStack,
-  Button,
-  useWindowDimensions,
-} from 'tamagui'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
+import { Text, Sheet, YStack, ScrollView, useWindowDimensions } from 'tamagui'
 import { FeedEntry } from 'types'
 import LottieView from 'lottie-react-native'
+import Toast from 'lib/toast'
 
 export default function Summarize({ entry }: { entry?: FeedEntry }) {
   const [position, setPosition] = useState(0)
@@ -33,6 +24,8 @@ export default function Summarize({ entry }: { entry?: FeedEntry }) {
   const { apiKey, model, role } = useAppSelector(
     (state) => state.setting?.openAPI
   )
+  const { count, resetAt } = useAppSelector((state) => state.setting.summarize)
+  const dispatch = useAppDispatch()
 
   if (!entry) {
     return null
@@ -56,6 +49,15 @@ export default function Summarize({ entry }: { entry?: FeedEntry }) {
             setErrorMessage(result.error.message)
           } else {
             setSummary(result.content)
+            if (!apiKey) {
+              dispatch({
+                type: 'setting/updateSummarize',
+                payload: {
+                  count: count + 1,
+                  resetAt,
+                },
+              })
+            }
           }
         })
         .catch((error) => {
@@ -71,7 +73,17 @@ export default function Summarize({ entry }: { entry?: FeedEntry }) {
 
   return (
     <>
-      <Pressable onPress={() => onOpenChange(true)}>
+      <Pressable
+        onPress={() => {
+          if (!apiKey && count >= 10) {
+            Toast.error(
+              'You have reached the maximum number of free summarizations.'
+            )
+          } else {
+            onOpenChange(true)
+          }
+        }}
+      >
         <Flower width={28} height={28} color={MAIN_COLOR} />
       </Pressable>
       <Sheet

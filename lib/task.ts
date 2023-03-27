@@ -20,7 +20,9 @@ export async function extract(url: string): Promise<FeedData> {
 
 export async function fetchFeedFlow(feeds: Feed[]) {
   try {
-    const publishLimit = store.getState().setting.flow.publishLimit
+    const publishLimit = store
+      .getState()
+      .setting.flow.publishLimit.toLowerCase() as keyof typeof DAYS_LIMIT
 
     await Promise.all(
       feeds.map(async (feed) => {

@@ -1,4 +1,4 @@
-import { Check, ChevronDown, ChevronUp } from '@tamagui/lucide-icons'
+import { Check, ChevronDown, ChevronUp, Smile } from '@tamagui/lucide-icons'
 import { ROLES } from 'lib/constants'
 import Toast from 'lib/toast'
 import { useState } from 'react'
@@ -24,11 +24,12 @@ export default function RoleSheet() {
   }
 
   return (
-    <XStack ai="center" jc="space-between">
-      <Text color="$color11" fontFamily="Gilroy-Bold" fontSize={18}>
-        Role
+    <XStack ai="center" space={8}>
+      <Smile size={20} color="$color11" />
+      <Text color="$color11" fontFamily="Arvo" fontSize={14}>
+        Customize role
       </Text>
-      <Select id="food" value={role} onValueChange={onChangeRole}>
+      <Select id="food" value={role} onValueChange={onChangeRole} size="$3">
         <Select.Trigger w={180} iconAfter={ChevronDown}>
           <Select.Value placeholder="Something" />
         </Select.Trigger>
@@ -59,7 +60,9 @@ export default function RoleSheet() {
 
           <Select.Viewport minWidth={200}>
             <Select.Group space="$0">
-              <Select.Label fontFamily="Gilroy-Bold">Role</Select.Label>
+              <Select.Label fontFamily="Gilroy-Bold">
+                Customize role
+              </Select.Label>
               {ROLES.map((item, i) => {
                 return (
                   <Select.Item index={i} key={item} value={item.toLowerCase()}>

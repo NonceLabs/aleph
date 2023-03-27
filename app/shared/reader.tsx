@@ -19,10 +19,10 @@ import ReaderToolbar from 'components/Reader/ReaderToolbar'
 import useTheme from 'hooks/useTheme'
 import useEntry from 'hooks/useEntry'
 import useFeeds from 'hooks/useFeeds'
-import { FeedListType } from 'types'
-import { MAIN_COLOR } from 'lib/constants'
-import { ThumbsDown, ThumbsUp } from '@tamagui/lucide-icons'
+import { FeedListType, FeedType } from 'types'
+import { ThumbsUp } from '@tamagui/lucide-icons'
 import Toast from 'lib/toast'
+import { MAIN_COLOR } from 'lib/constants'
 
 export default function Reader() {
   const { id, type } = useSearchParams()
@@ -126,6 +126,12 @@ export default function Reader() {
               systemFonts={[fontFamily, 'Vollkorn', 'Gilroy-Bold']}
               tagsStyles={tagsStyle as any}
               ignoredDomTags={['audio', 'svg']}
+              defaultTextProps={{
+                selectable: true,
+                selectionColor: MAIN_COLOR,
+                suppressHighlighting: true,
+                accessible: true,
+              }}
             />
           </YStack>
           <XStack ai="center" space="$2">
@@ -144,17 +150,8 @@ export default function Reader() {
               scaleIcon={1.4}
               onPress={() => onToggleLike(true)}
             >
-              Upvote
-            </Button>
-            <Button
-              bc="$gray9"
-              color="white"
-              f={1}
-              icon={ThumbsDown}
-              scaleIcon={1.4}
-              onPress={() => onToggleLike(false)}
-            >
-              Downvote
+              I like this{' '}
+              {entry?.entryType === FeedType.RSS ? 'post' : 'episode'}
             </Button>
           </XStack>
         </ScrollView>

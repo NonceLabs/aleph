@@ -1,4 +1,4 @@
-import { X } from '@tamagui/lucide-icons'
+import { CupSoda, X } from '@tamagui/lucide-icons'
 import { useState } from 'react'
 import {
   Unspaced,
@@ -14,10 +14,12 @@ import { MAIN_COLOR } from 'lib/constants'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import Toast from 'lib/toast'
 import { fetcher } from 'lib/request'
-import { Alert } from 'react-native'
+import { Alert, Platform } from 'react-native'
+import Purchases from 'react-native-purchases'
 
 export default function MyAPIKey() {
-  const _apiKey = useAppSelector((state) => state.setting.openAPI.apiKey)
+  const { apiKey: _apiKey } = useAppSelector((state) => state.setting.openAPI)
+  const purchased = useAppSelector((state) => state.setting.purchased)
   const [apiKey, setApiKey] = useState(_apiKey)
   const [open, setOpen] = useState(false)
   const { width } = useWindowDimensions()
@@ -63,12 +65,40 @@ export default function MyAPIKey() {
     ])
   }
 
+  const onPurchase = async () => {
+    try {
+      if (Platform.OS === 'ios') {
+        Purchases.configure({ apiKey: 'appl_WhGheBhuxObFAEBibQsjRTJKcQx' })
+      } else if (Platform.OS === 'android') {
+        Purchases.configure({ apiKey: '' })
+      }
+      const offerings = await Purchases.getOfferings()
+      console.log('offerings', offerings)
+    } catch (error) {
+      console.log('error', error)
+
+      Toast.error(error)
+    }
+  }
+
   return (
     <Dialog modal open={open} onOpenChange={setOpen}>
       {!_apiKey ? (
-        <Button bc={MAIN_COLOR} color="white" onPress={() => setOpen(true)}>
-          Enter API Key
-        </Button>
+        purchased ? (
+          <Button bc="$red9" color="white" onPress={() => setOpen(true)}>
+            Enter API Key
+          </Button>
+        ) : (
+          <Button
+            bc={MAIN_COLOR}
+            color="white"
+            icon={CupSoda}
+            scaleIcon={1.6}
+            onPress={onPurchase}
+          >
+            Upgrade to Aleph Pro
+          </Button>
+        )
       ) : (
         <YStack space={8}>
           <Text fontWeight="bold" fontSize={18} color="$color11">
@@ -89,7 +119,7 @@ export default function MyAPIKey() {
             </Button>
             <Button
               f={1}
-              bc={MAIN_COLOR}
+              bc="$red9"
               color="white"
               onPress={() => setOpen(true)}
             >

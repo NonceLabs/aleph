@@ -17,6 +17,11 @@ interface SettingSlice {
     role: string
     models: string[]
   }
+  purchased: boolean
+  summarize: {
+    count: number
+    resetAt: number
+  }
 }
 
 const initialState: SettingSlice = {
@@ -31,9 +36,14 @@ const initialState: SettingSlice = {
   },
   openAPI: {
     apiKey: '',
-    model: '',
+    model: 'gpt-3.5-turbo',
     role: 'user',
     models: [],
+  },
+  purchased: false,
+  summarize: {
+    count: 0,
+    resetAt: 0,
   },
 }
 
@@ -67,6 +77,9 @@ export const settingSlice = createSlice({
     },
     updateRole: (state, action) => {
       state.openAPI.role = action.payload
+    },
+    updateSummarize: (state, action) => {
+      state.summarize = action.payload
     },
   },
 })

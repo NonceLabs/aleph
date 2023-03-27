@@ -1,4 +1,9 @@
-import { Check, ChevronDown, ChevronUp } from '@tamagui/lucide-icons'
+import {
+  Check,
+  ChevronDown,
+  ChevronUp,
+  VenetianMask,
+} from '@tamagui/lucide-icons'
 import Toast from 'lib/toast'
 import { useState } from 'react'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
@@ -25,11 +30,12 @@ export default function ModelSheet() {
   }
 
   return (
-    <XStack ai="center" jc="space-between">
-      <Text color="$color11" fontFamily="Gilroy-Bold" fontSize={18}>
-        Model
+    <XStack ai="center" space={8}>
+      <VenetianMask size={20} color="$color11" />
+      <Text color="$color11" fontFamily="Arvo" fontSize={14}>
+        Customize model
       </Text>
-      <Select id="food" value={model} onValueChange={onChangeModel}>
+      <Select id="food" value={model} onValueChange={onChangeModel} size="$3">
         <Select.Trigger w={200} iconAfter={ChevronDown}>
           <Select.Value
             placeholder={model}
@@ -64,7 +70,9 @@ export default function ModelSheet() {
 
           <Select.Viewport minWidth={200}>
             <Select.Group space="$0">
-              <Select.Label fontFamily="Gilroy-Bold">Model</Select.Label>
+              <Select.Label fontFamily="Gilroy-Bold">
+                Customize model
+              </Select.Label>
               {models.map((item, i) => {
                 return (
                   <Select.Item index={i} key={item} value={item.toLowerCase()}>

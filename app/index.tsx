@@ -10,18 +10,20 @@ import useBookmarks from 'hooks/useBookmarks'
 import useQueue from 'hooks/useQueue'
 import { fetcher } from 'lib/request'
 import { HOST } from 'lib/constants'
-import { useAppDispatch } from 'store/hooks'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
 
 export default function FlowPage() {
   const [refreshing, setRefreshing] = useState(false)
   const [initing, setIniting] = useState(false)
   const { feeds } = useFeeds()
   const { entries } = useEntryFlow()
+  const { count, resetAt } = useAppSelector((state) => state.setting.summarize)
   useBookmarks()
   useQueue()
 
   const dispatch = useAppDispatch()
   useEffect(() => {
+    // fetch explore
     fetcher(`${HOST}/explore`).then((res) => {
       dispatch({
         type: 'feed/setExplore',
@@ -29,6 +31,7 @@ export default function FlowPage() {
       })
     })
 
+    // init db
     setTimeout(() => {
       initSQLite()
     }, 300)
@@ -36,6 +39,18 @@ export default function FlowPage() {
     setTimeout(() => {
       setIniting(false)
     }, 3000)
+  }, [])
+
+  useEffect(() => {
+    if (new Date().getTime() - 24 * 60 * 60 * 1000 > resetAt) {
+      dispatch({
+        type: 'setting/updateSummarize',
+        payload: {
+          count: 0,
+          resetAt: new Date().getTime() + 24 * 60 * 60 * 1000,
+        },
+      })
+    }
   }, [])
 
   useEffect(() => {

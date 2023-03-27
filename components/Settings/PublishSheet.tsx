@@ -17,10 +17,10 @@ export default function PublishSheet() {
 
   return (
     <XStack ai="center" jc="space-between">
-      <Text color="$color11" fontFamily="Gilroy-Bold" fontSize={18}>
+      <Text color="$color11" fontFamily="Arvo">
         Fetch feed since last
       </Text>
-      <Select value={publishLimit} onValueChange={onChange}>
+      <Select value={publishLimit} onValueChange={onChange} size="$3">
         <Select.Trigger w={100} iconAfter={ChevronDown}>
           <Select.Value
             placeholder={publishLimit}
