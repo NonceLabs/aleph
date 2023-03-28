@@ -79,7 +79,7 @@ export default function Reader() {
       return Toast.error("You haven't setup your own key")
     }
     try {
-      await post(`${HOST}/api/like`, {
+      await post(`${HOST}/like`, {
         apiKey,
         model,
         role,
