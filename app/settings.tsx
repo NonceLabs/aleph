@@ -20,12 +20,18 @@ import ModelSheet from 'components/Settings/ModelSheet'
 import { useEffect, useState } from 'react'
 import { post } from 'lib/request'
 import PublishSheet from 'components/Settings/PublishSheet'
-import { Infinity, Languages, Podcast, ThumbsUp } from '@tamagui/lucide-icons'
+import {
+  Infinity,
+  Languages,
+  Podcast,
+  Sunrise,
+  ThumbsUp,
+} from '@tamagui/lucide-icons'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 export default function SettingsPage() {
   const hideRead = useAppSelector((state) => state.setting?.flow?.hideRead)
-  const { apiKey } = useAppSelector((state) => state.setting?.openAPI)
+  const { apiKey } = useAppSelector((state) => state.setting?.openAI)
   const { count, resetAt } = useAppSelector((state) => state.setting.summarize)
   const insets = useSafeAreaInsets()
 
@@ -167,6 +173,13 @@ export default function SettingsPage() {
               <Podcast size={20} color="$color11" />
               <Text color="$color11" fontSize={14} fontFamily="Arvo">
                 Transcript for podcast (coming soon)
+              </Text>
+            </XStack>
+
+            <XStack ai="center" space={8} my={5}>
+              <Sunrise size={20} color="$color11" />
+              <Text color="$color11" fontSize={14} fontFamily="Arvo">
+                Daily digest (coming soon)
               </Text>
             </XStack>
           </YStack>

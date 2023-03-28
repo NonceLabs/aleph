@@ -22,7 +22,7 @@ export default function Summarize({ entry }: { entry?: FeedEntry }) {
     (state) => state.setting?.reader?.fontFamily
   )
   const { apiKey, model, role } = useAppSelector(
-    (state) => state.setting?.openAPI
+    (state) => state.setting?.openAI
   )
   const { count, resetAt } = useAppSelector((state) => state.setting.summarize)
   const dispatch = useAppDispatch()

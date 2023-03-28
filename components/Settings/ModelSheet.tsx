@@ -14,7 +14,7 @@ export default function ModelSheet() {
     apiKey,
     model: _model,
     models,
-  } = useAppSelector((state) => state.setting.openAPI)
+  } = useAppSelector((state) => state.setting.openAI)
   const [model, setModel] = useState(_model)
   const dispatch = useAppDispatch()
 
@@ -33,7 +33,7 @@ export default function ModelSheet() {
     <XStack ai="center" space={8}>
       <VenetianMask size={20} color="$color11" />
       <Text color="$color11" fontFamily="Arvo" fontSize={14}>
-        Customize model
+        Model
       </Text>
       <Select id="food" value={model} onValueChange={onChangeModel} size="$3">
         <Select.Trigger w={200} iconAfter={ChevronDown}>

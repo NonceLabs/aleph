@@ -7,7 +7,7 @@ import { XStack, Text, Sheet, YStack, Select, Adapt } from 'tamagui'
 
 export default function RoleSheet() {
   const { apiKey, role: _role } = useAppSelector(
-    (state) => state.setting.openAPI
+    (state) => state.setting.openAI
   )
   const [role, setRole] = useState(_role)
   const dispatch = useAppDispatch()
@@ -27,7 +27,7 @@ export default function RoleSheet() {
     <XStack ai="center" space={8}>
       <Smile size={20} color="$color11" />
       <Text color="$color11" fontFamily="Arvo" fontSize={14}>
-        Customize role
+        Role
       </Text>
       <Select id="food" value={role} onValueChange={onChangeRole} size="$3">
         <Select.Trigger w={180} iconAfter={ChevronDown}>

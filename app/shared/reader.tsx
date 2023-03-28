@@ -22,7 +22,8 @@ import useFeeds from 'hooks/useFeeds'
 import { FeedListType, FeedType } from 'types'
 import { ThumbsUp } from '@tamagui/lucide-icons'
 import Toast from 'lib/toast'
-import { MAIN_COLOR } from 'lib/constants'
+import { HOST, MAIN_COLOR } from 'lib/constants'
+import { post } from 'lib/request'
 
 export default function Reader() {
   const { id, type } = useSearchParams()
@@ -36,7 +37,7 @@ export default function Reader() {
   const { width } = useWindowDimensions()
   const feed = feeds.find((t) => t.url === entry?.feedUrl)
   const { apiKey, model, role } = useAppSelector(
-    (state) => state.setting.openAPI
+    (state) => state.setting.openAI
   )
 
   const theme = useTheme()
@@ -73,10 +74,20 @@ export default function Reader() {
     }
   }, [fontSize, fontFamily, theme])
 
-  const onToggleLike = (like: boolean) => {
+  const onLike = async () => {
     if (!apiKey) {
       return Toast.error("You haven't setup your own key")
     }
+    try {
+      await post(`${HOST}/api/like`, {
+        apiKey,
+        model,
+        role,
+        url: entry?.entryType === FeedType.Podcast ? entry?.media : entry?.link,
+        entryType: entry?.entryType,
+      })
+      Toast.success('Liked!')
+    } catch (error) {}
   }
 
   return (
@@ -148,7 +159,8 @@ export default function Reader() {
               color="white"
               icon={ThumbsUp}
               scaleIcon={1.4}
-              onPress={() => onToggleLike(true)}
+              onPress={onLike}
+              pressStyle={{ backgroundColor: '$red7' }}
             >
               I like this{' '}
               {entry?.entryType === FeedType.RSS ? 'post' : 'episode'}

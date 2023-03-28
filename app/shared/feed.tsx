@@ -103,13 +103,17 @@ export default function FeedProfile() {
           </XStack>
         }
         right={
-          feedData && (
+          oldSub && !oldSub.deleted ? (
             <Link
               href={`shared/feedInfo?url=${encodeURIComponent(url as string)}`}
             >
               <Info width={24} height={24} color={MAIN_COLOR} />
             </Link>
-          )
+          ) : feedData ? (
+            <Pressable onPress={() => setFeed(feedData.feed)}>
+              <Info width={24} height={24} color={MAIN_COLOR} />
+            </Pressable>
+          ) : null
         }
       />
       <YStack flex={1}>

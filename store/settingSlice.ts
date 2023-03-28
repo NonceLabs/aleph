@@ -11,7 +11,7 @@ interface SettingSlice {
     hideRead: boolean
     publishLimit: FeedPublishLimit
   }
-  openAPI: {
+  openAI: {
     apiKey: string
     model: string
     role: string
@@ -34,7 +34,7 @@ const initialState: SettingSlice = {
     hideRead: false,
     publishLimit: FeedPublishLimit.Ever,
   },
-  openAPI: {
+  openAI: {
     apiKey: '',
     model: 'gpt-3.5-turbo',
     role: 'user',
@@ -67,19 +67,22 @@ export const settingSlice = createSlice({
       state.flow.publishLimit = action.payload
     },
     updateModels: (state, action) => {
-      state.openAPI.models = action.payload
+      state.openAI.models = action.payload
     },
     updateModel: (state, action) => {
-      state.openAPI.model = action.payload
+      state.openAI.model = action.payload
     },
     updateApiKey: (state, action) => {
-      state.openAPI.apiKey = action.payload
+      state.openAI.apiKey = action.payload
     },
     updateRole: (state, action) => {
-      state.openAPI.role = action.payload
+      state.openAI.role = action.payload
     },
     updateSummarize: (state, action) => {
       state.summarize = action.payload
+    },
+    purchased: (state, action) => {
+      state.purchased = action.payload
     },
   },
 })
