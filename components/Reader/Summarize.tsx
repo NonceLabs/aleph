@@ -1,5 +1,5 @@
 import { Flower } from 'iconoir-react-native'
-import { HOST, MAIN_COLOR } from 'lib/constants'
+import { HOST, MAIN_COLOR, SUMMARIZE_LIMIT } from 'lib/constants'
 import { post } from 'lib/request'
 import { useState } from 'react'
 import { Pressable } from 'react-native'
@@ -8,6 +8,7 @@ import { Text, Sheet, YStack, ScrollView, useWindowDimensions } from 'tamagui'
 import { FeedEntry } from 'types'
 import LottieView from 'lottie-react-native'
 import Toast from 'lib/toast'
+import { Link } from 'expo-router'
 
 export default function Summarize({ entry }: { entry?: FeedEntry }) {
   const [position, setPosition] = useState(0)
@@ -37,6 +38,13 @@ export default function Summarize({ entry }: { entry?: FeedEntry }) {
     setErrorMessage('')
     setOpen(_open)
     if (_open && entry) {
+      if (count > SUMMARIZE_LIMIT) {
+        setGenerating(false)
+        setErrorMessage(
+          'You have reached the maximum number of free summarizations.'
+        )
+        return
+      }
       post(`${HOST}/summarize`, {
         url: entry.id,
         apiKey,
@@ -62,7 +70,7 @@ export default function Summarize({ entry }: { entry?: FeedEntry }) {
         })
         .catch((error) => {
           setGenerating(false)
-          setSummary(
+          setErrorMessage(
             error instanceof Error
               ? error.message
               : 'Failed to summarize article. Please try again later. :('
@@ -112,9 +120,18 @@ export default function Summarize({ entry }: { entry?: FeedEntry }) {
               </Text>
             )}
             {errorMessage && (
-              <Text fontSize={16} color="$color11" ta="center">
-                {errorMessage}
-              </Text>
+              <YStack pt={20} space={8} ai="center">
+                <Text fontSize={16} color="$color11" ta="center">
+                  {errorMessage}
+                </Text>
+                {!apiKey && (
+                  <Link href="/settings" onPress={() => setOpen(false)}>
+                    <Text fontSize={16} color="$blue11" ta="center">
+                      Upgrade to Aleph Pro to use your own OpenAI API key.
+                    </Text>
+                  </Link>
+                )}
+              </YStack>
             )}
             {generating && (
               <YStack pt={20} space={8} ai="center">

@@ -50,6 +50,8 @@ export async function fetchFeedFlow(feeds: Feed[]) {
 
 export async function tagFeedEntries(entries: FeedEntry[]) {
   try {
+    const apiKey = store.getState().setting.openAI?.apiKey
+
     const untaggedEntries = entries.filter((entry) => {
       return (
         entry.id.startsWith('http') && (!entry.tags || entry.tags.length === 0)
@@ -70,6 +72,9 @@ export async function tagFeedEntries(entries: FeedEntry[]) {
       }
     })
 
-    updateEntries(taggedEntries)
+    await updateEntries(taggedEntries)
+    if (apiKey) {
+      await tagFeedEntries(untaggedEntries.slice(10))
+    }
   } catch (error) {}
 }

@@ -7,9 +7,10 @@ export const post = async (url: string, json: object, headers = {}) => {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        ...headers
+        ...headers,
       },
     })
+
     const responseJson = await response.json()
     console.log('✅POST - ', url, json)
     return responseJson
