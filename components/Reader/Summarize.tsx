@@ -9,6 +9,7 @@ import { FeedEntry } from 'types'
 import LottieView from 'lottie-react-native'
 import Toast from 'lib/toast'
 import { Link } from 'expo-router'
+import { getSummaryOf } from 'lib/task'
 
 export default function Summarize({ entry }: { entry?: FeedEntry }) {
   const [position, setPosition] = useState(0)
@@ -45,8 +46,7 @@ export default function Summarize({ entry }: { entry?: FeedEntry }) {
         )
         return
       }
-      post(`${HOST}/summarize`, {
-        url: entry.id,
+      getSummaryOf(entry.id, {
         apiKey,
         model,
         role,
@@ -69,6 +69,8 @@ export default function Summarize({ entry }: { entry?: FeedEntry }) {
           }
         })
         .catch((error) => {
+          console.log('error', error)
+
           setGenerating(false)
           setErrorMessage(
             error instanceof Error

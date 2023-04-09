@@ -1,8 +1,8 @@
-import TrackPlayer, { Event } from 'react-native-track-player'
+import TrackPlayer, { Event, State } from 'react-native-track-player'
+
+let wasPausedByDuck = false
 
 export async function PlaybackService() {
-  console.log('PlaybackService')
-
   TrackPlayer.addEventListener(Event.RemotePause, () => {
     console.log('Event.RemotePause')
     TrackPlayer.pause()
@@ -25,12 +25,14 @@ export async function PlaybackService() {
 
   TrackPlayer.addEventListener(Event.RemoteJumpForward, async (event) => {
     console.log('Event.RemoteJumpForward', event)
-    TrackPlayer.seekBy(event.interval)
+    const position = (await TrackPlayer.getPosition()) + event.interval
+    TrackPlayer.seekTo(position)
   })
 
   TrackPlayer.addEventListener(Event.RemoteJumpBackward, async (event) => {
     console.log('Event.RemoteJumpBackward', event)
-    TrackPlayer.seekBy(-event.interval)
+    const position = (await TrackPlayer.getPosition()) - event.interval
+    TrackPlayer.seekTo(position)
   })
 
   TrackPlayer.addEventListener(Event.RemoteSeek, (event) => {
@@ -38,23 +40,36 @@ export async function PlaybackService() {
     TrackPlayer.seekTo(event.position)
   })
 
-  TrackPlayer.addEventListener(Event.RemoteDuck, async (event) => {
-    console.log('Event.RemoteDuck', event)
-  })
+  TrackPlayer.addEventListener(
+    Event.RemoteDuck,
+    async ({ permanent, paused }) => {
+      console.log('Event.RemoteDuck')
+      if (permanent) {
+        TrackPlayer.pause()
+        return
+      }
+      if (paused) {
+        const playerState = await TrackPlayer.getState()
+        wasPausedByDuck = playerState !== State.Paused
+        TrackPlayer.pause()
+      } else {
+        if (wasPausedByDuck) {
+          TrackPlayer.play()
+          wasPausedByDuck = false
+        }
+      }
+    }
+  )
 
   TrackPlayer.addEventListener(Event.PlaybackQueueEnded, (event) => {
     console.log('Event.PlaybackQueueEnded', event)
   })
 
-  TrackPlayer.addEventListener(Event.PlaybackActiveTrackChanged, (event) => {
-    console.log('Event.PlaybackActiveTrackChanged', event)
+  TrackPlayer.addEventListener(Event.PlaybackTrackChanged, (event) => {
+    console.log('Event.PlaybackTrackChanged', event)
   })
 
-  TrackPlayer.addEventListener(Event.PlaybackPlayWhenReadyChanged, (event) => {
-    console.log('Event.PlaybackPlayWhenReadyChanged', event)
-  })
-
-  TrackPlayer.addEventListener(Event.PlaybackState, (event) => {
-    console.log('Event.PlaybackState', event)
+  TrackPlayer.addEventListener(Event.PlaybackProgressUpdated, (event) => {
+    console.log('Event.PlaybackProgressUpdated', event)
   })
 }

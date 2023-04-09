@@ -46,16 +46,10 @@ export default function MyAPIKey() {
           setPurchasePackage(offerings.current.availablePackages[0])
         }
       } catch (error) {
-        console.log('error', error)
-
         Toast.error(error)
       }
     }
     fetchOffering()
-    // dispatch({
-    //   type: 'setting/purchased',
-    //   payload: false,
-    // })
   }, [])
 
   const onConfirm = async () => {

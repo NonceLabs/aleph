@@ -53,6 +53,7 @@ export default function SettingsPage() {
       <ScrollView
         style={{ flex: 1 }}
         contentContainerStyle={{ paddingBottom: insets.bottom + 20 }}
+        showsVerticalScrollIndicator={false}
       >
         <YStack space={16} px={16} mt={16}>
           <XStack ai="center" space my={16}>

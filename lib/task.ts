@@ -5,6 +5,11 @@ import { Feed, FeedData, FeedEntry } from 'types'
 import { HOST } from './constants'
 import { createEntries, updateEntries } from './db'
 import { fetcher, post } from './request'
+import {
+  Configuration,
+  OpenAIApi,
+  ChatCompletionRequestMessageRoleEnum,
+} from 'openai'
 
 const DAYS_LIMIT = {
   day: 1,
@@ -50,8 +55,10 @@ export async function fetchFeedFlow(feeds: Feed[]) {
 
 export async function tagFeedEntries(entries: FeedEntry[]) {
   try {
-    const apiKey = store.getState().setting.openAI?.apiKey
-
+    const { apiKey, model, role } = store.getState().setting.openAI
+    if (!apiKey) {
+      return
+    }
     const untaggedEntries = entries.filter((entry) => {
       return (
         entry.id.startsWith('http') && (!entry.tags || entry.tags.length === 0)
@@ -61,9 +68,14 @@ export async function tagFeedEntries(entries: FeedEntry[]) {
     if (untaggedEntries.length === 0) {
       return
     }
-    const result = await post(`${HOST}/keywords`, {
-      entries: untaggedEntries.slice(0, 10).map((t) => t.id),
-    })
+    const result = await getKeywordsOf(
+      untaggedEntries.slice(0, 10).map((t) => t.id),
+      {
+        apiKey,
+        model,
+        role,
+      }
+    )
 
     const taggedEntries = untaggedEntries.map((entry, idx) => {
       return {
@@ -77,4 +89,117 @@ export async function tagFeedEntries(entries: FeedEntry[]) {
       await tagFeedEntries(untaggedEntries.slice(10))
     }
   } catch (error) {}
+}
+
+export async function getKeywordsOf(
+  urls: string[],
+  {
+    apiKey,
+    model,
+    role,
+  }: {
+    apiKey: string
+    model: string
+    role: string
+  }
+) {
+  if (apiKey) {
+    try {
+      const response = await fetch(
+        'https://api.openai.com/v1/chat/completions',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${apiKey}`,
+          },
+          body: JSON.stringify({
+            model: apiKey ? model : 'gpt-3.5-turbo',
+            messages: [
+              {
+                role: apiKey ? role : 'user',
+                content: `${urls.join(
+                  ', '
+                )} keywords of above articles, each limit to 5 words, give me an string like this [["keywordA","keywordB"],["keywordC","keywordD"]] which can be used with JSON.parse in javascript`,
+              },
+            ],
+            temperature: 0.7,
+            top_p: 1,
+            frequency_penalty: 0,
+            presence_penalty: 0,
+            max_tokens: 200,
+            stream: false,
+            n: 1,
+          }),
+        }
+      )
+
+      const json = await response.json()
+      const content = json.choices[0].message.content
+
+      if (content) {
+        return JSON.parse(content.trim().replace(/(\r\n|\n|\r)/gm, ''))
+      }
+      return []
+    } catch (error) {
+      return []
+    }
+  } else {
+    return post(`${HOST}/keywords`, {
+      entries: urls,
+    })
+  }
+}
+
+export async function getSummaryOf(
+  url: string,
+  {
+    apiKey,
+    model,
+    role,
+  }: {
+    apiKey: string
+    model: string
+    role: string
+  }
+) {
+  if (apiKey) {
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model: apiKey ? model : 'gpt-3.5-turbo',
+        messages: [
+          {
+            role: apiKey ? role : 'user',
+            content: `summarize ${url}, limit to 120 words`,
+          },
+        ],
+        temperature: 0.7,
+        top_p: 1,
+        frequency_penalty: 0,
+        presence_penalty: 0,
+        max_tokens: 200,
+        stream: false,
+        n: 1,
+      }),
+    })
+
+    const json = await response.json()
+    const content = json.choices[0].message.content
+    return {
+      url,
+      content,
+    }
+  } else {
+    return post(`${HOST}/summarize`, {
+      url,
+      apiKey,
+      model,
+      role,
+    })
+  }
 }
