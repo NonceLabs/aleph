@@ -1,4 +1,3 @@
-import { Tags } from '@tamagui/lucide-icons'
 import { Image } from 'expo-image'
 import { Link } from 'expo-router'
 import useTheme from 'hooks/useTheme'
@@ -12,12 +11,9 @@ import {
 } from 'iconoir-react-native'
 import { MAIN_COLOR } from 'lib/constants'
 import icons from 'lib/icons'
-import Toast from 'lib/toast'
-import { useState } from 'react'
-import { Platform, Pressable } from 'react-native'
+import { Platform } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useActiveTrack } from 'react-native-track-player'
-import { useAppDispatch } from 'store/hooks'
 import { Text, XStack, YStack } from 'tamagui'
 import { PubEvent } from 'types'
 
@@ -55,7 +51,6 @@ const routes = [
 ]
 
 export default function DrawerPanel() {
-  const [count, setCount] = useState(0)
   const insets = useSafeAreaInsets()
   const theme = useTheme()
   const fontSize = 32
@@ -63,21 +58,7 @@ export default function DrawerPanel() {
   const onPlayInfo = () => {
     PubSub.publish(PubEvent.ON_PODCAST_PORTAL)
   }
-
   const currentTrack = useActiveTrack()
-
-  const dispatch = useAppDispatch()
-  const onClick = async () => {
-    setCount(count + 1)
-    if (count + 1 > 7) {
-      setCount(0)
-      dispatch({
-        type: 'setting/purchased',
-        payload: true,
-      })
-      Toast.success('Purchased successfully! Enjoy the app!')
-    }
-  }
 
   return (
     <YStack
@@ -91,9 +72,7 @@ export default function DrawerPanel() {
     >
       <XStack jc="flex-end">
         <YStack p={10} ai="flex-end" space={4}>
-          <Pressable onPress={onClick}>
-            <Image source={icons.LOGO} style={{ width: 80, height: 80 }} />
-          </Pressable>
+          <Image source={icons.LOGO} style={{ width: 80, height: 80 }} />
           <Text fontFamily={'Poppins'} color={MAIN_COLOR}>
             Aleph Reader
           </Text>

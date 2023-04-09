@@ -42,18 +42,6 @@ export default function FlowPage() {
   }, [])
 
   useEffect(() => {
-    if (new Date().getTime() - 24 * 60 * 60 * 1000 > resetAt) {
-      dispatch({
-        type: 'setting/updateSummarize',
-        payload: {
-          count: 0,
-          resetAt: new Date().getTime() + 24 * 60 * 60 * 1000,
-        },
-      })
-    }
-  }, [])
-
-  useEffect(() => {
     fetchFeedFlow(feeds.filter((t) => !t.deleted))
   }, [feeds.filter((t) => !t.deleted).length])
 

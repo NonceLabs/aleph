@@ -1,6 +1,5 @@
 import { Flower } from 'iconoir-react-native'
-import { HOST, MAIN_COLOR, SUMMARIZE_LIMIT } from 'lib/constants'
-import { post } from 'lib/request'
+import { MAIN_COLOR, SUMMARIZE_LIMIT } from 'lib/constants'
 import { useState } from 'react'
 import { Pressable } from 'react-native'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
@@ -57,20 +56,9 @@ export default function Summarize({ entry }: { entry?: FeedEntry }) {
             setErrorMessage(result.error.message)
           } else {
             setSummary(result.content)
-            if (!apiKey) {
-              dispatch({
-                type: 'setting/updateSummarize',
-                payload: {
-                  count: count + 1,
-                  resetAt,
-                },
-              })
-            }
           }
         })
         .catch((error) => {
-          console.log('error', error)
-
           setGenerating(false)
           setErrorMessage(
             error instanceof Error

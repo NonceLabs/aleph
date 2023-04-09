@@ -5,11 +5,6 @@ import { Feed, FeedData, FeedEntry } from 'types'
 import { HOST } from './constants'
 import { createEntries, updateEntries } from './db'
 import { fetcher, post } from './request'
-import {
-  Configuration,
-  OpenAIApi,
-  ChatCompletionRequestMessageRoleEnum,
-} from 'openai'
 
 const DAYS_LIMIT = {
   day: 1,

@@ -1,38 +1,23 @@
-import {
-  YStack,
-  XStack,
-  Text,
-  Switch,
-  Button,
-  Group,
-  Separator,
-  Progress,
-} from 'tamagui'
+import { YStack, XStack, Text, Switch, Button, Separator } from 'tamagui'
 import { DoubleCheck } from 'iconoir-react-native'
-import { ScrollView } from 'react-native'
+import { Pressable, ScrollView } from 'react-native'
 import DrawerHeader from 'components/Drawer/DrawerHeader'
 import { markAllRead } from 'lib/db'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
-import { HOST, MAIN_COLOR, SUMMARIZE_LIMIT } from 'lib/constants'
+import { HOST, MAIN_COLOR } from 'lib/constants'
 import MyAPIKey from 'components/Settings/MyAPIKey'
 import RoleSheet from 'components/Settings/RoleSheet'
 import ModelSheet from 'components/Settings/ModelSheet'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { post } from 'lib/request'
 import PublishSheet from 'components/Settings/PublishSheet'
-import {
-  Infinity,
-  Languages,
-  Podcast,
-  Sunrise,
-  ThumbsUp,
-} from '@tamagui/lucide-icons'
+import { Github } from '@tamagui/lucide-icons'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import * as WebBrowser from 'expo-web-browser'
 
 export default function SettingsPage() {
   const hideRead = useAppSelector((state) => state.setting?.flow?.hideRead)
   const { apiKey } = useAppSelector((state) => state.setting?.openAI)
-  const { count, resetAt } = useAppSelector((state) => state.setting.summarize)
   const insets = useSafeAreaInsets()
 
   useEffect(() => {
@@ -56,13 +41,6 @@ export default function SettingsPage() {
         showsVerticalScrollIndicator={false}
       >
         <YStack space={16} px={16} mt={16}>
-          <XStack ai="center" space my={16}>
-            <Separator borderColor="$color11" />
-            <Text color="$color11" fontFamily="Gilroy-Bold">
-              Common Settings
-            </Text>
-            <Separator borderColor="$color11" />
-          </XStack>
           <XStack space ai="center" jc="space-between">
             <Text fontFamily="Arvo" color="$color11">
               Hide read
@@ -107,82 +85,33 @@ export default function SettingsPage() {
 
           <PublishSheet />
 
-          {!apiKey && [
-            <Separator key="sep" />,
-            <YStack space={4} key="summary-limit">
-              <Text fontFamily="Arvo" color="$color11">
-                Summary Limit
-              </Text>
-
-              <YStack space={4}>
-                <Text color="$color11" fontFamily="Arvo" ta="right">
-                  {count}/{SUMMARIZE_LIMIT}
-                </Text>
-                <Progress size="$3" value={(count || 0) * 10}>
-                  <Progress.Indicator animation="bouncy" />
-                </Progress>
-              </YStack>
-            </YStack>,
-          ]}
-
-          <XStack ai="center" space mt={16}>
-            <Separator borderColor={MAIN_COLOR} />
-            <Text color={MAIN_COLOR} fontFamily="Gilroy-Bold" fontSize={18}>
-              Aleph Pro
-            </Text>
-            <Separator borderColor={MAIN_COLOR} />
-          </XStack>
-
-          {!apiKey && (
-            <XStack>
-              <Text color="$color10" fontSize={14} fontFamily="Arvo">
-                After upgrade, you can use your own API key, unlock more
-                features.
-              </Text>
-            </XStack>
-          )}
-
-          <MyAPIKey />
-
           <YStack space={16}>
             <ModelSheet />
 
             <RoleSheet />
+          </YStack>
+          <MyAPIKey />
 
-            <XStack ai="center" space={8} my={5}>
-              <Infinity size={20} color="$color11" />
-              <Text color="$color11" fontSize={14} fontFamily="Arvo">
-                Unlimited summary
+          <YStack ai="center" space="$2" mt="$4">
+            <Pressable>
+              <Text fontFamily="Arvo" color="$color11">
+                Made by @chezhe
               </Text>
-            </XStack>
-
-            <XStack ai="center" space={8} my={5}>
-              <ThumbsUp size={20} color="$color11" />
-              <Text color="$color11" fontSize={14} fontFamily="Arvo">
-                Let AI know your preference
-              </Text>
-            </XStack>
-
-            <XStack ai="center" space={8} my={5}>
-              <Languages size={20} color="$color11" />
-              <Text color="$color11" fontSize={14} fontFamily="Arvo">
-                Translation (coming soon)
-              </Text>
-            </XStack>
-
-            <XStack ai="center" space={8} my={5}>
-              <Podcast size={20} color="$color11" />
-              <Text color="$color11" fontSize={14} fontFamily="Arvo">
-                Transcript for podcast (coming soon)
-              </Text>
-            </XStack>
-
-            <XStack ai="center" space={8} my={5}>
-              <Sunrise size={20} color="$color11" />
-              <Text color="$color11" fontSize={14} fontFamily="Arvo">
-                Daily digest (coming soon)
-              </Text>
-            </XStack>
+            </Pressable>
+            <Pressable
+              onPress={() => {
+                WebBrowser.openBrowserAsync(
+                  'https://github.com/NonceLabs/aleph'
+                )
+              }}
+            >
+              <XStack ai="center" jc="center" space="$2">
+                <Text fontFamily="Arvo" color="$color11">
+                  open source
+                </Text>
+                <Github size={16} color={MAIN_COLOR} />
+              </XStack>
+            </Pressable>
           </YStack>
         </YStack>
       </ScrollView>
