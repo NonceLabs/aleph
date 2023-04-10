@@ -17,7 +17,6 @@ export default function FlowPage() {
   const [initing, setIniting] = useState(false)
   const { feeds } = useFeeds()
   const { entries } = useEntryFlow()
-  const { count, resetAt } = useAppSelector((state) => state.setting.summarize)
   useBookmarks()
   useQueue()
 

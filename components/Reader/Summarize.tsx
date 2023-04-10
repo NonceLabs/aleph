@@ -25,7 +25,6 @@ export default function Summarize({ entry }: { entry?: FeedEntry }) {
   const { apiKey, model, role } = useAppSelector(
     (state) => state.setting?.openAI
   )
-  const { count, resetAt } = useAppSelector((state) => state.setting.summarize)
   const dispatch = useAppDispatch()
 
   if (!entry) {
@@ -38,13 +37,6 @@ export default function Summarize({ entry }: { entry?: FeedEntry }) {
     setErrorMessage('')
     setOpen(_open)
     if (_open && entry) {
-      if (count > SUMMARIZE_LIMIT) {
-        setGenerating(false)
-        setErrorMessage(
-          'You have reached the maximum number of free summarizations.'
-        )
-        return
-      }
       getSummaryOf(entry.id, {
         apiKey,
         model,
@@ -73,13 +65,7 @@ export default function Summarize({ entry }: { entry?: FeedEntry }) {
     <>
       <Pressable
         onPress={() => {
-          if (!apiKey && count >= 10) {
-            Toast.error(
-              'You have reached the maximum number of free summarizations.'
-            )
-          } else {
-            onOpenChange(true)
-          }
+          onOpenChange(true)
         }}
       >
         <Flower width={28} height={28} color={MAIN_COLOR} />
@@ -117,7 +103,7 @@ export default function Summarize({ entry }: { entry?: FeedEntry }) {
                 {!apiKey && (
                   <Link href="/settings" onPress={() => setOpen(false)}>
                     <Text fontSize={16} color="$blue11" ta="center">
-                      Upgrade to Aleph Pro to use your own OpenAI API key.
+                      Set up your own API key.
                     </Text>
                   </Link>
                 )}

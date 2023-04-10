@@ -107,7 +107,7 @@ export default function MyAPIKey() {
               onPress={() => setOpen(true)}
               pressStyle={{ backgroundColor: '$red7' }}
             >
-              Edit
+              Update
             </Button>
           </XStack>
         </YStack>

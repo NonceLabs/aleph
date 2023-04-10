@@ -5215,11 +5215,6 @@ expo-dev-menu@2.1.4:
     expo-dev-menu-interface "1.1.1"
     semver "^7.3.5"
 
-expo-eas-client@~0.5.0:
-  version "0.5.1"
-  resolved "https://registry.npmjs.org/expo-eas-client/-/expo-eas-client-0.5.1.tgz#3ef80dbbde13abe35be4e2a2e29b73d2f7fdf27a"
-  integrity sha512-i3L/iwhI6cFhSUpVsCxSU5qehNznL/rQFYoof6qUIh3CMyijCuTEwjEhwbw2a5W6obPBzQUXbomMSFDO6D5/0Q==
-
 expo-file-system@~15.2.0, expo-file-system@~15.2.2:
   version "15.2.2"
   resolved "https://registry.npmjs.org/expo-file-system/-/expo-file-system-15.2.2.tgz#a1ddf8aabf794f93888a146c4f5187e2004683a3"
@@ -5259,13 +5254,6 @@ expo-linking@~4.0.1:
     invariant "^2.2.4"
     qs "^6.11.0"
     url-parse "^1.5.9"
-
-expo-mail-composer@~12.1.1:
-  version "12.1.1"
-  resolved "https://registry.npmjs.org/expo-mail-composer/-/expo-mail-composer-12.1.1.tgz#bf137f3d2383fa51af70c25d6a29602de5acc9ce"
-  integrity sha512-DJZpxdc6huwg8M9STfzL415xHGEaEXOseK2VyPAKKllWYR6m2gE18sXND9Ak8rcynZGTwyuaHrqJLBXd3I/LcQ==
-  dependencies:
-    query-string "^6.2.0"
 
 expo-manifests@~0.5.0:
   version "0.5.2"
@@ -5334,11 +5322,6 @@ expo-status-bar@~1.4.4:
   resolved "https://registry.npmjs.org/expo-status-bar/-/expo-status-bar-1.4.4.tgz#6874ccfda5a270d66f123a9f220735a76692d114"
   integrity sha512-5DV0hIEWgatSC3UgQuAZBoQeaS9CqeWRZ3vzBR9R/+IUD87Adbi4FGhU10nymRqFXOizGsureButGZIXPs7zEA==
 
-expo-structured-headers@~3.1.0:
-  version "3.1.1"
-  resolved "https://registry.npmjs.org/expo-structured-headers/-/expo-structured-headers-3.1.1.tgz#198d44260f4b128d41313ef78df02fa6e20c5054"
-  integrity sha512-oV6yNGsJxQt7S9HYZTr+4L0I/yRwOF38USJ81I1KiN3GQI4C2z7P5OosyREA2VL9O+kUZVCCpNYsBLSa3/5bAQ==
-
 expo-system-ui@~2.2.1:
   version "2.2.1"
   resolved "https://registry.npmjs.org/expo-system-ui/-/expo-system-ui-2.2.1.tgz#d955d2fcb93e196e183ed79e5da1b4427f1d4896"
@@ -5358,23 +5341,6 @@ expo-updates-interface@~0.9.0:
   version "0.9.1"
   resolved "https://registry.npmjs.org/expo-updates-interface/-/expo-updates-interface-0.9.1.tgz#e81308d551ed5a4c35c8770ac61434f6ca749610"
   integrity sha512-wk88LLhseQ7LJvxdN7BTKiryyqALxnrvr+lyHK3/prg76Yy0EGi2Q/oE/rtFyyZ1JmQDRbO/5pdX0EE6QqVQXQ==
-
-expo-updates@~0.16.4:
-  version "0.16.4"
-  resolved "https://registry.npmjs.org/expo-updates/-/expo-updates-0.16.4.tgz#6d05438cf7304add03645a598211ac4ef3cc4f64"
-  integrity sha512-hEUotP10sBiYn6dvkYC2rIa+kAmsBuaMp32sIVNAYEwKMQJqEwqNAKTU6CpJ4Aoc//BYL2Hv8qNo/UsT4rATRg==
-  dependencies:
-    "@expo/code-signing-certificates" "0.0.5"
-    "@expo/config" "~8.0.0"
-    "@expo/config-plugins" "~6.0.0"
-    "@expo/metro-config" "~0.7.0"
-    arg "4.1.0"
-    expo-eas-client "~0.5.0"
-    expo-manifests "~0.5.0"
-    expo-structured-headers "~3.1.0"
-    expo-updates-interface "~0.9.0"
-    fbemitter "^3.0.0"
-    resolve-from "^5.0.0"
 
 expo-web-browser@~12.1.1:
   version "12.1.1"
@@ -8460,16 +8426,6 @@ query-string@^5.0.1:
     decode-uri-component "^0.2.0"
     object-assign "^4.1.0"
     strict-uri-encode "^1.0.0"
-
-query-string@^6.2.0:
-  version "6.14.1"
-  resolved "https://registry.npmjs.org/query-string/-/query-string-6.14.1.tgz#7ac2dca46da7f309449ba0f86b1fd28255b0c86a"
-  integrity sha512-XDxAeVmpfu1/6IjyT/gXHOl+S0vQ9owggJ30hhWKdHAsNPOcasn5o9BW0eejZqL2e4vMjhAxoW3jVHcD6mbcYw==
-  dependencies:
-    decode-uri-component "^0.2.0"
-    filter-obj "^1.1.0"
-    split-on-first "^1.0.0"
-    strict-uri-encode "^2.0.0"
 
 querystring@0.2.0:
   version "0.2.0"

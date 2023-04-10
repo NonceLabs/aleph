@@ -4,6 +4,7 @@
   },
   "build": {
     "development": {
+      "channel": "development",
       "developmentClient": true,
       "distribution": "internal",
       "ios": {
@@ -19,8 +20,12 @@
       }
     },
     "production": {
+      "channel": "production",
       "ios": {
         "resourceClass": "m-medium",
+        "autoIncrement": true
+      },
+      "android": {
         "autoIncrement": true
       }
     }
